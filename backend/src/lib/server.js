@@ -6,12 +6,15 @@ import cors from 'cors';
 // import HttpError from 'http-errors';
 
 import logger from './logger';
+import searchRouter from '../routes/search';
 import errorMiddleware from './error-middleware';
 
 const app = express();
 let server = null;
 
 app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
+
+app.use(searchRouter);
 
 app.all('*', (request, response) => {
   logger.log(logger.INFO, '404 - not found - catch-all');
