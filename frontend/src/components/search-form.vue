@@ -1,27 +1,37 @@
 <template>
   <div class="search-form">
     <h3>Enter a state to find National Parks near you</h3>
-    <form>
+    <form v-on:submit.prevent="handleSubmit">
       <input 
-        v-model="state"
+        v-model.lazy="state"
         type="text" 
         name="state"
         placeholder="ex. CA"
       />
       <div class="button">
-        <button>Find parks in {{ state }}</button>
+        <button type="submit">Find parks in {{ state }}</button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
+import superagent from 'superagent';
+
 export default {
   name: 'SearchForm',
   data() {
     return {
       state: null,
     }
+  },
+  methods: {
+    handleSubmit() {
+      return superagent.get(`${API_URL}/search`)
+        .then((response) => {
+          console.log(response);
+        })
+    },
   }
 }
 </script>
