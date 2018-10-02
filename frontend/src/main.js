@@ -7,4 +7,4 @@ new Vue({ /* eslint-disable-line */
   render: h => h(App),
   components: { App },
   template: '<App/>',
-});
+}).$mount('#app');

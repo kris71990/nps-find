@@ -18,7 +18,7 @@ export default {
   name: 'SearchForm',
   data() {
     return {
-      state: 'blah',
+      state: 'CA',
     }
   }
 }
