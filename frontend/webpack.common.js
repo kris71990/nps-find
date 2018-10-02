@@ -2,7 +2,7 @@
 
 require('dotenv').config();
 
-const { VueLoaderPlugin } = require('vue-loader');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssPlugin = require('mini-css-extract-plugin');
 
@@ -40,10 +40,6 @@ webpackConfig.module.rules = [
     exclude: /node_modules/,
     use: {
       loader: 'babel-loader',
-      options: {
-        presets: ['env', 'stage-0'],
-        cacheDirectory: true,
-      },
     },
   },
   {
