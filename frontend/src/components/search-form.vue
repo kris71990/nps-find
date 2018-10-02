@@ -8,7 +8,9 @@
         name="state"
         placeholder="ex. CA"
       />
-      <button>Find parks in {{ state }}</button>
+      <div class="button">
+        <button>Find parks in {{ state }}</button>
+      </div>
     </form>
   </div>
 </template>
@@ -23,3 +25,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.button {
+  margin: 1%;
+
+  button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid black;
+  }
+
+  button:hover {
+    background-color: tan;
+    border: 2px solid white;
+  }
+}
+</style>
