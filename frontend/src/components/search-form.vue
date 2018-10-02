@@ -1,6 +1,6 @@
 <template>
   <div class="search-form">
-    <h1>Enter a state to find National Parks near you</h1>
+    <h3>Enter a state to find National Parks near you</h3>
     <form>
       <input 
         v-model="state"
@@ -20,7 +20,7 @@ export default {
   name: 'SearchForm',
   data() {
     return {
-      state: 'CA',
+      state: null,
     }
   }
 }
@@ -31,14 +31,15 @@ export default {
   margin: 1%;
 
   button {
+    background-color: rgb(126, 182, 112);
     padding: 10px;
     border-radius: 5px;
-    border: 2px solid black;
+    border: 2px solid #336E55;
   }
 
   button:hover {
-    background-color: tan;
-    border: 2px solid white;
+    background-color: #336E55;
+    color: #F1E3CB;
   }
 }
 </style>
