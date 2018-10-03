@@ -14,6 +14,11 @@ export default {
   components: {
     SearchForm,
     SearchResults,
+  },
+  data() {
+    return {
+      results: null,
+    }
   }
 }
 </script>
