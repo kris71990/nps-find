@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import App from '../app.vue';
-import SearchResults from '../components/search-results.vue';
+import Landing from '../app.vue';
+import Dashboard from '../components/dashboard.vue';
 
 Vue.use(Router);
 
@@ -10,12 +10,12 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: App,
+      component: Landing,
     },
     {
-      path: '/search',
-      name: 'Search Results',
-      component: SearchResults,
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard,
     },
   ],
 });

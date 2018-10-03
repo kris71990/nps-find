@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'SearchResults',
+  name: 'Dashboard',
   props: {
     parks: Object,
   },

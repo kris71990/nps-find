@@ -2,7 +2,7 @@
   <div id="app">
     <Header/>
     <Landing/>
-    <SearchResults/>
+    <Dashboard/>
     <Footer/>
   </div>
 </template>
@@ -10,7 +10,7 @@
 <script>
 import Header from './components/header.vue';
 import Landing from './components/landing.vue';
-import SearchResults from './components/search-results.vue';
+import Dashboard from './components/dashboard.vue';
 import Footer from './components/footer.vue';
 
 export default {
@@ -18,7 +18,7 @@ export default {
   components: {
     Header,
     Landing,
-    SearchResults,
+    Dashboard,
     Footer,
   }
 }

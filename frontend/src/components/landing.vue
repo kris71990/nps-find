@@ -1,4 +1,4 @@
-<template>
+<template v-if="results === null">
   <div id="home">
     <SearchForm/>
   </div>

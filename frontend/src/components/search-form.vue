@@ -9,7 +9,7 @@
         placeholder="ex. CA"
       />
       <div class="button">
-        <router-link to="/search" tag="button" type="submit">
+        <router-link to="/dashboard" tag="button" type="submit">
           Find parks in {{ state }}
         </router-link>
       </div>
