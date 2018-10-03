@@ -20,8 +20,12 @@ import superagent from 'superagent';
 
 export default {
   name: 'SearchForm',
+  props: {
+    results: Object,
+  },
   data() {
     return {
+      parks: null,
       state: null,
     }
   },
@@ -29,7 +33,7 @@ export default {
     handleSubmit() {
       return superagent.get(`${API_URL}/search`)
         .then((response) => {
-          console.log(response);
+          this.parks = response.body.data;
         })
     },
   }

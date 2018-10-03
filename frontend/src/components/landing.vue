@@ -7,7 +7,7 @@
 
 <script>
 import SearchForm from './search-form.vue';
-import SearchResults from './search-results.vue'
+import SearchResults from './search-results.vue';
 
 export default {
   name: 'Landing',
