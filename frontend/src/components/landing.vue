@@ -1,19 +1,20 @@
 <template>
   <div id="home">
     <SearchForm/>
-    <SearchResults/>
   </div>
 </template>
 
 <script>
 import SearchForm from './search-form.vue';
-import SearchResults from './search-results.vue';
 
 export default {
   name: 'Landing',
+  props: {
+    state: String,
+    handleSearch: Function,
+  },
   components: {
     SearchForm,
-    SearchResults,
   },
   data() {
     return {

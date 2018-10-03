@@ -1,4 +1,4 @@
-<template>
+<template v-if="parks">
   <div class="search-form">
     <h3>Enter a state to find National Parks near you</h3>
     <form v-on:submit.prevent="handleSubmit">
@@ -9,7 +9,9 @@
         placeholder="ex. CA"
       />
       <div class="button">
-        <button type="submit">Find parks in {{ state }}</button>
+        <router-link to="/search" tag="button" type="submit">
+          Find parks in {{ state }}
+        </router-link>
       </div>
     </form>
   </div>
@@ -21,7 +23,7 @@ import superagent from 'superagent';
 export default {
   name: 'SearchForm',
   props: {
-    results: Object,
+    handleSearch: Function,
   },
   data() {
     return {
@@ -35,6 +37,7 @@ export default {
         .then((response) => {
           this.parks = response.body.data;
         })
+        .then(() => store.commit('increment', this.state))
     },
   }
 }

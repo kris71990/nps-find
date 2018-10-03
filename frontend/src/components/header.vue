@@ -3,7 +3,7 @@
     <h1>Explore American Public Lands</h1>
     <nav>
       <ul>
-        <li><a href="#">Home</a></li>
+        <li><router-link to="/">Home</router-link></li>
         <li><a href="#">Profile</a></li>
         <li><a href="#">About</a></li>
       </ul>
