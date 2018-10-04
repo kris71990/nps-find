@@ -1,17 +1,27 @@
 <template>
   <div id="app">
-    <SearchForm/>
+    <Header/>
+    <Landing/>
+    <Dashboard/>
+    <Footer/>
   </div>
 </template>
 
 <script>
-import SearchForm from './components/search-form.vue';
+import Header from './components/header.vue';
+import Dashboard from './components/dashboard.vue';
+import Landing from './components/landing.vue';
+import Footer from './components/footer.vue';
+import store from './store/store';
 
 export default {
   name: 'App',
   components: {
-    SearchForm
-  }
+    Header,
+    Landing,
+    Dashboard,
+    Footer,
+  },
 }
 </script>
 

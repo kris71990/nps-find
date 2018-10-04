@@ -1,15 +1,17 @@
 <template>
   <div class="search-form">
-    <h1>Enter a state to find National Parks near you</h1>
-    <form>
+    <h3>Enter a state to find National Parks near you</h3>
+    <form @submit="handleSubmit">
       <input 
-        v-model="state"
+        v-model.lazy="state"
         type="text" 
         name="state"
         placeholder="ex. CA"
       />
       <div class="button">
-        <button>Find parks in {{ state }}</button>
+        <button type="submit">
+          Find parks in {{ state }}
+        </button>
       </div>
     </form>
   </div>
@@ -18,9 +20,19 @@
 <script>
 export default {
   name: 'SearchForm',
+  props: {
+    handleSearch: Function,
+  },
   data() {
     return {
-      state: 'CA',
+      state: null,
+    }
+  },
+  methods: {
+    handleSubmit(e) {
+      e.preventDefault();
+      return this.handleSearch({ state: this.state })
+        .then(() => this.state = null);
     }
   }
 }
@@ -31,14 +43,15 @@ export default {
   margin: 1%;
 
   button {
+    background-color: rgb(126, 182, 112);
     padding: 10px;
     border-radius: 5px;
-    border: 2px solid black;
+    border: 2px solid #336E55;
   }
 
   button:hover {
-    background-color: tan;
-    border: 2px solid white;
+    background-color: #336E55;
+    color: #F1E3CB;
   }
 }
 </style>
