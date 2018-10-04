@@ -6,10 +6,10 @@ import logger from '../lib/logger';
 
 const searchRouter = new Router();
 
-searchRouter.get('/search', (request, response, next) => {
-  logger.log(logger.INFO, 'Searching for national parks in California...');
+searchRouter.get('/search/:state', (request, response, next) => {
+  logger.log(logger.INFO, `Searching for national parks in ${request.params.state}...`);
 
-  const url = 'https://api.nps.gov/api/v1/parks?stateCode=CA';
+  const url = `https://api.nps.gov/api/v1/parks?stateCode=${request.params.state}`;
   return superagent.get(url)
     .set('api_key', process.env.NPS_API_KEY)
     .type('application/json')

@@ -1,8 +1,8 @@
 <template>
-  <div v-if="computedResults" id="search-results" >
-    <h3>National Parks in California</h3>
+  <div v-if="computedParks" id="search-results" >
+    <h3>National Parks in {{ computedState }}</h3>
     <ul id="park-list">
-      <li v-for="item in computedResults" :key="item.id">
+      <li v-for="item in computedParks" :key="item.id">
         {{ item.fullName }}
       </li>
     </ul>
@@ -15,9 +15,12 @@ import store from '../store/store';
 export default {
   name: 'Dashboard',
   computed: {
-    computedResults () {
+    computedParks () {
       return this.$store.getters.getParks;
-    }
+    },
+    computedState () {
+      return this.$store.getters.getState;
+    },
   }
 }
 </script>

@@ -23,7 +23,7 @@ export default {
   methods: {
     handleSearch(event) {
       this.state = event.state;
-      return superagent.get(`${API_URL}/search`)
+      return superagent.get(`${API_URL}/search/${this.state}`)
         .then((response) => {
           this.parks = response.body.data;
         })
