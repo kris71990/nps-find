@@ -27,9 +27,4 @@ export default {
 
 <style lang="scss">
 @import './style/main.scss';
-
-body {
-  background-color: #F1E3CB;
-  color: #336E55;
-}
 </style>

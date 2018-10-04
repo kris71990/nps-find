@@ -1,6 +1,11 @@
 <template>
   <div v-if="computedResults" id="search-results" >
-    {{ computedResults }}
+    <h3>National Parks in California</h3>
+    <ul id="park-list">
+      <li v-for="item in computedResults" :key="item.id">
+        {{ item.fullName }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -18,5 +23,15 @@ export default {
 </script>
 
 <style lang="scss">
-
+#search-results {
+  padding: 3%;
+  ul {
+    margin: 5%;
+    padding-left: 0px;
+    li {
+      margin: 1%;
+      list-style-type: none;
+    }
+  }
+}
 </style>
