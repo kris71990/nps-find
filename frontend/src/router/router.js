@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Landing from '../app.vue';
+import Landing from '../components/landing.vue';
 import Dashboard from '../components/dashboard.vue';
 
 Vue.use(Router);

@@ -1,24 +1,21 @@
-<template v-if="results">
-  <div id="search-results">
-    <h3>test</h3>
-    {{ results }}
+<template>
+  <div v-if="computedResults" id="search-results" >
+    {{ computedResults }}
   </div>
 </template>
 
 <script>
+import store from '../store/store';
+
 export default {
   name: 'Dashboard',
-  props: {
-    parks: Object,
-  },
-  data() {
-    return {
-      results: null,
+  computed: {
+    computedResults () {
+      return this.$store.getters.getParks;
     }
-  },
+  }
 }
 </script>
-
 
 <style lang="scss">
 

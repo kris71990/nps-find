@@ -9,9 +9,10 @@
 
 <script>
 import Header from './components/header.vue';
-import Landing from './components/landing.vue';
 import Dashboard from './components/dashboard.vue';
+import Landing from './components/landing.vue';
 import Footer from './components/footer.vue';
+import store from './store/store';
 
 export default {
   name: 'App',
@@ -20,7 +21,7 @@ export default {
     Landing,
     Dashboard,
     Footer,
-  }
+  },
 }
 </script>
 

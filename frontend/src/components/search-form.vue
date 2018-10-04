@@ -1,7 +1,7 @@
-<template v-if="parks">
+<template>
   <div class="search-form">
     <h3>Enter a state to find National Parks near you</h3>
-    <form v-on:submit.prevent="handleSubmit">
+    <form @submit="handleSubmit">
       <input 
         v-model.lazy="state"
         type="text" 
@@ -9,17 +9,15 @@
         placeholder="ex. CA"
       />
       <div class="button">
-        <router-link to="/dashboard" tag="button" type="submit">
+        <button type="submit">
           Find parks in {{ state }}
-        </router-link>
+        </button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import superagent from 'superagent';
-
 export default {
   name: 'SearchForm',
   props: {
@@ -27,18 +25,15 @@ export default {
   },
   data() {
     return {
-      parks: null,
       state: null,
     }
   },
   methods: {
-    handleSubmit() {
-      return superagent.get(`${API_URL}/search`)
-        .then((response) => {
-          this.parks = response.body.data;
-        })
-        .then(() => store.commit('increment', this.state))
-    },
+    handleSubmit(e) {
+      e.preventDefault();
+      return this.handleSearch({ state: this.state })
+        .then(() => this.state = null);
+    }
   }
 }
 </script>

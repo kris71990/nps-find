@@ -3,7 +3,7 @@
     <h1>Explore American Public Lands</h1>
     <nav>
       <ul>
-        <li><router-link to="/">Home</router-link></li>
+        <router-link to="/"><li v-on:click='resetDefault'>Home</li></router-link>
         <li><a href="#">Profile</a></li>
         <li><a href="#">About</a></li>
       </ul>
@@ -12,8 +12,15 @@
 </template>
 
 <script>
+import store from '../store/store';
+
 export default {
   name: 'Header',
+  methods: {
+    resetDefault() { 
+      store.commit('default');
+    }
+  }
 }
 </script>
 
