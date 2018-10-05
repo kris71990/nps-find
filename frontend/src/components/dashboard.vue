@@ -3,7 +3,10 @@
     <h3>National Parks in {{ computedState }}</h3>
     <ul id="park-list">
       <li v-for="item in computedParks" :key="item.id">
-        {{ item.fullName }}
+        <div>
+          <img v-bind:src="item.images[0].url"/>
+        </div>
+        <p>{{ item.fullName }}</p>
       </li>
     </ul>
   </div>
@@ -23,13 +26,17 @@ export default {
 
 <style lang="scss">
 #search-results {
-  padding: 3%;
+  width: 95%;
+  margin: 3% auto;
   ul {
-    margin: 5%;
     padding-left: 0px;
     li {
-      margin: 1%;
+      margin-top: 3%;
+      margin-bottom: 5%;
       list-style-type: none;
+      img {
+        width: 45%;
+      }
     }
   }
 }
