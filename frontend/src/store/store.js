@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import superagent from 'superagent';
 
 Vue.use(Vuex);
 
@@ -29,6 +30,20 @@ const store = new Vuex.Store({
     },
     getParks: (state) => {
       return state.parks;
+    },
+  },
+  actions: {
+    foundParks(context, stateSelection) {
+      const { commit } = context;
+      let parks;
+      return superagent.get(`${API_URL}/search/${stateSelection}`)
+        .then((response) => {
+          parks = response.body.data;
+        })
+        .then(() => {
+          commit('changeState', stateSelection);
+          commit('foundParks', parks);
+        });
     },
   },
 });

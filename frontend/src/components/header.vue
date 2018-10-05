@@ -12,13 +12,11 @@
 </template>
 
 <script>
-import store from '../store/store';
-
 export default {
   name: 'Header',
   methods: {
     resetDefault() { 
-      store.commit('default');
+      this.$store.commit('default');
     }
   }
 }

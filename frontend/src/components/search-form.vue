@@ -3,14 +3,14 @@
     <h3>Enter a state to find National Parks near you</h3>
     <form @submit="handleSubmit">
       <input 
-        v-model.lazy="state"
+        v-model.lazy="stateSelection"
         type="text" 
         name="state"
         placeholder="ex. CA"
       />
       <div class="button">
         <button type="submit">
-          Find parks in {{ state }}
+          Find parks in {{ stateSelection }}
         </button>
       </div>
     </form>
@@ -25,14 +25,14 @@ export default {
   },
   data() {
     return {
-      state: null,
+      stateSelection: null,
     }
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      return this.handleSearch({ state: this.state })
-        .then(() => this.state = null);
+      return this.handleSearch(this.stateSelection)
+        .then(() => this.stateSelection = null);
     }
   }
 }
