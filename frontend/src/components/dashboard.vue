@@ -10,16 +10,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'Dashboard',
-  computed: {
-    computedParks () {
-      return this.$store.getters.getParks;
-    },
-    computedState () {
-      return this.$store.getters.getState;
-    },
-  }
+  computed: mapState({
+    computedParks: state => state.parks,
+    computedState: state => state.stateFull,
+  }),
 }
 </script>
 

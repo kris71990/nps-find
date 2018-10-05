@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import SearchForm from './search-form.vue';
 
 export default {
@@ -16,22 +17,22 @@ export default {
     return {
       parks: null,
       state: null,
+      stateFull: null,
     }
   },
   methods: {
-    handleSearch(event) {
-      this.state = event;
-      return this.$store.dispatch('foundParks', this.state)
+    handleSearch(event, a, b) {
+      this.state = event.state;
+      this.stateFull = event.stateFull;
+      return this.$store.dispatch('foundParks', { state: this.state, stateFull: this.stateFull })
         .then(() => {
           this.$router.push('/dashboard');
         });
     },
   },
-  computed: {
-    computedParks () {
-      return this.$store.getters.getParks;
-    }
-  }
+  computed: mapState({
+    computedParks: state => state.parks,
+  }),
 }
 </script>
 

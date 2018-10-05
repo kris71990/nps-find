@@ -2,12 +2,15 @@
   <div class="search-form">
     <h3>Enter a state to find National Parks near you</h3>
     <form @submit="handleSubmit">
-      <input 
+      <select 
         v-model.lazy="stateSelection"
-        type="text" 
-        name="state"
-        placeholder="ex. CA"
-      />
+        value=stateSelection
+      >
+        <option value="empty">Select State</option>
+        <option v-for="state in Object.keys(stateAbbreviations)" v-bind:key=state v-bind:value=state>
+          {{ stateAbbreviations[state] }}
+        </option>
+      </select>
       <div class="button">
         <button type="submit">
           Find parks in {{ stateSelection }}
@@ -18,6 +21,8 @@
 </template>
 
 <script>
+import { stateAbbreviations } from '../utils/states';
+
 export default {
   name: 'SearchForm',
   props: {
@@ -25,13 +30,15 @@ export default {
   },
   data() {
     return {
+      stateAbbreviations,
       stateSelection: null,
     }
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      return this.handleSearch(this.stateSelection)
+      return this.handleSearch({ 
+        state: this.stateSelection, stateFull: stateAbbreviations[this.stateSelection] })
         .then(() => this.stateSelection = null);
     }
   }
