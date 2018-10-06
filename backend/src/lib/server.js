@@ -36,7 +36,8 @@ const startServer = () => {
           server = app.listen(process.env.PORT, () => {
             logger.log(logger.INFO, `Server listening on port ${process.env.PORT}`);
           });
-        });
+        })
+        .catch(() => new HttpError(502, 'unable to start server'));
     })
     .catch((error) => {
       logger.log(logger.INFO, `ERROR - Database connection error: ${error}`);

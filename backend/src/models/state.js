@@ -9,13 +9,8 @@ const State = (sequelize, DataTypes) => sequelize.define('state', {
   },
   totalParks: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
 });
-
-// State.create({
-//   stateCode: 'CA',
-//   totalParks: 12,
-// });
 
 export default State;
