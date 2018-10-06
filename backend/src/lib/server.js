@@ -14,6 +14,7 @@ let server = null;
 
 const CLIENT_URL = process.env.CLIENT_URL;
 const DATABASE_URL = process.env.DATABASE_URL;
+const sequelize = new Sequelize(DATABASE_URL);
 
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
 
@@ -27,8 +28,7 @@ app.all('*', (request, response) => {
 app.use(errorMiddleware);
 
 const startServer = () => {
-  const sequelize = new Sequelize(DATABASE_URL);
-  sequelize
+  return sequelize
     .authenticate()
     .then(() => {
       logger.log(logger.INFO, 'Database connection established');
@@ -43,9 +43,12 @@ const startServer = () => {
 };
 
 const stopServer = () => {
-  server.close(() => {
-    logger.log(logger.INFO, 'Server disconnected');
-  });
+  return sequelize.close()
+    .then(() => {
+      server.close(() => {
+        logger.log(logger.INFO, 'Server disconnected');
+      });
+    });
 };
 
 export { startServer, stopServer };
