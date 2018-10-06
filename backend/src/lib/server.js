@@ -9,12 +9,14 @@ import logger from './logger';
 import searchRouter from '../routes/search';
 import errorMiddleware from './error-middleware';
 
-const app = express();
-let server = null;
-
 const CLIENT_URL = process.env.CLIENT_URL;
 const DATABASE_URL = process.env.DATABASE_URL;
 const sequelize = new Sequelize(DATABASE_URL);
+
+const model = sequelize.import('../models/state');
+
+const app = express();
+let server = null;
 
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
 
@@ -32,6 +34,7 @@ const startServer = () => {
     .authenticate()
     .then(() => {
       logger.log(logger.INFO, 'Database connection established');
+      console.log(model);
       server = app.listen(process.env.PORT, () => {
         logger.log(logger.INFO, `Server listening on port ${process.env.PORT}`);
       });
