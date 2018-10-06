@@ -14,6 +14,7 @@ searchRouter.get('/search/:state', (request, response, next) => {
     .set('api_key', process.env.NPS_API_KEY)
     .type('application/json')
     .then((parks) => {
+      logger.log(logger.INFO, `Returning national parks in ${request.params.state}`);
       const filtered = parks.body.data.filter(park => park.url);
       return response.json(filtered);
     })
