@@ -2,8 +2,8 @@
 
 import express from 'express';
 import cors from 'cors';
-// import mongoose from 'mongoose';
-// import HttpError from 'http-errors';
+import HttpError from 'http-errors';
+import Sequelize from 'sequelize';
 
 import logger from './logger';
 import searchRouter from '../routes/search';
@@ -12,7 +12,10 @@ import errorMiddleware from './error-middleware';
 const app = express();
 let server = null;
 
-app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
+const CLIENT_URL = process.env.CLIENT_URL;
+const DATABASE_URL = process.env.DATABASE_URL;
+
+app.use(cors({ credentials: true, origin: CLIENT_URL }));
 
 app.use(searchRouter);
 
@@ -24,9 +27,19 @@ app.all('*', (request, response) => {
 app.use(errorMiddleware);
 
 const startServer = () => {
-  server = app.listen(process.env.PORT, () => {
-    logger.log(logger.INFO, `Server listening on port ${process.env.PORT}`);
-  });
+  const sequelize = new Sequelize(DATABASE_URL);
+  sequelize
+    .authenticate()
+    .then(() => {
+      logger.log(logger.INFO, 'Database connection established');
+      server = app.listen(process.env.PORT, () => {
+        logger.log(logger.INFO, `Server listening on port ${process.env.PORT}`);
+      });
+    })
+    .catch((error) => {
+      logger.log(logger.INFO, `ERROR - Database connection error: ${error}`);
+      return new HttpError(502, 'Unable to start server');
+    });
 };
 
 const stopServer = () => {

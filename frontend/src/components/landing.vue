@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import superagent from 'superagent';
-import store from '../store/store';
+import { mapState } from 'vuex';
 import SearchForm from './search-form.vue';
 
 export default {
@@ -18,29 +17,22 @@ export default {
     return {
       parks: null,
       state: null,
+      stateFull: null,
     }
   },
   methods: {
-    handleSearch(event) {
+    handleSearch(event, a, b) {
       this.state = event.state;
-      return superagent.get(`${API_URL}/search/${this.state}`)
-        .then((response) => {
-          this.parks = response.body.data;
-        })
-        .then(() => {
-          store.commit('changeState', this.state)
-          store.commit('foundParks', this.parks)
-        })
+      this.stateFull = event.stateFull;
+      return this.$store.dispatch('foundParks', { state: this.state, stateFull: this.stateFull })
         .then(() => {
           this.$router.push('/dashboard');
-        })
+        });
     },
   },
-  computed: {
-    computedParks () {
-      return this.$store.getters.getParks;
-    }
-  }
+  computed: mapState({
+    computedParks: state => state.parks,
+  }),
 }
 </script>
 

@@ -1,16 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import superagent from 'superagent';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    stateSelection: null,
+    stateAbbrev: null,
+    stateFull: null,
     parks: null,
   },
   mutations: {
     changeState(state, selection) {
-      state.stateSelection = selection;
+      state.stateAbbrev = selection.state;
+      state.stateFull = selection.stateFull;
       return state;
     },
     foundParks(state, fromApi) {
@@ -18,7 +21,8 @@ const store = new Vuex.Store({
       return state;
     },
     default(state) {
-      state.stateSelection = null;
+      state.stateAbbrev = null;
+      state.stateFull = null;
       state.parks = null;
       return state;
     },
@@ -29,6 +33,21 @@ const store = new Vuex.Store({
     },
     getParks: (state) => {
       return state.parks;
+    },
+  },
+  actions: {
+    foundParks(context, stateSelection) {
+      const { commit } = context;
+      const { state, stateFull } = stateSelection;
+      let parks;
+      return superagent.get(`${API_URL}/search/${state}`)
+        .then((response) => {
+          parks = response.body;
+        })
+        .then(() => {
+          commit('changeState', { state, stateFull });
+          commit('foundParks', parks);
+        });
     },
   },
 });
