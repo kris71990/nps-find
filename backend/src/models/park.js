@@ -1,10 +1,30 @@
 'use strict';
 
-// import sequelize from 'sequelize';
-// import State from '../models/state';
+const Park = (sequelize, DataTypes) => sequelize.define('park', {
+  parkCode: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
+    primaryKey: true,
+  },
 
-// const Park = DataTypes => sequelize.define('park', {
+  // stateCode: {
+  //   type: DataTypes.STRING,
+  //   allowNull: false,
+  //   references: {
+  //     model: models.state,
 
-// });
+  //   }
+  // }
+});
 
-// export default Park;
+Park.associate = (models) => {
+  models.park.belongsTo(models.state, {
+    onDelete: 'Cascade',
+    foreignKey: {
+      allowNull: false,
+    },
+  });
+};
+
+export default Park;
