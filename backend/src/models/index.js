@@ -10,7 +10,15 @@ const sequelize = new Sequelize(DATABASE_URL, {
 });
 
 const state = sequelize.import('state');
+const park = sequelize.import('park');
 db[state.name] = state;
+db[park.name] = park;
+
+Object.keys(db).forEach((model) => {
+  if (db[model].associate) {
+    db[model].associate(db);
+  }
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

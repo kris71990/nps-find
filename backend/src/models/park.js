@@ -7,23 +7,16 @@ const Park = (sequelize, DataTypes) => sequelize.define('park', {
     allowNull: false,
     primaryKey: true,
   },
-
-  // stateCode: {
-  //   type: DataTypes.STRING,
-  //   allowNull: false,
-  //   references: {
-  //     model: models.state,
-
-  //   }
-  // }
+  stateCode: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 Park.associate = (models) => {
   models.park.belongsTo(models.state, {
-    onDelete: 'Cascade',
-    foreignKey: {
-      allowNull: false,
-    },
+    foreignKey: 'stateCode',
+    targetKey: 'stateCode',
   });
 };
 
