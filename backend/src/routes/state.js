@@ -43,7 +43,14 @@ stateRouter.get('/state/:state', (request, response, next) => {
                   description: parkFound.description,
                 });
               })
-                .then(() => response.json(filtered));
+                .then(() => {
+                  // return models.state.findOne({
+                  //   where: {
+                  //     stateCode: request.
+                  //   }
+                  // })
+                  return response.json(filtered);
+                });
             })
             .catch(next);
         })
