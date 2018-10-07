@@ -6,7 +6,7 @@ import HttpError from 'http-errors';
 
 import logger from './logger';
 import models from '../models';
-import searchRouter from '../routes/search';
+import stateRouter from '../routes/state';
 import errorMiddleware from './error-middleware';
 
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -16,7 +16,7 @@ let server = null;
 
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
 
-app.use(searchRouter);
+app.use(stateRouter);
 
 app.all('*', (request, response) => {
   logger.log(logger.INFO, '404 - not found - catch-all');

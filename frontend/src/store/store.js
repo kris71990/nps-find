@@ -40,7 +40,7 @@ const store = new Vuex.Store({
       const { commit } = context;
       const { state, stateFull } = stateSelection;
       let parks;
-      return superagent.get(`${API_URL}/search/${state}`)
+      return superagent.get(`${API_URL}/state/${state}`)
         .then((response) => {
           parks = response.body;
         })
