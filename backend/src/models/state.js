@@ -1,7 +1,7 @@
 'use strict';
 
 const State = (sequelize, DataTypes) => sequelize.define('state', {
-  stateCode: {
+  stateId: {
     type: DataTypes.STRING,
     unique: true,
     allowNull: false,
@@ -14,9 +14,9 @@ const State = (sequelize, DataTypes) => sequelize.define('state', {
 });
 
 State.associate = (models) => {
-  models.state.hasMany(models.Park, {
+  models.state.hasMany(models.park, {
     foreignKey: 'stateCode',
-    sourceKey: 'stateCode',
+    sourceKey: 'stateId',
   });
 };
 

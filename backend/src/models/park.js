@@ -47,7 +47,7 @@ const Park = (sequelize, DataTypes) => sequelize.define('park', {
 Park.associate = (models) => {
   models.park.belongsTo(models.state, {
     foreignKey: 'stateCode',
-    targetKey: 'stateCode',
+    targetKey: 'stateId',
   });
 };
 

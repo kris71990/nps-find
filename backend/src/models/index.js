@@ -9,8 +9,8 @@ const sequelize = new Sequelize(DATABASE_URL, {
   logging: logger.info,
 });
 
-const state = sequelize.import('state');
-const park = sequelize.import('park');
+const state = sequelize.import('./state.js');
+const park = sequelize.import('./park.js');
 db[state.name] = state;
 db[park.name] = park;
 
