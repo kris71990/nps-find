@@ -3,6 +3,7 @@
 import { Router } from 'express';
 import superagent from 'superagent';
 import logger from '../lib/logger';
+import models from '../models/index';
 
 const searchRouter = new Router();
 
@@ -16,7 +17,18 @@ searchRouter.get('/search/:state', (request, response, next) => {
     .then((parks) => {
       logger.log(logger.INFO, `Returning national parks in ${request.params.state}`);
       const filtered = parks.body.data.filter(park => park.url);
-      return response.json(filtered);
+      return models.state.findOrCreate({
+        where: {
+          stateCode: request.params.state,
+        },
+        defaults: {
+          totalParks: null,
+        },
+      })
+        .then(() => {
+          return response.json(filtered);
+        })
+        .catch(next);
     })
     .catch(next);
 });
