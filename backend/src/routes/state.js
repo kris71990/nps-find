@@ -41,8 +41,8 @@ stateRouter.get('/state/:state', (request, response, next) => {
           })
             .then((retrievedParks) => {
               return response.json(retrievedParks);
-            });
-          // return response.json(response2);
+            })
+            .catch(next);
         })
         .catch(next);
     })
