@@ -33,8 +33,16 @@ stateRouter.get('/state/:state', (request, response, next) => {
 
       // if it doesn't, call this function to get data from the api
       return getData(request.params.state)
-        .then((response2) => {
-          return response.json(response2);
+        .then(() => {
+          return models.park.findAll({
+            where: {
+              stateCode: request.params.state,
+            },
+          })
+            .then((retrievedParks) => {
+              return response.json(retrievedParks);
+            });
+          // return response.json(response2);
         })
         .catch(next);
     })

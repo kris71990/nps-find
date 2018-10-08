@@ -26,11 +26,34 @@ const getParks = (stateSelected) => {
           logger.log(logger.INFO, `Inserting parks in ${stateSelected} into database`);
 
           filtered.forEach((parkFound) => {
+            let imgUrlStrings = '';
+            let imgCaptionStrings = '';
+
+            if (parkFound.images.length > 0) {
+              parkFound.images.forEach((image) => {
+                imgUrlStrings += `${image.url}\n`;
+                imgCaptionStrings += `${image.title}\n`;
+              });
+            } else {
+              imgUrlStrings = null;
+              imgCaptionStrings = null;
+            }
+
             models.park.create({
               stateCode: stateSelected,
               parkCode: parkFound.parkCode,
               pKeyCode: `${stateSelected}-${parkFound.parkCode}`,
               description: parkFound.description,
+              designation: parkFound.designation,
+              directionsInfo: parkFound.directionsInfo,
+              fullName: parkFound.fullName,
+              imageUrl: imgUrlStrings,
+              imageCaptions: imgCaptionStrings,
+              latLong: parkFound.latLong, 
+              name: parkFound.name,
+              states: parkFound.states,
+              url: parkFound.url,
+              weatherInfo: parkFound.weatherInfo,
             });
           });
           return filtered;

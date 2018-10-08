@@ -23,13 +23,16 @@ const Park = (sequelize, DataTypes) => sequelize.define('park', {
     type: DataTypes.STRING,
   },
   directionsInfo: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(1000),
   },
   fullName: {
     type: DataTypes.STRING,
   },
-  image: {
-    type: DataTypes.STRING,
+  imageUrl: {
+    type: DataTypes.STRING(4000),
+  },
+  imageCaptions: {
+    type: DataTypes.STRING(2000),
   },
   latLong: {
     type: DataTypes.STRING,
@@ -44,7 +47,7 @@ const Park = (sequelize, DataTypes) => sequelize.define('park', {
     type: DataTypes.STRING,
   },
   weatherInfo: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(1000),
   },
 });
 

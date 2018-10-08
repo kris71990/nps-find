@@ -3,8 +3,8 @@
     <h3>National Parks in {{ computedState }}</h3>
     <ul id="park-list">
       <li v-for="item in computedParks" :key="item.id">
-        <div v-if="item.images[0]">
-          <img v-bind:src="item.images[0].url"/>
+        <div v-if="item.imageUrl">
+          <img v-bind:src="item.imageUrl.split('\n')[0]"/>
         </div>
         <p>{{ item.fullName }}</p>
       </li>
