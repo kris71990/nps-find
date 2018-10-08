@@ -14,11 +14,11 @@ const park = sequelize.import('./park.js');
 db[state.name] = state;
 db[park.name] = park;
 
-Object.keys(db).forEach((model) => {
-  if (db[model].associate) {
-    db[model].associate(db);
-  }
-});
+// Object.keys(db).forEach((model) => {
+//   if (db[model].associate) {
+//     db[model].associate(db);
+//   }
+// });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
