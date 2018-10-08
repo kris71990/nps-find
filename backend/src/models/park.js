@@ -3,12 +3,16 @@
 const Park = (sequelize, DataTypes) => sequelize.define('park', {
   parkCode: {
     type: DataTypes.STRING,
-    unique: true,
     allowNull: false,
-    primaryKey: true,
   },
   stateCode: {
     type: DataTypes.STRING,
+    allowNull: false,
+  },
+  pKeyCode: {
+    type: DataTypes.STRING,
+    primaryKey: true,
+    unique: true,
     allowNull: false,
   },
   description: {
@@ -43,12 +47,5 @@ const Park = (sequelize, DataTypes) => sequelize.define('park', {
     type: DataTypes.STRING,
   },
 });
-
-// Park.associate = (models) => {
-//   models.park.belongsTo(models.state, {
-//     foreignKey: 'stateCode',
-//     targetKey: 'stateId',
-//   });
-// };
 
 export default Park;

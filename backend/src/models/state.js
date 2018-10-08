@@ -13,11 +13,4 @@ const State = (sequelize, DataTypes) => sequelize.define('state', {
   },
 });
 
-// State.associate = (models) => {
-//   models.state.hasMany(models.park, {
-//     foreignKey: 'stateCode',
-//     sourceKey: 'stateId',
-//   });
-// };
-
 export default State;
