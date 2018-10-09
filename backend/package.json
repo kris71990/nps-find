@@ -10,7 +10,7 @@
   },
   "jest": {
     "setupFiles": [
-      "<rootDir>/src/__test__/lib/.env"
+      "<rootDir>/src/__test__/lib/jest-setup.js"
     ]
   },
   "author": "",
