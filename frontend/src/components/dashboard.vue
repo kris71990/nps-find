@@ -4,7 +4,7 @@
     <ul id="park-list">
       <li v-for="item in computedParks" :key="item.id">
         <div v-if="item.imageUrl">
-          <img v-bind:src="item.imageUrl.split('\n')[0]"/>
+          <img v-bind:src="randomizedImage(item)"/>
         </div>
         <p>{{ item.fullName }}</p>
       </li>
@@ -21,6 +21,14 @@ export default {
     computedParks: state => state.parks,
     computedState: state => state.stateFull,
   }),
+  methods: {
+    randomizedImage:
+      (park) => {
+        const arr = park.imageUrl.split('\n');
+        const index = Math.round(Math.random() * (arr.length - 1));
+        return arr[index];
+      }
+  }
 }
 </script>
 
