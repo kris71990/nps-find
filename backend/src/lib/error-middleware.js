@@ -13,6 +13,11 @@ export default (error, request, response, next) => { // eslint-disable-line no-u
 
   const errorMessage = error.message.toLowerCase();
 
+  if (errorMessage.includes('sequelizedatabaseerror')) {
+    logger.log(logger.INFO, 'Responding with 400 code - bad data');
+    return response.sendStatus(400);
+  }
+
   if (errorMessage.includes('objectid failed')) {
     logger.log(logger.INFO, 'Responding with a 404 code - not found');
     return response.sendStatus(404);

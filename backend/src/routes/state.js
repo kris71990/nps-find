@@ -13,7 +13,7 @@ stateRouter.get('/state/:state', (request, response, next) => {
   logger.log(logger.INFO, `Processing a get for /state/${request.params.state}...`);
 
   // find if state exists in db
-  models.state.findAll({
+  return models.state.findAll({
     where: {
       stateId: request.params.state,
     },
@@ -21,6 +21,8 @@ stateRouter.get('/state/:state', (request, response, next) => {
     .then((results) => {
       // if it exists, return all parks associated with the state
       if (results.length > 0) {
+        logger.log(logger.INFO, `Returning park data from db for ${request.params.state}`);
+
         return models.park.findAll({
           where: {
             stateCode: request.params.state,

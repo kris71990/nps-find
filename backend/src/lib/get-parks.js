@@ -8,7 +8,7 @@ import models from '../models';
 
 const getParks = (stateSelected) => {
   logger.log(logger.INFO, `Retrieving new data from API for ${stateSelected}`);
-
+  
   const url = `https://api.nps.gov/api/v1/parks?stateCode=${stateSelected}&fields=images`;
   
   return superagent.get(url)
@@ -25,7 +25,7 @@ const getParks = (stateSelected) => {
         .then(() => {
           logger.log(logger.INFO, `Inserting parks in ${stateSelected} into database`);
 
-          filtered.forEach((parkFound) => {
+          const parksEntered = filtered.forEach((parkFound) => {
             let imgUrlStrings = '';
             let imgCaptionStrings = '';
 
@@ -39,7 +39,7 @@ const getParks = (stateSelected) => {
               imgCaptionStrings = null;
             }
 
-            models.park.create({
+            return models.park.create({
               stateCode: stateSelected,
               parkCode: parkFound.parkCode,
               pKeyCode: `${stateSelected}-${parkFound.parkCode}`,
@@ -55,8 +55,10 @@ const getParks = (stateSelected) => {
               url: parkFound.url,
               weatherInfo: parkFound.weatherInfo,
             });
-          });
-          return filtered;
+          })
+            .then(() => {
+              return parksEntered;
+            });
         })
         .catch(() => new HttpError(400, 'Unable to save to db'));
     })

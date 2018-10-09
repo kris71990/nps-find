@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "eslint . && jest --coverage",
-    "test-nolint": "jest --coverage --detectOpenHandles",
+    "test-nolint": "jest --coverage --detectOpenHandles --forceExit",
     "start": "node index.js"
   },
   "jest": {
     "setupFiles": [
-      "<rootDir>/src/__test__/lib/test.env.js"
+      "<rootDir>/src/__test__/lib/.env"
     ]
   },
   "author": "",
