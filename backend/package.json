@@ -5,8 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "eslint . && jest --coverage",
-    "test-nolint": "jest --coverage",
+    "test-nolint": "jest --coverage --detectOpenHandles --forceExit",
     "start": "node index.js"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/src/__test__/lib/jest-setup.js"
+    ]
   },
   "author": "",
   "license": "ISC",

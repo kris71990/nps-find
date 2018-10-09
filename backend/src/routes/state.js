@@ -1,62 +1,54 @@
 'use strict';
 
 import { Router } from 'express';
-import superagent from 'superagent';
+import HttpError from 'http-errors';
 import logger from '../lib/logger';
 import models from '../models';
+
+import getData from '../lib/get-parks';
 
 const stateRouter = new Router();
 
 stateRouter.get('/state/:state', (request, response, next) => {
-  logger.log(logger.INFO, `Searching for national parks in ${request.params.state}...`);
+  logger.log(logger.INFO, `Processing a get for /state/${request.params.state}...`);
 
-  models.state.findAll({
+  // find if state exists in db
+  return models.state.findAll({
     where: {
-      stateCode: request.params.state,
+      stateId: request.params.state,
     },
   })
     .then((results) => {
-      if (results.length > 0) console.log(results);
+      // if it exists, return all parks associated with the state
+      if (results.length > 0) {
+        logger.log(logger.INFO, `Returning park data from db for ${request.params.state}`);
 
-      const url = `https://api.nps.gov/api/v1/parks?stateCode=${request.params.state}&fields=images`;
+        return models.park.findAll({
+          where: {
+            stateCode: request.params.state,
+          },
+        })
+          .then((retrievedParks) => {
+            return response.json(retrievedParks);
+          });
+      }
 
-      return superagent.get(url)
-        .set('api_key', process.env.NPS_API_KEY)
-        .type('application/json')
-        .then((parks) => {
-          logger.log(logger.INFO, `Returning national parks in ${request.params.state}`);
-          
-          const filtered = parks.body.data.filter(park => park.url);
-          return models.state.findOrCreate({
+      // if it doesn't, call this function to get data from the api
+      return getData(request.params.state)
+        .then(() => {
+          return models.park.findAll({
             where: {
               stateCode: request.params.state,
             },
-            defaults: {
-              totalParks: null,
-            },
           })
-            .then(() => {
-              filtered.forEach((parkFound) => {
-                return models.park.create({
-                  stateCode: request.params.state,
-                  parkCode: parkFound.parkCode,
-                  description: parkFound.description,
-                });
-              })
-                .then(() => {
-                  // return models.state.findOne({
-                  //   where: {
-                  //     stateCode: request.
-                  //   }
-                  // })
-                  return response.json(filtered);
-                });
+            .then((retrievedParks) => {
+              return response.json(retrievedParks);
             })
             .catch(next);
         })
         .catch(next);
     })
-    .catch(next);
+    .catch(error => new HttpError(400, `Bad request ${error}`));
 });
 
 export default stateRouter;

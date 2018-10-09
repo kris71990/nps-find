@@ -3,12 +3,16 @@
 const Park = (sequelize, DataTypes) => sequelize.define('park', {
   parkCode: {
     type: DataTypes.STRING,
-    unique: true,
     allowNull: false,
-    primaryKey: true,
   },
   stateCode: {
     type: DataTypes.STRING,
+    allowNull: false,
+  },
+  pKeyCode: {
+    type: DataTypes.STRING,
+    primaryKey: true,
+    unique: true,
     allowNull: false,
   },
   description: {
@@ -19,13 +23,16 @@ const Park = (sequelize, DataTypes) => sequelize.define('park', {
     type: DataTypes.STRING,
   },
   directionsInfo: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(1000),
   },
   fullName: {
     type: DataTypes.STRING,
   },
-  image: {
-    type: DataTypes.STRING,
+  imageUrl: {
+    type: DataTypes.STRING(4000),
+  },
+  imageCaptions: {
+    type: DataTypes.STRING(2000),
   },
   latLong: {
     type: DataTypes.STRING,
@@ -40,15 +47,8 @@ const Park = (sequelize, DataTypes) => sequelize.define('park', {
     type: DataTypes.STRING,
   },
   weatherInfo: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(1000),
   },
 });
-
-Park.associate = (models) => {
-  models.park.belongsTo(models.state, {
-    foreignKey: 'stateCode',
-    targetKey: 'stateId',
-  });
-};
 
 export default Park;
