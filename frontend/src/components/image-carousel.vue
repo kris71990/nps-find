@@ -1,29 +1,22 @@
 <template>
   <div class='carousel-view'>
-    <ul id="park-list">
-      <transition-group
-        class='carousel'
-        tag="li">
-        <li
-          v-for="item in parks" 
-          class='slide'
-          :key="item.imageUrl"
-        >
-          <div v-if="item.imageUrl" :index="index">
-            <img v-bind:src="item.imageUrl.split('\n')[index]"/>
-            <p>{{ item.fullName }}</p>
-            <div>
-              <button @click="index -= 1">Previous</button>
-              <button @click="index += 1">Next</button>
-            </div>
-          </div>
-          <!-- <div class='carousel-controls' :key="item.imageUrl">
-            <button class='carousel-controls__button' @click="previous">prev</button>
-            <button class='carousel-controls__button' @click="next">next</button>
-          </div> -->
-        </li>
-      </transition-group>
-    </ul>
+    <transition-group
+      class='carousel'
+      tag="div">
+      <div
+        :index="index"
+        class='slide'
+        :key="index"
+      >
+        <div v-if="parkImages[index]">
+          <img v-bind:src="parkImages[index]"/>
+        </div>
+      </div>
+    </transition-group>
+    <div>
+      <button @click="validateIndexLow">Previous</button>
+      <button @click="validateIndexHigh">Next</button>
+    </div>
   </div>
 </template>
 
@@ -38,37 +31,66 @@ export default {
     }
   },
   props: {
-    parks: Array,
+    parkImages: Array,
   },
-  // computed: {
-  //   next: () => this.index += 1,
-  //   previous: () => this.index -= 1,
-  // },
   methods: {
     randomizedImage:
       function(park) {
         const arr = park.imageUrl.split('\n');
         arr.pop()
-        // const index = Math.round(Math.random() * (arr.length - 1));
+        const index = Math.round(Math.random() * (arr.length - 1));
         return arr[this.index];
       }, 
-    // ...mapMutations({
-    //   nextImage: parkImageNext,
-    // })
-    // next () {
-    //   const first = this.parksComputed.shift()
-    //   parksComputed = parksComputed.concat(first)
-    // },
-    // previous () {
-    //   const last = parksComputed.pop()
-    //   parksComputed = [last].concat(parksComputed)
-    // }
+    validateIndexLow: 
+      function() {
+        if (this.index === 0) {
+          this.index = this.parkImages.length - 2
+          return this.index;
+        }
+        if (this.index >= 1) this.index -= 1;
+      },
+    validateIndexHigh: 
+      function() {
+        if (this.index === this.parkImages.length - 2) {
+          this.index = 0
+          return this.index;
+        }
+        if (this.index < this.parkImages.length - 2) this.index += 1;
+      },
   }
-//     randomizedImage:
-//       (park) => {
-//         const index = Math.round(Math.random() * (arr.length - 1));
-//         return arr[index];
-//       }
-//   }
 }
 </script>
+
+<style lang="scss">
+// .carousel-view {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+// }
+// .carousel {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   overflow: hidden;
+  
+//   width: 24em;
+//   min-height: 25em;
+// }
+// .slide {
+//   flex: 0 0 20em;
+//   height: 20em;
+//   margin: 1em;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   border: 0.1em dashed #000;
+//   border-radius: 50%;
+//   transition: transform 0.3s ease-in-out;
+// }
+// .slide:first-of-type {
+//   opacity: 0;
+// }
+// .slide:last-of-type {
+//   opacity: 0;
+// }
+</style>
