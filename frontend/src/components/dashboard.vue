@@ -3,7 +3,7 @@
     <h3>National Parks in {{ computedState }}</h3>
     <ul id="park-list">
       <li v-for="item in computedParks" :key="item.id">
-        <Carousel v-bind:parkImages="item.imageUrl.split('\n')"/>
+        <ImageCarousel v-bind:parkImages="item.imageUrl.split('\n')"/>
         <p>{{ item.fullName }}</p>
       </li>
     </ul> 
@@ -12,12 +12,12 @@
 
 <script>
 import { mapState } from 'vuex';
-import Carousel from './image-carousel.vue';
+import ImageCarousel from './image-carousel.vue';
 
 export default {
   name: 'Dashboard',
   components: {
-    Carousel,
+    ImageCarousel,
   },
   computed:
     mapState({
@@ -46,9 +46,6 @@ export default {
       margin-top: 3%;
       margin-bottom: 5%;
       list-style-type: none;
-      img {
-        width: 45%;
-      }
     }
   }
 }

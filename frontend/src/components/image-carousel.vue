@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
-
 export default {
   name: 'Carousel',
   data() {
@@ -62,35 +60,23 @@ export default {
 </script>
 
 <style lang="scss">
-// .carousel-view {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-// }
-// .carousel {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   overflow: hidden;
-  
-//   width: 24em;
-//   min-height: 25em;
-// }
-// .slide {
-//   flex: 0 0 20em;
-//   height: 20em;
-//   margin: 1em;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   border: 0.1em dashed #000;
-//   border-radius: 50%;
-//   transition: transform 0.3s ease-in-out;
-// }
-// .slide:first-of-type {
-//   opacity: 0;
-// }
-// .slide:last-of-type {
-//   opacity: 0;
-// }
+.carousel-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    .slide {
+      transition: transform 0.3s ease-in-out;
+      img {
+        width: 40%;
+        height: auto;
+        border: 8px groove #336E55;
+      }
+    }
+  }
+}
 </style>
