@@ -20,6 +20,14 @@ const store = new Vuex.Store({
       state.parks = fromApi;
       return state;
     },
+    // parkImageNext(state) {
+    //   state.parks.map((park) => {
+    //     park.imageUrl
+    //   })
+    //   const first = state.parks.shift();
+    //   state.parks = state.parks.concat(first);
+    //   return state;
+    // },
     default(state) {
       state.stateAbbrev = null;
       state.stateFull = null;

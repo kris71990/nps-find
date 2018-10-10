@@ -1,7 +1,7 @@
 <template>
   <div v-if="computedParks" id="search-results" >
     <h3>National Parks in {{ computedState }}</h3>
-    <!-- <Carousel v-bind:slides="slides"/> -->
+    <Carousel v-bind:parks="computedParks"/>
     <!-- <ul id="park-list">
       <li v-for="item in computedParks" :key="item.id">
         <div v-if="item.imageUrl">
@@ -10,35 +10,43 @@
         <p>{{ item.fullName }}</p>
       </li>
     </ul> -->
-    <div class='carousel-view'>
+    <!-- <div class='carousel-view'>
       <ul id="park-list">
         <transition-group
           class='carousel'
-          tag="div">
+          tag="li">
           <li
             v-for="item in computedParks" 
             class='slide'
             :key="item.imageUrl">
             <div v-if="item.imageUrl">
-              <img v-bind:src="randomizedImage(item.imageUrl)"/>
+              <img v-bind:src="randomizedImage(item)"/>
               <p>{{ item.fullName }}</p>
-            </div>
+              <div>
+                <button @click="randomizedImage(item)">Previous</button>
+                <button @click="randomizedImage(item)">Next</button>
+              </div>
+            </div> -->
             <!-- <div class='carousel-controls' :key="item.imageUrl">
               <button class='carousel-controls__button' @click="previous">prev</button>
               <button class='carousel-controls__button' @click="next">next</button>
             </div> -->
-          </li>
+          <!-- </li>
         </transition-group>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Carousel from './image-carousel.vue';
 
 export default {
   name: 'Dashboard',
+  components: {
+    Carousel,
+  },
   computed:
     mapState({
       computedParks: state => state.parks,
@@ -46,20 +54,20 @@ export default {
     }),
   methods: {
     randomizedImage:
-      (imageUrl) => {
-        const arr = imageUrl.split('\n');
+      (park) => {
+        const arr = park.imageUrl.split('\n');
         arr.pop()
         const index = Math.round(Math.random() * (arr.length - 1));
         return arr[index];
       }, 
-    next () {
-      const first = this.imageArr.shift()
-      imageArr = images.concat(first)
-    },
-    previous () {
-      const last = imageArr.pop()
-      imageArr = [last].concat(imageArr)
-    }
+    // next (imgArr) {
+    //   const first = imgArr.shift()
+    //   imgArr = images.concat(first)
+    // },
+    // previous (imgArr) {
+    //   const last = imageArr.pop()
+    //   imageArr = [last].concat(imageArr)
+    // }
   }
 }
 </script>

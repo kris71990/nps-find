@@ -1,44 +1,74 @@
 <template>
   <div class='carousel-view'>
-    <transition-group
-      class='carousel'
-      tag="div">
-      <div
-        v-for="slide in this.slides" 
-        class='slide'
-        :key="slide">
-        <img src="slide"/>
-      </div>
-    </transition-group>
-    <div class='carousel-controls'>
-      <button class='carousel-controls__button' @click="previous">prev</button>
-      <button class='carousel-controls__button' @click="next">next</button>
-    </div>
+    <ul id="park-list">
+      <transition-group
+        class='carousel'
+        tag="li">
+        <li
+          v-for="item in parks" 
+          class='slide'
+          :key="item.imageUrl"
+        >
+          <div v-if="item.imageUrl" :index="index">
+            <img v-bind:src="item.imageUrl.split('\n')[index]"/>
+            <p>{{ item.fullName }}</p>
+            <div>
+              <button @click="index -= 1">Previous</button>
+              <button @click="index += 1">Next</button>
+            </div>
+          </div>
+          <!-- <div class='carousel-controls' :key="item.imageUrl">
+            <button class='carousel-controls__button' @click="previous">prev</button>
+            <button class='carousel-controls__button' @click="next">next</button>
+          </div> -->
+        </li>
+      </transition-group>
+    </ul>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
   name: 'Carousel',
-  props: {
-    slides: Array,
-  },
-  methods: {
-    next () {
-      const first = this.slides.shift()
-      this.slides = this.slides.concat(first)
-    },
-    previous () {
-      const last = this.slides.pop()
-      this.slides = [last].concat(this.slides)
+  data() {
+    return {
+      index: 0,
     }
+  },
+  props: {
+    parks: Array,
+  },
+  // computed: {
+  //   next: () => this.index += 1,
+  //   previous: () => this.index -= 1,
+  // },
+  methods: {
+    randomizedImage:
+      function(park) {
+        const arr = park.imageUrl.split('\n');
+        arr.pop()
+        // const index = Math.round(Math.random() * (arr.length - 1));
+        return arr[this.index];
+      }, 
+    // ...mapMutations({
+    //   nextImage: parkImageNext,
+    // })
+    // next () {
+    //   const first = this.parksComputed.shift()
+    //   parksComputed = parksComputed.concat(first)
+    // },
+    // previous () {
+    //   const last = parksComputed.pop()
+    //   parksComputed = [last].concat(parksComputed)
+    // }
   }
-  // methods: {
-  //   randomizedImage:
-  //     (park) => {
-  //       const index = Math.round(Math.random() * (arr.length - 1));
-  //       return arr[index];
-  //     }
-  // }
+//     randomizedImage:
+//       (park) => {
+//         const index = Math.round(Math.random() * (arr.length - 1));
+//         return arr[index];
+//       }
+//   }
 }
 </script>
