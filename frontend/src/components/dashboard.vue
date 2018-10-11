@@ -1,6 +1,6 @@
 <template>
   <div v-if="computedParks" id="search-results" >
-    <h3>National Parks in {{ computedState }}</h3>
+    <h3>National Parks in {{ computedState }} ({{ computedTotal }})</h3>
     <ul id="park-list">
       <li v-for="item in computedParks" :key="item.id">
         <ImageCarousel v-bind:parkImages="item.imageUrl.split('\n')"/>
@@ -23,6 +23,7 @@ export default {
     mapState({
       computedParks: state => state.parks,
       computedState: state => state.stateFull,
+      computedTotal: state => state.parksTotal,
     }),
   methods: {
     randomizedImage:

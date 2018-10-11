@@ -8,6 +8,7 @@ const store = new Vuex.Store({
   state: {
     stateAbbrev: null,
     stateFull: null,
+    parksTotal: null,
     parks: null,
   },
   mutations: {
@@ -20,9 +21,14 @@ const store = new Vuex.Store({
       state.parks = fromApi;
       return state;
     },
+    setTotal(state, total) {
+      state.parksTotal = total;
+      return state;
+    },
     default(state) {
       state.stateAbbrev = null;
       state.stateFull = null;
+      state.parksTotal = null;
       state.parks = null;
       return state;
     },
@@ -40,13 +46,16 @@ const store = new Vuex.Store({
       const { commit } = context;
       const { state, stateFull } = stateSelection;
       let parks;
+      let parksNumber;
       return superagent.get(`${API_URL}/state/${state}`)
         .then((response) => {
           parks = response.body;
+          parksNumber = response.body.length;
         })
         .then(() => {
           commit('changeState', { state, stateFull });
           commit('foundParks', parks);
+          commit('setTotal', parksNumber);
         });
     },
   },
