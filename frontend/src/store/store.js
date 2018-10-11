@@ -10,6 +10,7 @@ const store = new Vuex.Store({
     stateFull: null,
     parksTotal: null,
     parks: null,
+    stateList: null,
   },
   mutations: {
     changeState(state, selection) {
@@ -19,7 +20,11 @@ const store = new Vuex.Store({
     },
     foundParks(state, fromApi) {
       state.parks = fromApi;
+      state.stateList = null;
       return state;
+    },
+    createStateList(state, statesFromDB) {
+      state.stateList = statesFromDB;
     },
     setTotal(state, total) {
       state.parksTotal = total;
@@ -30,6 +35,7 @@ const store = new Vuex.Store({
       state.stateFull = null;
       state.parksTotal = null;
       state.parks = null;
+      state.stateList = null;
       return state;
     },
   },
@@ -47,7 +53,7 @@ const store = new Vuex.Store({
       const { state, stateFull } = stateSelection;
       let parks;
       let parksNumber;
-      return superagent.get(`${API_URL}/state/${state}`)
+      return superagent.get(`${API_URL}/parks/${state}`)
         .then((response) => {
           parks = response.body;
           parksNumber = response.body.length;
@@ -56,6 +62,17 @@ const store = new Vuex.Store({
           commit('changeState', { state, stateFull });
           commit('foundParks', parks);
           commit('setTotal', parksNumber);
+        });
+    },
+    stateChart(context) {
+      const { commit } = context;
+      let parks;
+      return superagent.get(`${API_URL}/states`)
+        .then((response) => {
+          parks = response.body;
+        })
+        .then(() => {
+          commit('createStateList', parks);
         });
     },
   },

@@ -1,6 +1,9 @@
 <template>
-  <div id="home" v-if="!computedParks">
+  <div id="home" v-if="!computedParks && !stateList">
     <SearchForm :handleSearch="handleSearch"/>
+    <div id="states">
+      <h4>Or see an <a v-on:click="getStateList">overview</a> of all parks</h4>
+    </div>
   </div>
 </template>
 
@@ -29,9 +32,16 @@ export default {
           this.$router.push('/dashboard');
         });
     },
+    getStateList(event, a, b) {
+      return this.$store.dispatch('stateChart')
+        .then(() => {
+          this.$router.push('/states');
+        })
+    }
   },
   computed: mapState({
     computedParks: state => state.parks,
+    stateList: state => state.stateList,
   }),
 }
 </script>
@@ -40,5 +50,13 @@ export default {
 #home {
   width: 40%;
   margin: 5% auto;
+  a {
+    color: #336E55;
+  }
+  a:hover {
+    color: #11C68A;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
 </style>
