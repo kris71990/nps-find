@@ -8,6 +8,19 @@ import models from '../models';
 import getData from '../lib/get-parks';
 
 const stateRouter = new Router();
+stateRouter.get('/rankings', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /state/rankings');
+
+  return models.sequelize.query(
+    'SELECT "stateId", "totalParks" FROM states ORDER BY "totalParks" DESC', 
+    { type: models.sequelize.QueryTypes.SELECT },
+  )
+    .then((states) => {
+      logger.log(logger.INFO, 'Returning states in order of total parks');
+      return response.json(states);
+    })
+    .catch(next);
+});
 
 stateRouter.get('/state/:state', (request, response, next) => {
   logger.log(logger.INFO, `Processing a get for /state/${request.params.state}...`);
@@ -50,5 +63,6 @@ stateRouter.get('/state/:state', (request, response, next) => {
     })
     .catch(error => new HttpError(400, `Bad request ${error}`));
 });
+
 
 export default stateRouter;
