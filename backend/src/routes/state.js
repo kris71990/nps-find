@@ -8,10 +8,14 @@ import models from '../models';
 const stateRouter = new Router();
 
 stateRouter.get('/states', (request, response, next) => {
-  logger.log(logger.INFO, 'Processing a get on /state/rankings');
+  logger.log(logger.INFO, 'Processing a get on /states');
 
+  // return models.sequelize.query(
+  //   'SELECT "stateId", "totalParks" FROM states ORDER BY "totalParks" DESC', 
+  //   { type: models.sequelize.QueryTypes.SELECT },
+  // )
   return models.sequelize.query(
-    'SELECT "stateId", "totalParks" FROM states ORDER BY "totalParks" DESC', 
+    'SELECT "designation", COUNT(*) FROM parks GROUP BY "designation"', 
     { type: models.sequelize.QueryTypes.SELECT },
   )
     .then((states) => {

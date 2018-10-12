@@ -28,7 +28,7 @@ const getParks = (stateSelected) => {
 
       return models.state.create({
         stateId: stateSelected,
-        totalParks: total.length,
+        total: total.length,
       })
         .then(() => {
           logger.log(logger.INFO, `Inserting parks in ${stateSelected} into database`);

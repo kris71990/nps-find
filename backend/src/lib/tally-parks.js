@@ -1,9 +1,9 @@
-'use strict';
+// 'use strict';
 
-import logger from './logger';
+// import logger from './logger';
 
-const countParks = (parksArr) => {
-  
-};
+// const countParks = (parksArr) => {
 
-export default countParks;
+// };
+
+// export default countParks;
