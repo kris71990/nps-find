@@ -17,17 +17,25 @@ const getParks = (stateSelected) => {
     .then((parks) => {
       logger.log(logger.INFO, `Found data and inserting ${stateSelected} in to database`);
       
-      const filtered = parks.body.data.filter(park => park.url);
+      const total = parks.body.data.filter(park => park.url);
+
       return models.state.create({
         stateId: stateSelected,
-        totalParks: filtered.length,
+        total: total.length,
       })
         .then(() => {
           logger.log(logger.INFO, `Inserting parks in ${stateSelected} into database`);
 
-          const parksEntered = filtered.forEach((parkFound) => {
+          const parksEntered = total.forEach((parkFound) => {
             let imgUrlStrings = '';
             let imgCaptionStrings = '';
+            let designationString = null;
+
+            if (parkFound.designation === '') {
+              designationString = 'Other';
+            } else {
+              designationString = parkFound.designation.trim();
+            }
 
             if (parkFound.images.length > 0) {
               parkFound.images.forEach((image) => {
@@ -41,19 +49,19 @@ const getParks = (stateSelected) => {
 
             return models.park.create({
               stateCode: stateSelected,
-              parkCode: parkFound.parkCode,
+              parkCode: parkFound.parkCode.trim(),
               pKeyCode: `${stateSelected}-${parkFound.parkCode}`,
-              description: parkFound.description,
-              designation: parkFound.designation,
-              directionsInfo: parkFound.directionsInfo,
-              fullName: parkFound.fullName,
+              description: parkFound.description.trim(),
+              designation: designationString,
+              directionsInfo: parkFound.directionsInfo.trim(),
+              fullName: parkFound.fullName.trim(),
               imageUrl: imgUrlStrings,
               imageCaptions: imgCaptionStrings,
-              latLong: parkFound.latLong, 
-              name: parkFound.name,
-              states: parkFound.states,
-              url: parkFound.url,
-              weatherInfo: parkFound.weatherInfo,
+              latLong: parkFound.latLong.trim(), 
+              name: parkFound.name.trim(),
+              states: parkFound.states.trim(),
+              url: parkFound.url.trim(),
+              weatherInfo: parkFound.weatherInfo.trim(),
             });
           })
             .then(() => {

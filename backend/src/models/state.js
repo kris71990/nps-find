@@ -7,7 +7,7 @@ const State = (sequelize, DataTypes) => sequelize.define('state', {
     allowNull: false,
     primaryKey: true,
   },
-  totalParks: {
+  total: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },

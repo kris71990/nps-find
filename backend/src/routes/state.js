@@ -5,50 +5,74 @@ import HttpError from 'http-errors';
 import logger from '../lib/logger';
 import models from '../models';
 
-import getData from '../lib/get-parks';
-
 const stateRouter = new Router();
 
-stateRouter.get('/state/:state', (request, response, next) => {
-  logger.log(logger.INFO, `Processing a get for /state/${request.params.state}...`);
+stateRouter.get('/states', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /states');
 
-  // find if state exists in db
-  return models.state.findAll({
-    where: {
-      stateId: request.params.state,
-    },
-  })
-    .then((results) => {
-      // if it exists, return all parks associated with the state
-      if (results.length > 0) {
-        logger.log(logger.INFO, `Returning park data from db for ${request.params.state}`);
+  return models.sequelize.query(
+    'SELECT "stateCode", "designation", COUNT(*) FROM parks GROUP BY "designation", "stateCode"', 
+    { type: models.sequelize.QueryTypes.SELECT },
+  )
+    .then((parks) => {
+      logger.log(logger.INFO, 'Returning states in order of total parks');
 
-        return models.park.findAll({
-          where: {
-            stateCode: request.params.state,
-          },
-        })
-          .then((retrievedParks) => {
-            return response.json(retrievedParks);
-          });
-      }
-
-      // if it doesn't, call this function to get data from the api
-      return getData(request.params.state)
-        .then(() => {
-          return models.park.findAll({
-            where: {
-              stateCode: request.params.state,
-            },
-          })
-            .then((retrievedParks) => {
-              return response.json(retrievedParks);
-            })
-            .catch(next);
-        })
-        .catch(next);
+      const obj = {};
+      parks.map((state) => {
+        if (!obj[state.stateCode]) {
+          obj[state.stateCode] = {};
+        }
+        obj[state.stateCode][state.designation] = state.count;
+        return 0;
+      });
+      return obj;
     })
-    .catch(error => new HttpError(400, `Bad request ${error}`));
+    .then((stateObj) => {
+      return models.sequelize.query(
+        'SELECT "stateId", "total" FROM states ORDER BY "total" DESC', 
+        { type: models.sequelize.QueryTypes.SELECT },
+      )
+        .then((states) => {
+          logger.log(logger.INFO, 'Returning states in order of total parks');
+          const finalObj = states.map((state) => {
+            state.types = stateObj[state.stateId];
+            return state;
+          });
+          return response.json(finalObj);
+        })
+        .catch(() => next(new HttpError(400, 'bad request')));
+    })
+    .catch(() => next(new HttpError(400, 'bad request')));
 });
+
+
+// stateRouter.get('/states/breakdown', (request, response, next) => {
+//   logger.log(logger.INFO, 'Processing a get on /states');
+
+//   // return models.sequelize.query(
+//   //   'SELECT "stateId", "totalParks" FROM states ORDER BY "totalParks" DESC', 
+//   //   { type: models.sequelize.QueryTypes.SELECT },
+//   // )
+//   return models.sequelize.query(
+//     'SELECT "stateCode", "designation", COUNT(*) FROM parks GROUP BY "designation", "stateCode"', 
+//     { type: models.sequelize.QueryTypes.SELECT },
+//   )
+//     .then((parks) => {
+//       logger.log(logger.INFO, 'Returning states in order of total parks');
+
+//       const obj = {};
+//       parks.map((state) => {
+//         if (!obj[state.stateCode]) {
+//           obj[state.stateCode] = {};
+//         }
+//         obj[state.stateCode][state.designation] = state.count;
+//         return 0;
+//       });
+
+//       console.log(obj);
+//       return response.json(obj);
+//     })
+//     .catch(() => next(new HttpError(400, 'bad request')));
+// });
 
 export default stateRouter;
