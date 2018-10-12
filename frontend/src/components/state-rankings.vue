@@ -8,11 +8,16 @@
         {{ state.total }}
       </li>
     </ul>
+    <a v-on:click="create">Click for chart</a>
+    <div id="chart-container">
+      <canvas id="state-chart"></canvas>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Chart from 'chart.js';
 import { stateAbbreviations } from '../utils/states';
 
 export default {
@@ -22,10 +27,45 @@ export default {
       fullStateNames: stateAbbreviations,
     }
   },
-  computed:
-    mapState({
+  computed: mapState({
       computedStateList: state => state.stateList,
-    }),  
+    }),
+  methods: {
+    create() {
+      this.createChart('state-chart', this.computedStateList);
+    },
+    createChart(chartId, chartData) {
+      console.log(chartData);
+      const ctx = document.getElementById('state-chart');
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: chartData.map((state) => state.stateId),
+          datasets: [
+            {
+              label: 'Total parks by state',
+              data: chartData.map((state) => state.total),
+              backgroundColor: chartData.map(() => 'black'),
+              borderColor: chartData.map(() => 'red'),
+              borderWidth: 2,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          maxBarThickness: 0.2,
+          scales: {
+              xAxes: [{
+                  stacked: true
+              }],
+              yAxes: [{
+                  stacked: true
+              }]
+          }
+        }
+      })
+    }
+  } 
 }
 </script>
 
@@ -33,6 +73,10 @@ export default {
 #state-rankings {
   width: 95%;
   margin: 0 auto;
+  #chart-container {
+    margin: 0 auto;
+    width: 50%;
+  }
   ul {
     padding-left: 0px;
     li {
