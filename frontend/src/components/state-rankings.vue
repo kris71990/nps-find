@@ -5,7 +5,7 @@
       <li v-for="(state, index) in computedStateList" :key="state.stateId">
         {{ index + 1 }}.
         {{ fullStateNames[state.stateId] }} - 
-        {{ state.totalParks }}
+        {{ state.total }}
       </li>
     </ul>
   </div>
