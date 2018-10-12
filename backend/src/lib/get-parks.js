@@ -17,15 +17,23 @@ const getParks = (stateSelected) => {
     .then((parks) => {
       logger.log(logger.INFO, `Found data and inserting ${stateSelected} in to database`);
       
-      const filtered = parks.body.data.filter(park => park.url);
+      const total = parks.body.data.filter(park => park.url);
+
+      // const typeObj = {};
+      // total.forEach((park) => {
+      //   if (typeObj[park.designation]) typeObj[park.designation] += 1;
+      //   typeObj[park.designation] = 0;
+      // });
+      // // const keys = Object.keys(typeObj);
+
       return models.state.create({
         stateId: stateSelected,
-        totalParks: filtered.length,
+        totalParks: total.length,
       })
         .then(() => {
           logger.log(logger.INFO, `Inserting parks in ${stateSelected} into database`);
 
-          const parksEntered = filtered.forEach((parkFound) => {
+          const parksEntered = total.forEach((parkFound) => {
             let imgUrlStrings = '';
             let imgCaptionStrings = '';
 

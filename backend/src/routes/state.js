@@ -22,3 +22,9 @@ stateRouter.get('/states', (request, response, next) => {
 });
 
 export default stateRouter;
+
+/* 
+LEFT JOIN parks to tables:
+
+'SELECT "stateCode", "designation" FROM parks LEFT JOIN states ON "stateCode"="stateId" ORDER BY "totalParks" DESC';
+*/
