@@ -19,13 +19,6 @@ const getParks = (stateSelected) => {
       
       const total = parks.body.data.filter(park => park.url);
 
-      // const typeObj = {};
-      // total.forEach((park) => {
-      //   if (typeObj[park.designation]) typeObj[park.designation] += 1;
-      //   typeObj[park.designation] = 0;
-      // });
-      // // const keys = Object.keys(typeObj);
-
       return models.state.create({
         stateId: stateSelected,
         total: total.length,
@@ -36,6 +29,13 @@ const getParks = (stateSelected) => {
           const parksEntered = total.forEach((parkFound) => {
             let imgUrlStrings = '';
             let imgCaptionStrings = '';
+            let designationString = null;
+
+            if (parkFound.designation === '') {
+              designationString = 'Other';
+            } else {
+              designationString = parkFound.designation.trim();
+            }
 
             if (parkFound.images.length > 0) {
               parkFound.images.forEach((image) => {
@@ -49,19 +49,19 @@ const getParks = (stateSelected) => {
 
             return models.park.create({
               stateCode: stateSelected,
-              parkCode: parkFound.parkCode,
+              parkCode: parkFound.parkCode.trim(),
               pKeyCode: `${stateSelected}-${parkFound.parkCode}`,
-              description: parkFound.description,
-              designation: parkFound.designation,
-              directionsInfo: parkFound.directionsInfo,
-              fullName: parkFound.fullName,
+              description: parkFound.description.trim(),
+              designation: designationString,
+              directionsInfo: parkFound.directionsInfo.trim(),
+              fullName: parkFound.fullName.trim(),
               imageUrl: imgUrlStrings,
               imageCaptions: imgCaptionStrings,
-              latLong: parkFound.latLong, 
-              name: parkFound.name,
-              states: parkFound.states,
-              url: parkFound.url,
-              weatherInfo: parkFound.weatherInfo,
+              latLong: parkFound.latLong.trim(), 
+              name: parkFound.name.trim(),
+              states: parkFound.states.trim(),
+              url: parkFound.url.trim(),
+              weatherInfo: parkFound.weatherInfo.trim(),
             });
           })
             .then(() => {
