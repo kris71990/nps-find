@@ -3,7 +3,7 @@
     <h3>National Parks in {{ computedState }} ({{ computedTotal }})</h3>
     <ul id="park-list">
       <li v-for="item in computedParks" :key="item.id">
-        <ImageCarousel v-bind:parkImages="item.imageUrl.split('\n')"/>
+        <ImageCarousel v-if="item.imageUrl" v-bind:parkImages="item.imageUrl.split('\n')"/>
         <p>{{ item.fullName }}</p>
       </li>
     </ul> 
