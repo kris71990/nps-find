@@ -15,11 +15,21 @@ stateRouter.get('/states', (request, response, next) => {
   //   { type: models.sequelize.QueryTypes.SELECT },
   // )
   return models.sequelize.query(
-    'SELECT "designation", COUNT(*) FROM parks GROUP BY "designation"', 
+    'SELECT "stateCode", "designation", COUNT(*)  FROM parks GROUP BY "designation", "stateCode"', 
     { type: models.sequelize.QueryTypes.SELECT },
   )
     .then((states) => {
       logger.log(logger.INFO, 'Returning states in order of total parks');
+
+      const obj = {};
+      states.map((state) => {
+        if (!obj[state.stateCode]) {
+          obj[state.stateCode] = {};
+        }
+        obj[state.stateCode][state.designation] = state.count;
+        return obj;
+      });
+      console.log(obj);
       return response.json(states);
     })
     .catch(() => next(new HttpError(400, 'bad request')));
@@ -28,7 +38,7 @@ stateRouter.get('/states', (request, response, next) => {
 export default stateRouter;
 
 /* 
-LEFT JOIN parks to tables:
+select state, type, and count from parks:
 
-'SELECT "stateCode", "designation" FROM parks LEFT JOIN states ON "stateCode"="stateId" ORDER BY "totalParks" DESC';
+SELECT "stateCode", "designation", COUNT(*)  FROM parks GROUP BY "designation", "stateCode"
 */
