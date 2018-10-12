@@ -31,7 +31,11 @@ export default {
       computedStateList: state => state.stateList,
     }),
   methods: {
-    create() {
+    generateDataSet() {
+      // const keys = this.computedStateList.map((state) => state.stateId);
+      // for (let i in keys) {
+        
+      // }
       this.createChart('state-chart', this.computedStateList);
     },
     createChart(chartId, chartData) {
