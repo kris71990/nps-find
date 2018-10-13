@@ -1,7 +1,7 @@
 <template>
   <div v-if="computedStateList" id="state-rankings">
     <h2>National Parks by State</h2>
-    <div v-if="chartRendered === false">
+    <div v-if="chartRendered === false && mapRendered === false">
       <ul>
         <li v-for="(state, index) in computedStateList" :key="state.stateId">
           {{ index + 1 }}.
@@ -59,6 +59,12 @@ export default {
       margin: 1%;
       list-style-type: none;
     }
+  }
+  a {
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #336E55;
+    padding: 10px;
   }
 }
 </style>

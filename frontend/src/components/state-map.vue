@@ -35,6 +35,14 @@ export default {
         region: 'US',
         displayMode: 'regions',
         resolution: 'provinces',
+        backgroundColor: '#8EC9EB',
+        datalessRegionColor: '#D2D3D3',
+        colorAxis: {
+          colors: [
+            '#DFFFE9',
+            '#01601F',
+          ]
+        }
       };
       let container = document.getElementById('state-map');
       let geomap = new google.visualization.GeoChart(container);
@@ -45,5 +53,9 @@ export default {
 </script>
 
 <style lang="scss">
-
+#map-container {
+  margin: 0 auto;
+  width: 80%;
+  border: 10px ridge #336E55;
+}
 </style>
