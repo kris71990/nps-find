@@ -10,10 +10,15 @@
         </li>
       </ul>
       <a v-on:click="chartRendered = !chartRendered">Click for chart</a>
+      <a v-on:click="mapRendered = !mapRendered">Click for map</a>
     </div>
     <div v-if="chartRendered === true">
       <a v-on:click="chartRendered = !chartRendered">Back</a>
       <StateChart v-bind:stateList="computedStateList" v-bind:typeList="computedTypesArr"/>
+    </div>
+    <div v-if="mapRendered === true">
+      <a v-on:click="mapRendered = !mapRendered">Back</a>
+      <StateMap v-bind:stateList="computedStateList" v-bind:typeList="computedTypesArr"/>
     </div>
   </div>
 </template>
@@ -21,17 +26,20 @@
 <script>
 import { mapState } from 'vuex';
 import StateChart from './state-chart.vue';
+import StateMap from './state-map.vue';
 import { stateAbbreviations } from '../utils/states';
 
 export default {
   name: 'StateRankings',
   components: {
     StateChart,
+    StateMap,
   },
   data() {
     return {
       fullStateNames: stateAbbreviations,
       chartRendered: false,
+      mapRendered: false,
     }
   },
   computed: mapState({
