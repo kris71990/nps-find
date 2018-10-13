@@ -12,20 +12,11 @@ export default {
     typeList: Array,
   },
   mounted() {
-    let scriptEl = document.createElement('script');
-    scriptEl.setAttribute('src', 'https://www.gstatic.com/charts/loader.js');
-    document.head.appendChild(scriptEl);
-    return this.loadMap();
-
-    // google.charts.load('current', {
-    //   'packages': ['geomap'],
-    //   'mapsApiKey': process.env.GOOGLE_API_KEY,
-    // });
-    // google.charts.setOnLoadCallback(drawMap);
-  },
-  beforeDestroy() {
-    const mapEl = document.getElementById('state-map');
-    mapEl.clearChart();
+    google.charts.load('current', {
+      'packages': ['geomap'],
+      'mapsApiKey': GOOGLE_API_KEY,
+    });
+    google.charts.setOnLoadCallback(this.drawMap);
   },
   methods: {
     loadMap() {
@@ -37,9 +28,9 @@ export default {
       google.charts.setOnLoadCallback(drawMap);
     },
     drawMap() {
-      let data = google.visualization.arrayToDataTable([
-        ['State', 'Total Parks'],
-      ]);
+      const stateArr = this.stateList.map((state) => [state.stateId, state.total]);
+      stateArr.unshift(['State', 'Total Parks']);
+      let data = google.visualization.arrayToDataTable(stateArr);
       let options = {
         region: 'US',
         displayMode: 'regions',

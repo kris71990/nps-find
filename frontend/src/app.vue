@@ -25,6 +25,12 @@ export default {
     Dashboard,
     Footer,
   },
+  mounted() {
+    let scriptEl = document.createElement('script');
+    scriptEl.setAttribute('id', 'state-map-loader');
+    scriptEl.setAttribute('src', 'https://www.gstatic.com/charts/loader.js');
+    document.head.appendChild(scriptEl);
+  },
 }
 </script>
 
