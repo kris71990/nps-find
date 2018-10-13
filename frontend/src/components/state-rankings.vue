@@ -1,14 +1,16 @@
 <template>
   <div v-if="computedStateList" id="state-rankings">
     <h2>National Parks by State</h2>
-    <ul>
-      <li v-for="(state, index) in computedStateList" :key="state.stateId">
-        {{ index + 1 }}.
-        {{ fullStateNames[state.stateId] }} - 
-        {{ state.total }}
-      </li>
-    </ul>
-    <a v-on:click="generateDataSet">Click for chart</a>
+    <div v-if="chartRendered === false">
+      <ul>
+        <li v-for="(state, index) in computedStateList" :key="state.stateId">
+          {{ index + 1 }}.
+          {{ fullStateNames[state.stateId] }} - 
+          {{ state.total }}
+        </li>
+      </ul>
+      <a v-on:click="generateDataSet">Click for chart</a>
+    </div>
     <div id="chart-container">
       <canvas id="state-chart"></canvas>
     </div>
@@ -19,12 +21,14 @@
 import { mapState } from 'vuex';
 import Chart from 'chart.js';
 import { stateAbbreviations } from '../utils/states';
+import { parkTypeColors } from '../utils/colors';
 
 export default {
   name: 'StateRankings',
   data() {
     return {
       fullStateNames: stateAbbreviations,
+      chartRendered: false,
     }
   },
   computed: mapState({
@@ -36,6 +40,7 @@ export default {
       return this.$store.dispatch('setTypes')
         .then(() => {
           const datasetArr = this.computedTypesArr.map((type) => {
+            const color = parkTypeColors[type];
             const stateTotal = this.computedStateList.map((state) => {
               let typeNum;
               if (state.types[type]) {
@@ -48,6 +53,7 @@ export default {
             return {
               label: type,
               data: stateTotal,
+              backgroundColor: color,
             }
           }) 
           this.createChart('state-chart', { 
@@ -55,35 +61,30 @@ export default {
             typeArr: datasetArr,
           });
         })
-      // const typeObj = [];
-      // const parkTypes = this.computedStateList.map((state) => {
-      //   return { 
-      //     state: state.stateId, 
-      //     types: state.types,
-      //   }
-      // });
-      // console.log(parkTypes);
-      
-      // this.createChart('state-chart', this.computedStateList);
     },
     createChart(chartId, chartData) {
+      this.chartRendered = true;
       const ctx = document.getElementById('state-chart');
       const chart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: chartData.stateList.map((state) => state.stateId),
           datasets: chartData.typeArr,
-            // {
-            //   label: 'Total parks by state',
-            //   data: chartData.map((state) => state.total),
-            //   backgroundColor: chartData.map(() => 'black'),
-            //   borderColor: chartData.map(() => 'red'),
-            //   borderWidth: 2,
-            // },
         },
         options: {
           responsive: true,
+          maintainAspectRatio: true,
           maxBarThickness: 0.2,
+          animation: {
+            easing: 'linear',
+            duration: 1000,
+          },
+          legend: {
+            position: 'right',
+            labels: {
+              boxWidth: 15,
+            }
+          },
           scales: {
               xAxes: [{
                   stacked: true
@@ -104,8 +105,9 @@ export default {
   width: 95%;
   margin: 0 auto;
   #chart-container {
+    position: relative;
     margin: 0 auto;
-    width: 50%;
+    width: 80%;
   }
   ul {
     padding-left: 0px;
