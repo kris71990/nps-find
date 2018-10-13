@@ -9,22 +9,25 @@
           {{ state.total }}
         </li>
       </ul>
-      <a v-on:click="generateDataSet">Click for chart</a>
+      <a v-on:click="chartRendered = !chartRendered">Click for chart</a>
     </div>
-    <div id="chart-container">
-      <canvas id="state-chart"></canvas>
+    <div v-if="chartRendered === true">
+      <a v-on:click="chartRendered = !chartRendered">Back</a>
+      <StateChart v-bind:stateList="computedStateList" v-bind:typeList="computedTypesArr"/>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Chart from 'chart.js';
+import StateChart from './state-chart.vue';
 import { stateAbbreviations } from '../utils/states';
-import { parkTypeColors } from '../utils/colors';
 
 export default {
   name: 'StateRankings',
+  components: {
+    StateChart,
+  },
   data() {
     return {
       fullStateNames: stateAbbreviations,
@@ -35,68 +38,6 @@ export default {
       computedStateList: state => state.stateList,
       computedTypesArr: state => state.typesList,
     }),
-  methods: {
-    generateDataSet(event, a, b) {
-      return this.$store.dispatch('setTypes')
-        .then(() => {
-          const datasetArr = this.computedTypesArr.map((type) => {
-            const color = parkTypeColors[type];
-            const stateTotal = this.computedStateList.map((state) => {
-              let typeNum;
-              if (state.types[type]) {
-                typeNum = state.types[type];
-              } else {
-                typeNum = 0;
-              }
-              return typeNum;
-            })
-            return {
-              label: type,
-              data: stateTotal,
-              backgroundColor: color,
-            }
-          }) 
-          this.createChart('state-chart', { 
-            stateList: this.computedStateList,
-            typeArr: datasetArr,
-          });
-        })
-    },
-    createChart(chartId, chartData) {
-      this.chartRendered = true;
-      const ctx = document.getElementById('state-chart');
-      const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: chartData.stateList.map((state) => state.stateId),
-          datasets: chartData.typeArr,
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          maxBarThickness: 0.2,
-          animation: {
-            easing: 'linear',
-            duration: 1000,
-          },
-          legend: {
-            position: 'right',
-            labels: {
-              boxWidth: 15,
-            }
-          },
-          scales: {
-              xAxes: [{
-                  stacked: true
-              }],
-              yAxes: [{
-                  stacked: true
-              }]
-          }
-        }
-      })
-    }
-  } 
 }
 </script>
 
@@ -104,11 +45,6 @@ export default {
 #state-rankings {
   width: 95%;
   margin: 0 auto;
-  #chart-container {
-    position: relative;
-    margin: 0 auto;
-    width: 80%;
-  }
   ul {
     padding-left: 0px;
     li {
