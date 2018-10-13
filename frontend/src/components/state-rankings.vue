@@ -1,102 +1,57 @@
 <template>
   <div v-if="computedStateList" id="state-rankings">
     <h2>National Parks by State</h2>
-    <div v-if="chartRendered === false">
-      <ul>
-        <li v-for="(state, index) in computedStateList" :key="state.stateId">
-          {{ index + 1 }}.
-          {{ fullStateNames[state.stateId] }} - 
-          {{ state.total }}
-        </li>
-      </ul>
-      <a v-on:click="generateDataSet">Click for chart</a>
+    <div class="list">
+      <div v-if="chartRendered === false && mapRendered === false">
+        <ul>
+          <li v-for="(state, index) in computedStateList" :key="state.stateId">
+            {{ index + 1 }}.
+            {{ fullStateNames[state.stateId] }} - 
+            {{ state.total }}
+          </li>
+        </ul>
+        <div class="links">
+          <a v-on:click="chartRendered = !chartRendered">Click for chart</a>
+          <a v-on:click="mapRendered = !mapRendered">Click for map</a>
+        </div>
+      </div>
     </div>
-    <div id="chart-container">
-      <canvas id="state-chart"></canvas>
+    <div class="charts">
+      <div v-if="chartRendered === true">
+        <a v-on:click="chartRendered = !chartRendered">Back</a>
+        <StateChart v-bind:stateList="computedStateList" v-bind:typeList="computedTypesArr"/>
+      </div>
+      <div v-if="mapRendered === true">
+        <a v-on:click="mapRendered = !mapRendered">Back</a>
+        <StateMap v-bind:stateList="computedStateList" v-bind:typeList="computedTypesArr"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Chart from 'chart.js';
+import StateChart from './state-chart.vue';
+import StateMap from './state-map.vue';
 import { stateAbbreviations } from '../utils/states';
-import { parkTypeColors } from '../utils/colors';
 
 export default {
   name: 'StateRankings',
+  components: {
+    StateChart,
+    StateMap,
+  },
   data() {
     return {
       fullStateNames: stateAbbreviations,
       chartRendered: false,
+      mapRendered: false,
     }
   },
   computed: mapState({
       computedStateList: state => state.stateList,
       computedTypesArr: state => state.typesList,
     }),
-  methods: {
-    generateDataSet(event, a, b) {
-      return this.$store.dispatch('setTypes')
-        .then(() => {
-          const datasetArr = this.computedTypesArr.map((type) => {
-            const color = parkTypeColors[type];
-            const stateTotal = this.computedStateList.map((state) => {
-              let typeNum;
-              if (state.types[type]) {
-                typeNum = state.types[type];
-              } else {
-                typeNum = 0;
-              }
-              return typeNum;
-            })
-            return {
-              label: type,
-              data: stateTotal,
-              backgroundColor: color,
-            }
-          }) 
-          this.createChart('state-chart', { 
-            stateList: this.computedStateList,
-            typeArr: datasetArr,
-          });
-        })
-    },
-    createChart(chartId, chartData) {
-      this.chartRendered = true;
-      const ctx = document.getElementById('state-chart');
-      const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: chartData.stateList.map((state) => state.stateId),
-          datasets: chartData.typeArr,
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          maxBarThickness: 0.2,
-          animation: {
-            easing: 'linear',
-            duration: 1000,
-          },
-          legend: {
-            position: 'right',
-            labels: {
-              boxWidth: 15,
-            }
-          },
-          scales: {
-              xAxes: [{
-                  stacked: true
-              }],
-              yAxes: [{
-                  stacked: true
-              }]
-          }
-        }
-      })
-    }
-  } 
 }
 </script>
 
@@ -104,16 +59,29 @@ export default {
 #state-rankings {
   width: 95%;
   margin: 0 auto;
-  #chart-container {
-    position: relative;
-    margin: 0 auto;
-    width: 80%;
-  }
   ul {
     padding-left: 0px;
     li {
       margin: 1%;
       list-style-type: none;
+    }
+  }
+  .charts {
+    a {
+      border: 2px solid black;
+      border-radius: 10px;
+      background-color: #336E55;
+      padding: 5px 20px 5px 20px;
+    }
+  }
+  .links {
+    margin: 5%;
+    a {
+      border: 2px solid black;
+      border-radius: 10px;
+      background-color: #336E55;
+      padding: 10px;
+      margin: 25px;
     }
   }
 }
