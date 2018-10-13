@@ -39,8 +39,8 @@ export default {
         datalessRegionColor: '#D2D3D3',
         colorAxis: {
           colors: [
-            '#DFFFE9',
-            '#01601F',
+            '#CEDDD0',
+            '#036910',
           ]
         }
       };
@@ -54,7 +54,7 @@ export default {
 
 <style lang="scss">
 #map-container {
-  margin: 0 auto;
+  margin: 5% auto;
   width: 80%;
   border: 10px ridge #336E55;
 }

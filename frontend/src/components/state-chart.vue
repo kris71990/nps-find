@@ -84,7 +84,7 @@ export default {
 <style lang="scss">
 #chart-container {
   position: relative;
-  margin: 0 auto;
+  margin: 5% auto;
   width: 80%;
 }
 </style>

@@ -15,5 +15,8 @@ footer {
   background-color: #336E55;
   color: #F1E3CB;
   border: 2px solid black;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 </style>
