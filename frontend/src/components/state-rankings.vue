@@ -8,7 +8,7 @@
         {{ state.total }}
       </li>
     </ul>
-    <a v-on:click="create">Click for chart</a>
+    <a v-on:click="generateDataSet">Click for chart</a>
     <div id="chart-container">
       <canvas id="state-chart"></canvas>
     </div>
@@ -29,31 +29,57 @@ export default {
   },
   computed: mapState({
       computedStateList: state => state.stateList,
+      computedTypesArr: state => state.typesList,
     }),
   methods: {
-    generateDataSet() {
-      // const keys = this.computedStateList.map((state) => state.stateId);
-      // for (let i in keys) {
-        
-      // }
-      this.createChart('state-chart', this.computedStateList);
+    generateDataSet(event, a, b) {
+      return this.$store.dispatch('setTypes')
+        .then(() => {
+          const datasetArr = this.computedTypesArr.map((type) => {
+            const stateTotal = this.computedStateList.map((state) => {
+              let typeNum;
+              if (state.types[type]) {
+                typeNum = state.types[type];
+              } else {
+                typeNum = 0;
+              }
+              return typeNum;
+            })
+            return {
+              label: type,
+              data: stateTotal,
+            }
+          }) 
+          this.createChart('state-chart', { 
+            stateList: this.computedStateList,
+            typeArr: datasetArr,
+          });
+        })
+      // const typeObj = [];
+      // const parkTypes = this.computedStateList.map((state) => {
+      //   return { 
+      //     state: state.stateId, 
+      //     types: state.types,
+      //   }
+      // });
+      // console.log(parkTypes);
+      
+      // this.createChart('state-chart', this.computedStateList);
     },
     createChart(chartId, chartData) {
-      console.log(chartData);
       const ctx = document.getElementById('state-chart');
       const chart = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: chartData.map((state) => state.stateId),
-          datasets: [
-            {
-              label: 'Total parks by state',
-              data: chartData.map((state) => state.total),
-              backgroundColor: chartData.map(() => 'black'),
-              borderColor: chartData.map(() => 'red'),
-              borderWidth: 2,
-            },
-          ]
+          labels: chartData.stateList.map((state) => state.stateId),
+          datasets: chartData.typeArr,
+            // {
+            //   label: 'Total parks by state',
+            //   data: chartData.map((state) => state.total),
+            //   backgroundColor: chartData.map(() => 'black'),
+            //   borderColor: chartData.map(() => 'red'),
+            //   borderWidth: 2,
+            // },
         },
         options: {
           responsive: true,
