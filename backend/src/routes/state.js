@@ -45,6 +45,20 @@ stateRouter.get('/states', (request, response, next) => {
     .catch(() => next(new HttpError(400, 'bad request')));
 });
 
+stateRouter.get('/states/types', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /states/types');
+
+  return models.sequelize.query(
+    'SELECT DISTINCT "designation" FROM parks',
+    { type: models.sequelize.QueryTypes.SELECT },
+  )
+    .then((distinctTypes) => {
+      const typesArr = distinctTypes.map(type => type.designation);
+      return response.json(typesArr);
+    })
+    .catch(() => next(new HttpError(400, 'bad request')));
+});
+
 
 // stateRouter.get('/states/breakdown', (request, response, next) => {
 //   logger.log(logger.INFO, 'Processing a get on /states');

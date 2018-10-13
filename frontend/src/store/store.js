@@ -11,6 +11,7 @@ const store = new Vuex.Store({
     parksTotal: null,
     parks: null,
     stateList: null,
+    typesList: null,
   },
   mutations: {
     changeState(state, selection) {
@@ -30,12 +31,17 @@ const store = new Vuex.Store({
       state.parksTotal = total;
       return state;
     },
+    setTypes(state, types) {
+      state.typesList = types;
+      return state;
+    }, 
     default(state) {
       state.stateAbbrev = null;
       state.stateFull = null;
       state.parksTotal = null;
       state.parks = null;
       state.stateList = null;
+      state.typesList = null;
       return state;
     },
   },
@@ -62,6 +68,17 @@ const store = new Vuex.Store({
           commit('changeState', { state, stateFull });
           commit('foundParks', parks);
           commit('setTotal', parksNumber);
+        });
+    },
+    setTypes(context) {
+      const { commit } = context;
+      let types;
+      return superagent.get(`${API_URL}/states/types`)
+        .then((response) => {
+          types = response.body;
+        })
+        .then(() => {
+          commit('setTypes', types);
         });
     },
     stateChart(context) {
