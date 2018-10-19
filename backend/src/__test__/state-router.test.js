@@ -5,31 +5,40 @@ import { startServer, stopServer } from '../lib/server';
 
 const API_URL = `http://localhost:${process.env.PORT}`;
 
-describe('Test state-router - /state', () => {
+describe('Testing state router - /states', () => {
   beforeAll(startServer);
   afterAll(stopServer);
-
-  test('GET from /state/:stateId should return parks in that state from api', () => {
-    return superagent.get(`${API_URL}/state/SC`)
-      .then((response) => {
-        expect(response.status).toEqual(200);
-        expect(response.body).toBeInstanceOf(Array);
-        expect(response.body[0]).toBeInstanceOf(Object);
-        expect(response.body[0].parkCode).not.toBe(null);
-        expect(response.body[0].stateCode).not.toBe(null);
-        expect(response.body[0].pKeyCode).not.toBe(null);
-      });
+  
+  // for park list view
+  describe('GET /states', () => {
+    test('GET /states should return object of states in descending order of total parks, with types object', () => {
+      return superagent.get(`${API_URL}/states`)
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body).toBeInstanceOf(Array);
+          
+          const total0 = response.body[0].total;
+          const total1 = response.body[1].total;
+          expect(total0).toBeGreaterThan(total1);
+          expect(response.body[0].types).toBeTruthy();
+          expect(response.body[0].types).toBeInstanceOf(Object);
+        });
+    });
+    
+    test('GET /states/types should return array of all park types', () => {
+      return superagent.get(`${API_URL}/states/types`)
+        .then((response) => {
+          console.log(response.body);
+          expect(response.status).toEqual(200);
+          expect(response.body).toBeInstanceOf(Array);
+        });
+    });
   });
 
-  test('GET from /state/:stateId should return parks in that state from db', () => {
-    return superagent.get(`${API_URL}/state/CA`)
-      .then((response) => {
-        expect(response.status).toEqual(200);
-        expect(response.body).toBeInstanceOf(Array);
-        expect(response.body[0]).toBeInstanceOf(Object);
-        expect(response.body[0].parkCode).not.toBe(null);
-        expect(response.body[0].stateCode).not.toBe(null);
-        expect(response.body[0].pKeyCode).not.toBe(null);
+  test('404-catch-all', () => {
+    return superagent.get(`${API_URL}/catchall`)
+      .catch((response) => {
+        expect(response.status).toEqual(404);
       });
   });
 });

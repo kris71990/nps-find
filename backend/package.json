@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "eslint . && jest --coverage",
-    "test-nolint": "jest --coverage --detectOpenHandles --forceExit",
+    "test-nolint": "jest --coverage --detectOpenHandles --forceExit --runInBand",
     "start": "node index.js"
   },
   "jest": {

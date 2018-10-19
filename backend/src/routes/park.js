@@ -10,7 +10,7 @@ import getData from '../lib/get-parks';
 const parkRouter = new Router();
 
 parkRouter.get('/parks/:state', (request, response, next) => {
-  logger.log(logger.INFO, `Processing a get for /state/${request.params.state}...`);
+  logger.log(logger.INFO, `Processing a get for /parks/${request.params.state}...`);
 
   // find if state exists in db
   return models.state.findAll({
