@@ -9,7 +9,7 @@ const mockState = (stateId, total) => {
 };
 
 const removeMocks = () => {
-  return models.state.destroy({ cascade: true });
+  return models.state.destroy({ cascade: true, truncate: true });
 };
 
 export { mockState, removeMocks };
