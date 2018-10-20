@@ -1,7 +1,6 @@
 'use strict';
 
 import superagent from 'superagent';
-import HttpError from 'http-errors';
 
 import logger from './logger';
 import models from '../models';
@@ -64,10 +63,8 @@ const getParks = (stateSelected) => {
               weatherInfo: parkFound.weatherInfo.trim(),
             });
           });
-        })
-        .catch(() => new HttpError(400, 'Unable to save to db'));
-    })
-    .catch(() => new HttpError(400, 'Unable to get park data from API'));
+        });
+    });
 };
 
 export default getParks;

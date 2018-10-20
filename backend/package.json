@@ -4,7 +4,7 @@
   "description": "nps-backend",
   "main": "index.js",
   "scripts": {
-    "test": "eslint . && jest --coverage",
+    "test": "eslint . && jest --coverage --runInBand",
     "test-nolint": "jest --coverage --detectOpenHandles --forceExit --runInBand",
     "start": "node index.js"
   },

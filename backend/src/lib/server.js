@@ -7,8 +7,8 @@ import HttpError from 'http-errors';
 import logger from './logger';
 import models from '../models';
 import stateRouter from '../routes/state';
-import errorMiddleware from './error-middleware';
 import parkRouter from '../routes/park';
+import errorMiddleware from './error-middleware';
 
 const CLIENT_URL = process.env.CLIENT_URL;
 
