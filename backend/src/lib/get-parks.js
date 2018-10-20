@@ -1,7 +1,6 @@
 'use strict';
 
 import superagent from 'superagent';
-import HttpError from 'http-errors';
 
 import logger from './logger';
 import models from '../models';
@@ -26,7 +25,7 @@ const getParks = (stateSelected) => {
         .then(() => {
           logger.log(logger.INFO, `Inserting parks in ${stateSelected} into database`);
 
-          const parksEntered = total.forEach((parkFound) => {
+          return total.forEach((parkFound) => {
             let imgUrlStrings = '';
             let imgCaptionStrings = '';
             let designationString = null;
@@ -63,14 +62,9 @@ const getParks = (stateSelected) => {
               url: parkFound.url.trim(),
               weatherInfo: parkFound.weatherInfo.trim(),
             });
-          })
-            .then(() => {
-              return parksEntered;
-            });
-        })
-        .catch(() => new HttpError(400, 'Unable to save to db'));
-    })
-    .catch(() => new HttpError(400, 'Unable to get park data from API'));
+          });
+        });
+    });
 };
 
 export default getParks;

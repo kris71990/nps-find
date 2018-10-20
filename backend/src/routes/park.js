@@ -1,7 +1,6 @@
 'use strict';
 
 import { Router } from 'express';
-import HttpError from 'http-errors';
 import logger from '../lib/logger';
 import models from '../models';
 
@@ -10,7 +9,7 @@ import getData from '../lib/get-parks';
 const parkRouter = new Router();
 
 parkRouter.get('/parks/:state', (request, response, next) => {
-  logger.log(logger.INFO, `Processing a get for /state/${request.params.state}...`);
+  logger.log(logger.INFO, `Processing a get for /parks/${request.params.state}...`);
 
   // find if state exists in db
   return models.state.findAll({
@@ -44,11 +43,11 @@ parkRouter.get('/parks/:state', (request, response, next) => {
             .then((retrievedParks) => {
               return response.json(retrievedParks);
             })
-            .catch(() => next(new HttpError(400, 'bad request')));
+            .catch(next);
         })
-        .catch(() => next(new HttpError(400, 'bad request')));
+        .catch(next);
     })
-    .catch(() => next(new HttpError(400, 'Bad request')));
+    .catch(next);
 });
 
 export default parkRouter;

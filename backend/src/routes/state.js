@@ -40,9 +40,9 @@ stateRouter.get('/states', (request, response, next) => {
           });
           return response.json(finalObj);
         })
-        .catch(() => next(new HttpError(400, 'bad request')));
+        .catch(() => next(new HttpError(400, 'database error')));
     })
-    .catch(() => next(new HttpError(400, 'bad request')));
+    .catch(() => next(new HttpError(400, 'database error')));
 });
 
 stateRouter.get('/states/types', (request, response, next) => {
@@ -56,37 +56,7 @@ stateRouter.get('/states/types', (request, response, next) => {
       const typesArr = distinctTypes.map(type => type.designation);
       return response.json(typesArr);
     })
-    .catch(() => next(new HttpError(400, 'bad request')));
+    .catch(() => next(new HttpError(400, 'database error')));
 });
-
-
-// stateRouter.get('/states/breakdown', (request, response, next) => {
-//   logger.log(logger.INFO, 'Processing a get on /states');
-
-//   // return models.sequelize.query(
-//   //   'SELECT "stateId", "totalParks" FROM states ORDER BY "totalParks" DESC', 
-//   //   { type: models.sequelize.QueryTypes.SELECT },
-//   // )
-//   return models.sequelize.query(
-//     'SELECT "stateCode", "designation", COUNT(*) FROM parks GROUP BY "designation", "stateCode"', 
-//     { type: models.sequelize.QueryTypes.SELECT },
-//   )
-//     .then((parks) => {
-//       logger.log(logger.INFO, 'Returning states in order of total parks');
-
-//       const obj = {};
-//       parks.map((state) => {
-//         if (!obj[state.stateCode]) {
-//           obj[state.stateCode] = {};
-//         }
-//         obj[state.stateCode][state.designation] = state.count;
-//         return 0;
-//       });
-
-//       console.log(obj);
-//       return response.json(obj);
-//     })
-//     .catch(() => next(new HttpError(400, 'bad request')));
-// });
 
 export default stateRouter;
