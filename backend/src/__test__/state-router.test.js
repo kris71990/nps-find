@@ -2,35 +2,46 @@
 
 import superagent from 'superagent';
 import { startServer, stopServer } from '../lib/server';
+import { removeMocks } from './lib/state-mock';
+import mockParks from './lib/park-mock';
 
 const API_URL = `http://localhost:${process.env.PORT}`;
 
 describe('Testing state router - /states', () => {
   beforeAll(startServer);
+  afterEach(removeMocks);
   afterAll(stopServer);
   
   // for park list view
   describe('GET /states', () => {
     test('GET /states should return object of states in descending order of total parks, with types object', () => {
-      return superagent.get(`${API_URL}/states`)
-        .then((response) => {
-          expect(response.status).toEqual(200);
-          expect(response.body).toBeInstanceOf(Array);
-          
-          const total0 = response.body[0].total;
-          const total1 = response.body[1].total;
-          expect(total0).toBeGreaterThan(total1);
-          expect(response.body[0].types).toBeTruthy();
-          expect(response.body[0].types).toBeInstanceOf(Object);
+      return mockParks('MI', 4)
+        .then(() => mockParks('NM', 2))
+        .then(() => {
+          return superagent.get(`${API_URL}/states`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(response.body).toBeInstanceOf(Array);
+              expect(response.body[0].total).toEqual(4);
+              expect(response.body[0].stateId).toEqual('MI');
+              expect(response.body[1].total).toEqual(2);
+              expect(response.body[1].stateId).toEqual('NM');
+              expect(response.body[0].types).toBeTruthy();
+              expect(response.body[0].types).toBeInstanceOf(Object);
+            });
         });
     });
     
     test('GET /states/types should return array of all park types', () => {
-      return superagent.get(`${API_URL}/states/types`)
-        .then((response) => {
-          console.log(response.body);
-          expect(response.status).toEqual(200);
-          expect(response.body).toBeInstanceOf(Array);
+      return mockParks('MI', 4)
+        .then(() => mockParks('UT', 2))
+        .then(() => {
+          return superagent.get(`${API_URL}/states/types`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(response.body).toBeInstanceOf(Array);
+              expect(response.body[0]).toBeTruthy();
+            });
         });
     });
   });
