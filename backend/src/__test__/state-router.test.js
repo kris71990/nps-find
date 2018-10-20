@@ -13,7 +13,7 @@ describe('Testing state router - /states', () => {
   afterAll(stopServer);
   
   // for park list view
-  describe('GET /states', () => {
+  describe('/states', () => {
     test('GET /states should return object of states in descending order of total parks, with types object', () => {
       return mockParks('MI', 4)
         .then(() => mockParks('NM', 2))
@@ -31,7 +31,19 @@ describe('Testing state router - /states', () => {
             });
         });
     });
-    
+  
+    test('GET /states should return empty array if no data exists', () => {
+      return superagent.get(`${API_URL}/states`)
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body).toBeInstanceOf(Array);
+          expect(response.body).toHaveLength(0);
+        });
+    });
+  });
+
+  // for array of all park types
+  describe('/states/types', () => {
     test('GET /states/types should return array of all park types', () => {
       return mockParks('MI', 4)
         .then(() => mockParks('UT', 2))
@@ -42,6 +54,15 @@ describe('Testing state router - /states', () => {
               expect(response.body).toBeInstanceOf(Array);
               expect(response.body[0]).toBeTruthy();
             });
+        });
+    });
+  
+    test('GET /states/types should return empty array if no data exists', () => {
+      return superagent.get(`${API_URL}/states/types`)
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body).toBeInstanceOf(Array);
+          expect(response.body).toHaveLength(0);
         });
     });
   });

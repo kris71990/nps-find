@@ -26,7 +26,7 @@ const getParks = (stateSelected) => {
         .then(() => {
           logger.log(logger.INFO, `Inserting parks in ${stateSelected} into database`);
 
-          const parksEntered = total.forEach((parkFound) => {
+          return total.forEach((parkFound) => {
             let imgUrlStrings = '';
             let imgCaptionStrings = '';
             let designationString = null;
@@ -63,10 +63,7 @@ const getParks = (stateSelected) => {
               url: parkFound.url.trim(),
               weatherInfo: parkFound.weatherInfo.trim(),
             });
-          })
-            .then(() => {
-              return parksEntered;
-            });
+          });
         })
         .catch(() => new HttpError(400, 'Unable to save to db'));
     })

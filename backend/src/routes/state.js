@@ -40,9 +40,9 @@ stateRouter.get('/states', (request, response, next) => {
           });
           return response.json(finalObj);
         })
-        .catch(() => next(new HttpError(400, 'bad request')));
+        .catch(() => next(new HttpError(400, 'database error')));
     })
-    .catch(() => next(new HttpError(400, 'bad request')));
+    .catch(() => next(new HttpError(400, 'database error')));
 });
 
 stateRouter.get('/states/types', (request, response, next) => {
@@ -56,7 +56,7 @@ stateRouter.get('/states/types', (request, response, next) => {
       const typesArr = distinctTypes.map(type => type.designation);
       return response.json(typesArr);
     })
-    .catch(() => next(new HttpError(400, 'bad request')));
+    .catch(() => next(new HttpError(400, 'database error')));
 });
 
 export default stateRouter;

@@ -8,8 +8,8 @@ const mockParks = (stateCode, total) => {
   const designationTypes = [
     'National Monument', 
     'National Park', 
-    'National Battlefield', 
-    'National Preserve',
+    'Other',
+    'Other',
   ];
   return models.state.create({
     stateId: stateCode,
