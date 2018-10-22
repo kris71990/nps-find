@@ -21,13 +21,15 @@ export default {
       parks: null,
       state: null,
       stateFull: null,
+      interests: null,
     }
   },
   methods: {
-    handleSearch(event, a, b) {
+    handleSearch(event, a, b, c) {
       this.state = event.state;
       this.stateFull = event.stateFull;
-      return this.$store.dispatch('foundParks', { state: this.state, stateFull: this.stateFull })
+      this.interests = event.interests;
+      return this.$store.dispatch('foundParks', { state: this.state, stateFull: this.stateFull, interests: this.interests })
         .then(() => {
           this.$router.push('/dashboard');
         });

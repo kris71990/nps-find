@@ -20,19 +20,19 @@
           <div class="interest-checkboxes">
             <h3>What are your interests?</h3>
             <div>
-              <input type="checkbox" id="camping" name="camping" value="camping">
+              <input type="checkbox" v-model="interests" id="camping" value="camping">
               <label for="">Camping</label>
             </div>
             <div>
-              <input type="checkbox" id="hiking" name="hiking" value="hiking">
+              <input type="checkbox" v-model="interests" id="hiking" name="hiking" value="hiking">
               <label for="">Hiking</label>
             </div>
             <div>
-              <input type="checkbox" id="nature" name="nature" value="nature">
+              <input type="checkbox" v-model="interests" id="nature" name="nature" value="nature">
               <label for="">Nature</label>
             </div>
             <div>
-              <input type="checkbox" id="history" name="history" value="history">
+              <input type="checkbox" v-model="interests" id="history" name="history" value="history">
               <label for="history">History</label>
             </div>
           </div>
@@ -65,11 +65,11 @@ export default {
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      console.log(e);
+      console.log(this.interests);
       return this.handleSearch({ 
-        state: this.stateSelection, stateFull: stateAbbreviations[this.stateSelection] })
+        state: this.stateSelection, stateFull: stateAbbreviations[this.stateSelection], interests: this.interests })
         .then(() => this.stateSelection = null);
-    }
+    },
   }
 }
 </script>

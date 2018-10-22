@@ -10,6 +10,7 @@ const parkRouter = new Router();
 
 parkRouter.get('/parks/:state', (request, response, next) => {
   logger.log(logger.INFO, `Processing a get for /parks/${request.params.state}...`);
+  console.log(request.query);
 
   // find if state exists in db
   return models.state.findAll({
