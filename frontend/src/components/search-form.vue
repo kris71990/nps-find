@@ -77,7 +77,7 @@ export default {
 <style lang="scss">
 .search-form {
   form {
-    width: 50%;
+    width: 80%;
     margin: 0 auto;
     fieldset {
       background-color: #E8EAEB;
@@ -87,11 +87,21 @@ export default {
       background-color: white;
       padding: 2%;
     }
+    .interest-checkboxes div {
+      width: 30%;
+      margin: 2% auto;
+      padding: 2%;
+      text-align: left;
+      label {
+        margin-left: 10%;
+      }
+    }
     .button {
       margin: 1%;
       button {
         background-color: rgb(126, 182, 112);
         padding: 10px;
+        margin: 5%;
         border-radius: 5px;
         border: 2px solid #336E55;
       }
