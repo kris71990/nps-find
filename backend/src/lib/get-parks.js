@@ -23,10 +23,10 @@ const getParks = (stateSelected) => {
         stateId: stateSelected,
         total: total.length,
       })
-        .then(() => {
-          logger.log(logger.INFO, `Inserting parks in ${stateSelected} into database`);
+        .then((state) => {
+          logger.log(logger.INFO, `Inserting parks in ${state.stateId} into database`);
 
-          return total.forEach((parkFound) => {
+          total.forEach((parkFound) => {
             let imgUrlStrings = '';
             let imgCaptionStrings = '';
             let designationString = null;
@@ -47,7 +47,7 @@ const getParks = (stateSelected) => {
               imgCaptionStrings = null;
             }
 
-            return models.park.create({
+            models.park.create({
               stateCode: stateSelected,
               parkCode: parkFound.parkCode.trim(),
               pKeyCode: `${stateSelected}-${parkFound.parkCode}`,
@@ -64,8 +64,10 @@ const getParks = (stateSelected) => {
               weatherInfo: parkFound.weatherInfo.trim(),
             });
           });
+          return null;
         })
         .then(() => {
+          logger.log(logger.INFO, `Finding campgrounds in ${total.length} parks in ${stateSelected}`);
           return getCampgrounds(stateSelected);
         });
     });

@@ -65,7 +65,6 @@ export default {
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      console.log(this.interests);
       return this.handleSearch({ 
         state: this.stateSelection, stateFull: stateAbbreviations[this.stateSelection], interests: this.interests })
         .then(() => this.stateSelection = null);

@@ -1,5 +1,7 @@
 'use strict';
 
+import logger from './logger';
+
 const history = [
   'National Military Park', 
   'National Battlefield', 
@@ -49,6 +51,7 @@ const customizeParks = (query) => {
     reqArr = query.interests;
   }
 
+  logger.log(logger.INFO, `Filtering for user preferences: ${[...reqArr]}`);
   let interestParkTypes = [];
 
   if (reqArr) {

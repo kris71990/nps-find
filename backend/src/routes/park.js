@@ -23,8 +23,6 @@ parkRouter.get('/parks/:state', (request, response, next) => {
     .then((results) => {
       // if it exists, return all parks associated with the state
       if (results.length > 0) {
-        logger.log(logger.INFO, `Returning park data from db for ${request.params.state}`);
-
         if (parkTypes.length === 0) {
           return models.park.findAll({
             where: {
@@ -32,6 +30,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
             },
           })
             .then((retrievedParks) => {
+              logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state}`);
               return response.json(retrievedParks);
             });
         }
@@ -42,6 +41,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
           },
         })
           .then((retrievedParks) => {
+            logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state} that meet user requirements`);
             return response.json(retrievedParks);
           });
       }
@@ -56,6 +56,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
               },
             })
               .then((retrievedParks) => {
+                logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state}`);
                 return response.json(retrievedParks);
               });
           }
@@ -66,6 +67,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
             },
           })
             .then((retrievedParks) => {
+              logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state} that meet user requirements`);
               return response.json(retrievedParks);
             })
             .catch(next);

@@ -5,6 +5,10 @@ const Campground = (sequelize, DataTypes) => sequelize.define('campground', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  state: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
