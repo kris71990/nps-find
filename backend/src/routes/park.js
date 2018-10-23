@@ -74,6 +74,16 @@ parkRouter.get('/parks/:state', (request, response, next) => {
       if (results.length > 0) {
         logger.log(logger.INFO, `Returning park data from db for ${request.params.state}`);
 
+        if (reducedParkTypes.length === 0) {
+          return models.park.findAll({
+            where: {
+              stateCode: request.params.state,
+            },
+          })
+            .then((retrievedParks) => {
+              return response.json(retrievedParks);
+            });
+        }
         return models.park.findAll({
           where: {
             stateCode: request.params.state,
@@ -88,6 +98,16 @@ parkRouter.get('/parks/:state', (request, response, next) => {
       // if it doesn't, call this function to get data from the api
       return getData(request.params.state)
         .then(() => {
+          if (reducedParkTypes.length === 0) {
+            return models.park.findAll({
+              where: {
+                stateCode: request.params.state,
+              },
+            })
+              .then((retrievedParks) => {
+                return response.json(retrievedParks);
+              });
+          }
           return models.park.findAll({
             where: {
               stateCode: request.params.state,
