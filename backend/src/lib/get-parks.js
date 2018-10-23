@@ -4,6 +4,7 @@ import superagent from 'superagent';
 
 import logger from './logger';
 import models from '../models';
+import getCampgrounds from './get-campgrounds';
 
 const getParks = (stateSelected) => {
   logger.log(logger.INFO, `Retrieving new data from API for ${stateSelected}`);
@@ -17,8 +18,6 @@ const getParks = (stateSelected) => {
       logger.log(logger.INFO, `Found data and inserting ${stateSelected} in to database`);
       
       const total = parks.body.data.filter(park => park.url);
-
-      // get campgrounds for state
 
       return models.state.create({
         stateId: stateSelected,
@@ -65,6 +64,10 @@ const getParks = (stateSelected) => {
               weatherInfo: parkFound.weatherInfo.trim(),
             });
           });
+        })
+        .then(() => {
+          return getCampgrounds(stateSelected)
+            .then(campgrounds => console.log(campgrounds));
         });
     });
 };

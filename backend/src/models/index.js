@@ -23,9 +23,14 @@ park.belongsTo(state, {
   targetKey: 'stateId',
 });
 
+// park.hasMany(campground, {
+//   foreignKey: 'parkId',
+//   sourceKey: 'parkCode',
+// });
+
 campground.belongsTo(park, {
   foreignKey: 'parkId',
-  targetKey: 'parkCode',
+  targetKey: 'pKeyCode',
 });
 
 db[state.name] = state;
