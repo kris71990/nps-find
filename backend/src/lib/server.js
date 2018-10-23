@@ -33,7 +33,7 @@ const startServer = () => {
     .then(() => {
       logger.log(logger.INFO, 'Database connection established');
 
-      return models.sequelize.sync({ logging: logger.info })
+      return models.sequelize.sync({ logging: false })
         .then(() => {
           server = app.listen(process.env.PORT, () => {
             logger.log(logger.INFO, `Server listening on port ${process.env.PORT}`);

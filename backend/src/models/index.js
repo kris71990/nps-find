@@ -1,12 +1,11 @@
 'use strict';
 
 import Sequelize from 'sequelize';
-import logger from '../lib/logger';
 
 const db = {};
 const DATABASE_URL = process.env.DATABASE_URL;
 const sequelize = new Sequelize(DATABASE_URL, {
-  logging: logger.info,
+  logging: false,
 });
 
 const state = sequelize.import('./state.js');
@@ -22,11 +21,6 @@ park.belongsTo(state, {
   foreignKey: 'stateCode',
   targetKey: 'stateId',
 });
-
-// park.hasMany(campground, {
-//   foreignKey: 'parkId',
-//   sourceKey: 'parkCode',
-// });
 
 campground.belongsTo(park, {
   foreignKey: 'parkId',

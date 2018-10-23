@@ -66,8 +66,7 @@ const getParks = (stateSelected) => {
           });
         })
         .then(() => {
-          return getCampgrounds(stateSelected)
-            .then(campgrounds => console.log(campgrounds));
+          return getCampgrounds(stateSelected);
         });
     });
 };
