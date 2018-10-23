@@ -18,6 +18,8 @@ const getParks = (stateSelected) => {
       
       const total = parks.body.data.filter(park => park.url);
 
+      // get campgrounds for state
+
       return models.state.create({
         stateId: stateSelected,
         total: total.length,
