@@ -49,7 +49,7 @@ const customizeParks = (query) => {
     reqArr = query.interests;
   }
 
-  let interestParkTypes;
+  let interestParkTypes = [];
 
   if (reqArr) {
     for (let i = 0; i < reqArr.length; i++) {
