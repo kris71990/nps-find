@@ -8,6 +8,7 @@ const store = new Vuex.Store({
   state: {
     stateAbbrev: null,
     stateFull: null,
+    interests: null,
     parksTotal: null,
     parks: null,
     stateList: null,
@@ -17,6 +18,7 @@ const store = new Vuex.Store({
     changeState(state, selection) {
       state.stateAbbrev = selection.state;
       state.stateFull = selection.stateFull;
+      state.interests = selection.interests;
       return state;
     },
     foundParks(state, fromApi) {
@@ -42,6 +44,7 @@ const store = new Vuex.Store({
       state.parks = null;
       state.stateList = null;
       state.typesList = null;
+      state.interests = null;
       return state;
     },
   },
@@ -54,18 +57,19 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    foundParks(context, stateSelection) {
+    foundParks(context, selections) {
       const { commit } = context;
-      const { state, stateFull } = stateSelection;
+      const { state, stateFull, interests } = selections;
       let parks;
       let parksNumber;
       return superagent.get(`${API_URL}/parks/${state}`)
+        .query({ interests })
         .then((response) => {
           parks = response.body;
           parksNumber = response.body.length;
         })
         .then(() => {
-          commit('changeState', { state, stateFull });
+          commit('changeState', { state, stateFull, interests });
           commit('foundParks', parks);
           commit('setTotal', parksNumber);
         });
