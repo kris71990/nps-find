@@ -12,7 +12,10 @@ const parkRouter = new Router();
 parkRouter.get('/parks/:state', (request, response, next) => {
   logger.log(logger.INFO, `Processing a get for /parks/${request.params.state}...`);
 
-  const parkTypes = customizeParks(request.query);
+  let parkTypes;
+  if (request.query.interests) {
+    parkTypes = customizeParks(request.query);
+  }
 
   // find if state exists in db
   return models.state.findAll({
@@ -23,7 +26,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
     .then((results) => {
       // if it exists, return all parks associated with the state
       if (results.length > 0) {
-        if (parkTypes.length === 0) {
+        if (!parkTypes) {
           return models.park.findAll({
             where: {
               stateCode: request.params.state,
@@ -49,7 +52,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
       // if it doesn't, call this function to get data from the api
       return getData(request.params.state)
         .then(() => {
-          if (parkTypes.length === 0) {
+          if (!parkTypes) {
             return models.park.findAll({
               where: {
                 stateCode: request.params.state,
