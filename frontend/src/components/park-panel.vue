@@ -42,7 +42,7 @@ export default {
       function (park) {
         return this.$store.dispatch('renderPark', park)
           .then(() => {
-            this.$router.push(`/park/${park.parkCode}`);
+            this.$router.push({ name: 'ParkView', params: { id: park.parkCode }});
           })
       }
   }

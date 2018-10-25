@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <Header/>
-    <Landing/>
-    <StateRanking/>
-    <Dashboard/>
+    <router-view></router-view>
     <Footer/>
   </div>
 </template>
@@ -20,9 +18,6 @@ export default {
   name: 'App',
   components: {
     Header,
-    Landing,
-    StateRanking,
-    Dashboard,
     Footer,
   },
   mounted() {

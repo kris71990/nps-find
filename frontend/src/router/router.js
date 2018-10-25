@@ -25,7 +25,7 @@ export default new Router({
       component: StateRankings,
     },
     {
-      path: '/park',
+      path: '/park/:id',
       name: 'ParkView',
       component: ParkView,
     },

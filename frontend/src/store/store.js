@@ -32,6 +32,9 @@ const store = new Vuex.Store({
     },
     setPark(state, park) {
       state.singlePark = park;
+      state.interests = null;
+      state.parks = null;
+      return state;
     },
     setTotal(state, total) {
       state.parksTotal = total;
