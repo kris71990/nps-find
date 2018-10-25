@@ -68,18 +68,25 @@ export default {
   margin-bottom: 5%;
   ul {
     padding-left: 0;
-    display: flex;
-    flex-direction: row;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
     li {
-      margin: 1%;
+      margin: 2%;
       width: 25%;
-      display: inline-block;
       list-style-type: none;
-      border: 8px groove #336E55;
+      border: 8px double #0870B8;
+      background-color: #ECF2FF;
+      font-weight: bold;
+      font-style: oblique;
       img {
         max-width: 100%;
         max-height: 100%;
       }
+    }
+    li:hover {
+      border: 8px solid #930000;
+      transform: scale(1.01,1.01);
     }
   }
 }
