@@ -11,9 +11,9 @@
     <div class="panel">
       <h4>{{ total }} locations found.</h4>
       <ul>
-        <li v-for="park in parks" :key="park.id">
+        <li v-for="park in parks" :key="park.parkCode">
           <div class="park-card">
-            <p>{{ park.fullName }}</p>
+            <p><a v-on:click="renderPark(park)">{{ park.fullName }}</a></p>
             <img v-bind:src="randomizedImage(park)"/>
           </div>
         </li>
@@ -38,6 +38,13 @@ export default {
         const index = Math.round(Math.random() * (arr.length - 1));
         return arr[index];
       }, 
+    renderPark: 
+      function (park) {
+        return this.$store.dispatch('renderPark', park)
+          .then(() => {
+            this.$router.push(`/park/${park.parkCode}`);
+          })
+      }
   }
 }
 </script>

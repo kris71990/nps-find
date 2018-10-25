@@ -13,6 +13,7 @@ const store = new Vuex.Store({
     parks: null,
     stateList: null,
     typesList: null,
+    singlePark: null,
   },
   mutations: {
     changeState(state, selection) {
@@ -28,6 +29,9 @@ const store = new Vuex.Store({
     },
     createStateList(state, statesFromDB) {
       state.stateList = statesFromDB;
+    },
+    setPark(state, park) {
+      state.singlePark = park;
     },
     setTotal(state, total) {
       state.parksTotal = total;
@@ -45,6 +49,7 @@ const store = new Vuex.Store({
       state.stateList = null;
       state.typesList = null;
       state.interests = null;
+      state.singlePark = null;
       return state;
     },
   },
@@ -95,6 +100,10 @@ const store = new Vuex.Store({
         .then(() => {
           commit('createStateList', parks);
         });
+    },
+    renderPark(context, park) {
+      const { commit } = context;
+      return commit('setPark', park);
     },
   },
 });
