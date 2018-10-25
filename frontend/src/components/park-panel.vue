@@ -94,6 +94,7 @@ export default {
     li:hover {
       border: 8px solid #930000;
       transform: scale(1.01,1.01);
+      cursor: pointer;
     }
   }
 }
