@@ -10,6 +10,7 @@
       >
         <div v-if="parkImages[index]">
           <img v-bind:src="parkImages[index]"/>
+          <p>{{ imageCaptions[index] }}</p>
         </div>
       </div>
     </transition-group>
@@ -30,6 +31,7 @@ export default {
   },
   props: {
     parkImages: Array,
+    imageCaptions: Array,
   },
   methods: {
     randomizedImage:
@@ -61,6 +63,7 @@ export default {
 
 <style lang="scss">
 .carousel-view {
+  margin-bottom: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,11 +73,16 @@ export default {
     align-items: center;
     overflow: hidden;
     .slide {
+      margin-top: 1%;
       transition: transform 0.3s ease-in-out;
       img {
         width: 40%;
         height: auto;
         border: 8px groove #336E55;
+      }
+      p {
+        width: 40%;
+        margin: 2% auto;
       }
     }
   }
