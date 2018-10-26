@@ -13,13 +13,13 @@ export default {
     const renderableCoords = this.coordinates.split(', ');
     console.log(renderableCoords);
     const latLong = {
-      lat: parseInt(renderableCoords[0].slice(4)), 
-      lng: parseInt(renderableCoords[1].slice(5)),
+      lat: parseFloat(renderableCoords[0].slice(4)), 
+      lng: parseFloat(renderableCoords[1].slice(5)),
     };
 
     const map = new google.maps.Map(document.getElementById('map'), {
       center: latLong,
-      zoom: 8,
+      zoom: 7,
     });
 
     const marker = new google.maps.Marker({
