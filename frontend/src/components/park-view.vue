@@ -2,7 +2,7 @@
   <div class="single-park">
     <h1>{{ computedPark.fullName }}</h1>
     <div class="image-box">
-      <MapView 
+      <MapView v-if="computedPark.latLong"
       v-bind:coordinates="computedPark.latLong"
       v-bind:parkName="computedPark.name"
       />
@@ -41,16 +41,25 @@ export default {
 </script>
 
 <style lang="scss">
-.info-box {
-  width: 60%;
-  line-height: 2;
-  text-align: left;
-  margin: 0 auto 5%;
-  background-color: #E8EAEB;
-  border: 5px dashed grey;
-  padding: 2%;
-  h3 {
-    text-decoration: underline;
+.single-park {
+  h1 {
+    background: repeating-linear-gradient(60deg, #076B69, #016AAB 30%,#73C9C7);
+    border-bottom: 3px solid black;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 2em;
+  }
+  .info-box {
+    width: 60%;
+    line-height: 2;
+    text-align: left;
+    margin: 0 auto 5%;
+    background-color: #E8EAEB;
+    border: 5px dashed grey;
+    padding: 2%;
+    h3 {
+      text-decoration: underline;
+    }
   }
 }
 </style>

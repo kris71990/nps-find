@@ -19,6 +19,7 @@ export default {
     const map = new google.maps.Map(document.getElementById('map'), {
       center: latLong,
       zoom: 7,
+      mapTypeId: 'terrain',
     });
 
     const marker = new google.maps.Marker({
