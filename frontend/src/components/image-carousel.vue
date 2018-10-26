@@ -86,5 +86,18 @@ export default {
       }
     }
   }
+  button {
+    border-radius: 5px;
+    border: 1px solid #00558C;
+    background-color: #5199C7;
+  }
+  button:hover {
+    border: 1px solid #000A6A;
+    transform: scale(1.05,1.05);
+    cursor: pointer;
+  }
+  button:focus {
+    outline: none;
+  }
 }
 </style>

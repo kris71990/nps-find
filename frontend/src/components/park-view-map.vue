@@ -11,7 +11,6 @@ export default {
   },
   mounted: function() {
     const renderableCoords = this.coordinates.split(', ');
-    console.log(renderableCoords);
     const latLong = {
       lat: parseFloat(renderableCoords[0].slice(4)), 
       lng: parseFloat(renderableCoords[1].slice(5)),
