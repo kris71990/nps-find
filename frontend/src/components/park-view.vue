@@ -1,11 +1,14 @@
 <template>
   <div class="single-park">
     <h1>{{ computedPark.fullName }}</h1>
-    <!-- <div class="image-box">
+    <MapView 
+      v-bind:coordinates="computedPark.latLong"
+      v-bind:parkName="computedPark.name"
+    />
+    <div class="image-box">
       <ImageCarousel v-if="computedPark.imageUrl" v-bind:parkImages="computedPark.imageUrl.split('\n')" v-bind:imageCaptions="computedPark.imageCaptions.split('\n')"/>
-    </div> -->
-    <MapView/>
-    <!-- <div class="info-box">
+    </div>
+    <div class="info-box">
       <h3>Park details...</h3>
       <p>{{ computedPark.description }}</p>
       <h3>How to get here...</h3>
@@ -14,7 +17,7 @@
       <p>{{ computedPark.weatherInfo }}</p>
       <h3>Camping...</h3>
       <p>View page on <a :href=computedPark.url>National Park Service</a></p>
-    </div> -->
+    </div>
   </div>
 </template>
 

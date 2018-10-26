@@ -5,18 +5,27 @@
 <script>
 export default {
   name: 'MapView',
+  props: {
+    coordinates: String,
+    parkName: String,
+  },
   mounted: function() {
-    const myLatLng = {lat: -25.363, lng: 131.044};
+    const renderableCoords = this.coordinates.split(', ');
+    console.log(renderableCoords);
+    const latLong = {
+      lat: parseInt(renderableCoords[0].slice(4)), 
+      lng: parseInt(renderableCoords[1].slice(5)),
+    };
 
     const map = new google.maps.Map(document.getElementById('map'), {
-      center: myLatLng,
-      zoom: 4
+      center: latLong,
+      zoom: 8,
     });
 
     const marker = new google.maps.Marker({
       map: map,
-      position: myLatLng,
-      title: 'Hello World!'
+      position: latLong,
+      title: this.parkName,
     });
   },
 }
