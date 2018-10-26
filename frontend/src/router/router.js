@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Landing from '../components/landing.vue';
 import Dashboard from '../components/dashboard.vue';
 import StateRankings from '../components/state-rankings.vue';
+import ParkView from '../components/park-view.vue';
 
 Vue.use(Router);
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/states',
       name: 'States',
       component: StateRankings,
+    },
+    {
+      path: '/park/:id',
+      name: 'ParkView',
+      component: ParkView,
     },
   ],
 });

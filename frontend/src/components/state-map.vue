@@ -20,7 +20,6 @@ export default {
   },
   methods: {
     loadMap() {
-      console.log(GOOGLE_API_KEY)
       google.charts.load('current', {
         'packages': ['geomap'],
         'mapsApiKey': GOOGLE_API_KEY,

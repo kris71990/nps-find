@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <Header/>
-    <Landing/>
-    <StateRanking/>
-    <Dashboard/>
+    <router-view></router-view>
     <Footer/>
   </div>
 </template>
@@ -20,16 +18,19 @@ export default {
   name: 'App',
   components: {
     Header,
-    Landing,
-    StateRanking,
-    Dashboard,
     Footer,
   },
   mounted() {
-    let scriptEl = document.createElement('script');
-    scriptEl.setAttribute('id', 'state-map-loader');
-    scriptEl.setAttribute('src', 'https://www.gstatic.com/charts/loader.js');
-    document.head.appendChild(scriptEl);
+    let scriptElStatesView = document.createElement('script');
+    scriptElStatesView.setAttribute('id', 'state-map-loader');
+    scriptElStatesView.setAttribute('src', 'https://www.gstatic.com/charts/loader.js');
+    document.head.appendChild(scriptElStatesView);
+
+    console.log(GOOGLE_API_KEY);
+    let scriptElParkView = document.createElement('script');
+    scriptElParkView.setAttribute('id', 'map-view');
+    scriptElParkView.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}`);
+    document.body.appendChild(scriptElParkView);
   },
 }
 </script>

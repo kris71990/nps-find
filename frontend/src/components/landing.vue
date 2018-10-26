@@ -1,5 +1,5 @@
 <template>
-  <div id="home" v-if="!computedParks && !stateList">
+  <div id="home" v-if="!computedParks && !stateList && !singlePark">
     <SearchForm :handleSearch="handleSearch"/>
     <div id="states">
       <h4>Or see an <a v-on:click="getStateList">overview</a> of all parks</h4>
@@ -44,6 +44,7 @@ export default {
   computed: mapState({
     computedParks: state => state.parks,
     stateList: state => state.stateList,
+    singlePark: state => state.singlePark,
   }),
 }
 </script>
