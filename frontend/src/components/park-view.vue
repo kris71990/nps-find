@@ -1,10 +1,11 @@
 <template>
   <div class="single-park">
     <h1>{{ computedPark.fullName }}</h1>
-    <div class="image-box">
+    <!-- <div class="image-box">
       <ImageCarousel v-if="computedPark.imageUrl" v-bind:parkImages="computedPark.imageUrl.split('\n')" v-bind:imageCaptions="computedPark.imageCaptions.split('\n')"/>
-    </div>
-    <div class="info-box">
+    </div> -->
+    <MapView/>
+    <!-- <div class="info-box">
       <h3>Park details...</h3>
       <p>{{ computedPark.description }}</p>
       <h3>How to get here...</h3>
@@ -13,18 +14,20 @@
       <p>{{ computedPark.weatherInfo }}</p>
       <h3>Camping...</h3>
       <p>View page on <a :href=computedPark.url>National Park Service</a></p>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import ImageCarousel from './image-carousel.vue';
+import MapView from './park-view-map.vue';
 
 export default {
   name: 'ParkView',
   components: {
     ImageCarousel,
+    MapView,
   },
   computed: mapState({
     computedPark: state => state.singlePark,
