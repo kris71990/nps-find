@@ -4,7 +4,7 @@
       <img src="../utils/bison.png">
     </div>
     <div id="header-nav">
-      <h1>| Explore American Public Lands |</h1>
+      <h1>Explore American Public Lands</h1>
       <nav>
         <ul>
           <router-link to="/"><li v-on:click='resetDefault'>Home</li></router-link>
@@ -46,20 +46,19 @@ header {
   #header-nav {
     width: 88%;
     h1 {
-      width: 45%;
+      width: 42%;
       height: 100%;
       float: left;
       text-align: left;
-      font-style: italic;
-      padding-left: 5%;
-      text-decoration: underline overline dotted #5E9B7E;
+      margin-left: 5%;
+      padding-left: 1%;
+      font-family: 'Rock Salt', cursive;
     }
     nav {
       width: 40%;
       height: 100%;
       float: left;
       text-align: right;
-      font-style: italic;
       padding-right: 8%;
       ul {
         padding-left: 0px;
