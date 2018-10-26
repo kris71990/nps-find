@@ -1,5 +1,5 @@
 <template>
-  <div v-if="computedParks" id="search-results" >
+  <div id="search-results" >
     <h1>{{ computedState }}</h1>
     <div v-if="computedInterests.length > 0">
       <ParkPanel :parks="computedParks" :interests="computedInterests" :total="computedTotal"/>

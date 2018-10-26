@@ -1,5 +1,5 @@
 <template>
-  <div id="home" v-if="!computedParks && !stateList && !singlePark">
+  <div id="home">
     <SearchForm :handleSearch="handleSearch"/>
     <div id="states">
       <h4>Or see an <a v-on:click="getStateList">overview</a> of all parks</h4>
