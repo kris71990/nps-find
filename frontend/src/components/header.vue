@@ -16,7 +16,7 @@ export default {
   name: 'Header',
   methods: {
     resetDefault() { 
-      this.$store.commit('default');
+      this.$store.commit('setDefault');
     }
   }
 }
