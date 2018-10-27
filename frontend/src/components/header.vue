@@ -1,10 +1,12 @@
 <template>
   <header class="header">
     <div id="header-img">
-      <img src="../utils/bison.png">
+      <router-link to="/">
+        <img src="../utils/bison.png">
+      </router-link>
     </div>
     <div id="header-nav">
-      <h1>Explore American Public Lands</h1>
+      <router-link to="/"><h1>Explore American Public Lands</h1></router-link>
       <nav>
         <ul>
           <router-link to="/"><li v-on:click='resetDefault'>Home</li></router-link>
@@ -53,6 +55,7 @@ header {
       margin-left: 5%;
       padding-left: 1%;
       font-family: 'Rock Salt', cursive;
+      color: #F1E3CB;
     }
     nav {
       width: 40%;

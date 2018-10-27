@@ -1,6 +1,5 @@
 <template>
   <div class="search-form">
-    <h3>Choose a state to find National Parks near you</h3>
     <form @submit="handleSubmit">
       <fieldset>
         <legend>Submit your preferences</legend>
