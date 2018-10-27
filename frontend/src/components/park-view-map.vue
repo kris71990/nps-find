@@ -10,15 +10,30 @@ export default {
     parkName: String,
   },
   mounted: function() {
-    const renderableCoords = this.coordinates.split(', ');
-    const latLong = {
-      lat: parseFloat(renderableCoords[0].slice(4)), 
-      lng: parseFloat(renderableCoords[1].slice(5)),
-    };
+    let renderableCoords;
+    const defaultLatLong = { 
+      lat: 37.969001, 
+      lng: -98.802018,
+    }
+    
+    let latLong;
+    let mapZoom;
+    
+    if (this.coordinates) {
+      renderableCoords = this.coordinates.split(', ') 
+      latLong = {
+        lat: parseFloat(renderableCoords[0].slice(4)), 
+        lng: parseFloat(renderableCoords[1].slice(5)),
+      };
+      mapZoom = 7;
+    } else {
+      latLong = defaultLatLong;
+      mapZoom = 4;
+    }
 
     const map = new google.maps.Map(document.getElementById('map'), {
       center: latLong,
-      zoom: 7,
+      zoom: mapZoom,
       mapTypeId: 'terrain',
     });
 

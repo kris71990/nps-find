@@ -2,7 +2,7 @@
   <div class="single-park">
     <h1>{{ computedPark.fullName }}</h1>
     <div class="image-box">
-      <MapView v-if="computedPark.latLong"
+      <MapView
       v-bind:coordinates="computedPark.latLong"
       v-bind:parkName="computedPark.name"
       />
