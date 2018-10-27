@@ -1,9 +1,8 @@
 <template>
-  <div id="home" v-if="!computedParks && !stateList && !singlePark">
+  <div id="home">
+    <h3>Choose a state to find National Parks near you...</h3>
+    <h4>Or see an <a v-on:click="getStateList">overview</a> of all parks</h4>
     <SearchForm :handleSearch="handleSearch"/>
-    <div id="states">
-      <h4>Or see an <a v-on:click="getStateList">overview</a> of all parks</h4>
-    </div>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="computedStateList" id="state-rankings">
+  <div id="state-rankings">
     <h2>National Parks by State</h2>
     <div class="list">
       <div v-if="chartRendered === false && mapRendered === false">

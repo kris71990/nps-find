@@ -13,7 +13,12 @@ export const parkTypeColors = { // eslint-disable-line
   'National Heritage Area': '#693EFF', // purple blue
   'Wild River': '#0658F3', // blue
   'National Park': '#035C2A', // dark green
+  'National Parks': '#035C2A',
+  Park: '#035C2A',
+  'National and State Parks': '#035C2A',
   'National Parkway': '#B9BD7D', // grey yellow
+  Parkway: '#B4CFCE',
+  'Memorial Parkway': '#B4CFCE',
   Other: 'black',
   'National Historic Site': '#30006D', // dark purple
   'National Historical Park': '#332149', // darker purple
@@ -27,6 +32,7 @@ export const parkTypeColors = { // eslint-disable-line
   'National Memorial': '#0E8B93', // teal
   'National Reserve': '#51293F', // dark grey pink
   'National River': '#5500AA', // blueish
+  'National River & Recreation Area': '#5500AA',
   'National Wild & Scenic River & Riverway': '#1374BB', // cobalt blue
   'Affiliated Area': '#516C7F', // grey cobalt blue
   'National Trail System': '#49B5BC', // light teal
