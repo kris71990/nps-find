@@ -8,16 +8,19 @@ const foundParks = (context, selections) => {
   return superagent.get(`${API_URL}/parks/${state}`)
     .query({ interests })
     .then((response) => {
-      parks = response.body;
-      parksNumber = response.body.length;
+      let parkTypes;
+      if (response.body) parkTypes = response.body;
       return superagent.put(`${API_URL}/parks/${state}`)
-        .then(() => Promise.resolve());
-    })
-    .then(() => {
-      console.log('my titties');
-      commit('changeState', { state, stateFull, interests });
-      commit('foundParks', parks);
-      commit('setTotal', parksNumber);
+        .send({ parkTypes })
+        .then((updatedResponse) => {
+          parks = updatedResponse.body;
+          parksNumber = updatedResponse.body.length;
+        })
+        .then(() => {
+          commit('changeState', { state, stateFull, interests });
+          commit('foundParks', parks);
+          commit('setTotal', parksNumber);
+        });
     });
 };
 
