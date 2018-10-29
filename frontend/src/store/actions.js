@@ -24,6 +24,15 @@ const foundParks = (context, selections) => {
     });
 };
 
+const getCampgrounds = (context, park) => {
+  const { commit } = context;
+  const { pKeyCode } = park;
+  return superagent.get(`${API_URL}/campgrounds/${pKeyCode}`)
+    .then((response) => {
+      console.log(response);
+    });
+};
+
 const setTypes = (context) => {
   const { commit } = context;
   let types;

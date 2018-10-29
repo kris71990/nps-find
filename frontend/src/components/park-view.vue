@@ -18,6 +18,12 @@
       <h3>Weather...</h3>
       <p>{{ computedPark.weatherInfo }}</p>
       <h3>Camping...</h3>
+      <div>
+        <p v-if="computedPark.camping" @click="getCampgrounds">
+          See camping options in {{ computedPark.name }}.
+        </p>
+        <p v-else>No camping available.</p> 
+      </div>
       <p>View page on <a :href=computedPark.url>National Park Service</a></p>
     </div>
   </div>
@@ -27,16 +33,27 @@
 import { mapState } from 'vuex';
 import ImageCarousel from './image-carousel.vue';
 import MapView from './park-view-map.vue';
+import CampgroundOptions from './campground-options.vue';
 
 export default {
   name: 'ParkView',
   components: {
     ImageCarousel,
     MapView,
+    CampgroundOptions,
   },
   computed: mapState({
     computedPark: state => state.singlePark,
-  })
+  }),
+  methods: {
+    getCampgrounds: function() {
+      const { pKeyCode, parkCode } = this.computedPark;
+      return this.$store.dispatch('getCampgrounds', { pKeyCode, parkCode })
+        .then(() => {
+          this.$router.push(`/park/${parkCode}/campgrounds`);
+        });
+    }
+  }
 }
 </script>
 
