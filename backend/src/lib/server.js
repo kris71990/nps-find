@@ -8,6 +8,7 @@ import logger from './logger';
 import models from '../models';
 import stateRouter from '../routes/state';
 import parkRouter from '../routes/park';
+import campgroundRouter from '../routes/campground';
 import errorMiddleware from './error-middleware';
 
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -19,6 +20,7 @@ app.use(cors({ credentials: true, origin: CLIENT_URL }));
 
 app.use(stateRouter);
 app.use(parkRouter);
+app.use(campgroundRouter);
 
 app.all('*', (request, response) => {
   logger.log(logger.INFO, '404 - not found - catch-all');

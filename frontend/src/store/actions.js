@@ -63,5 +63,5 @@ const renderPark = (context, park) => {
 };
 
 export {
-  foundParks, renderPark, setTypes, stateChart,
+  foundParks, renderPark, setTypes, stateChart, getCampgrounds,
 };
