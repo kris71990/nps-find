@@ -9,7 +9,6 @@
       <ul id="park-list">
         <li v-for="item in computedParks" :key="item.id">
           <p>{{ item.fullName }}</p>
-          <p>{{ item.designation }}</p>
           <ImageCarousel v-if="item.imageUrl" v-bind:parkImages="item.imageUrl.split('\n')" v-bind:imageCaptions="item.imageCaptions.split('\n')"/>
         </li>
       </ul> 

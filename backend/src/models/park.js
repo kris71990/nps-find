@@ -49,6 +49,9 @@ const Park = (sequelize, DataTypes) => sequelize.define('park', {
   weatherInfo: {
     type: DataTypes.STRING(1000),
   },
+  camping: {
+    type: DataTypes.BOOLEAN,
+  },
 });
 
 export default Park;

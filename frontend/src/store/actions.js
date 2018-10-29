@@ -10,8 +10,11 @@ const foundParks = (context, selections) => {
     .then((response) => {
       parks = response.body;
       parksNumber = response.body.length;
+      return superagent.put(`${API_URL}/parks/${state}`)
+        .then(() => Promise.resolve());
     })
     .then(() => {
+      console.log('my titties');
       commit('changeState', { state, stateFull, interests });
       commit('foundParks', parks);
       commit('setTotal', parksNumber);

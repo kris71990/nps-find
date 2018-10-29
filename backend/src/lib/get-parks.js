@@ -62,6 +62,7 @@ const getParks = (stateSelected) => {
               states: parkFound.states.trim(),
               url: parkFound.url.trim(),
               weatherInfo: parkFound.weatherInfo.trim(),
+              camping: false,
             });
           });
           return null;

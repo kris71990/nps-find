@@ -1,12 +1,14 @@
 'use strict';
 
 import { Router } from 'express';
+import { json } from 'body-parser';
 import logger from '../lib/logger';
 import models from '../models';
 
 import getData from '../lib/get-parks';
 import customizeParks from '../lib/customize-parks';
 
+const jsonParser = json();
 const parkRouter = new Router();
 
 parkRouter.get('/parks/:state', (request, response, next) => {
@@ -76,6 +78,34 @@ parkRouter.get('/parks/:state', (request, response, next) => {
             .catch(next);
         })
         .catch(next);
+    })
+    .catch(next);
+});
+
+parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
+  return models.campground.findAll({
+    where: {
+      state: request.params.state,
+    },
+    attributes: ['state', 'parkId', 'name'],
+  })
+    .then((campgrounds) => {
+      const mapped = campgrounds.map(cg => cg.dataValues.parkId);
+      const uniqueParkCodes = mapped.filter((cg, i) => {
+        return mapped.indexOf(cg) === i;
+      });
+      return uniqueParkCodes;
+    })
+    .then((uniqueParks) => {
+      uniqueParks.forEach((park) => {
+        return models.park.update(
+          { camping: true },
+          { where: { pKeyCode: park } },
+        );
+      });
+    })
+    .then(() => {
+      return response.sendStatus(204);
     })
     .catch(next);
 });
