@@ -64,5 +64,11 @@ export default {
 </script>
 
 <style lang="scss">
-
+// .campground-view {
+//   text-align: left;
+//   -webkit-animation: fade 5s;
+//   animation: fade 5s;
+//   -moz-animation: fade 5s;
+//   -o-animation: fade 5s;
+// }
 </style>
