@@ -16,6 +16,7 @@ const store = new Vuex.Store({
     stateList: null,
     typesList: null,
     singlePark: null,
+    campgrounds: null,
   },
   getters: {
     getState: (state) => {

@@ -29,7 +29,7 @@ const getCampgrounds = (context, park) => {
   const { pKeyCode } = park;
   return superagent.get(`${API_URL}/campgrounds/${pKeyCode}`)
     .then((response) => {
-      console.log(response);
+      commit('setCampgrounds', response.body);
     });
 };
 

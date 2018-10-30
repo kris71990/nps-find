@@ -23,6 +23,11 @@ const setPark = (state, park) => {
   return state;
 };
 
+const setCampgrounds = (state, campgrounds) => {
+  state.campgrounds = campgrounds;
+  return state;
+};
+
 const setTotal = (state, total) => {
   state.parksTotal = total;
   return state;
@@ -53,4 +58,5 @@ export {
   setTotal, 
   setTypes, 
   setDefault,
+  setCampgrounds,
 };
