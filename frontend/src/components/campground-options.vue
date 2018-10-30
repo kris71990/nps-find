@@ -1,12 +1,18 @@
 <template>
-  <div class="campground-list">
+  <div>
     <h1>Camping in {{ computedPark.name }}</h1>
-    <ul>
-      <li v-for="cg in computedCampgrounds" :key="cg.id">
-        <p @click="viewDetails(cg)">{{ cg.name }}</p>
-      </li>
-    </ul>
-    <CampgroundView v-if="selected"/>
+    <div class="campground-view">
+      <div class="list">
+        <ul>
+          <li v-for="cg in computedCampgrounds" :key="cg.id">
+            <p @click="viewDetails(cg)">{{ cg.name }}</p>
+          </li>
+        </ul>
+      </div>
+      <div class="view">
+        <CampgroundView v-if="selected" v-bind:campground="selected"/>
+      </div>  
+    </div>
   </div>
 </template>
 
@@ -32,7 +38,7 @@ export default {
     }),
   methods: {
     viewDetails: function(e, cg) {
-      
+
       return this.selected ? 
         this.selected.name === e.name ? this.selected = null : this.selected = e 
       : this.selected = e;
@@ -42,6 +48,15 @@ export default {
 </script>
 
 <style lang="scss">
+.campground-view {
+  display: flex;
+  .list {
+    width: 45%;
+  }
+  .view {
+    width: 45%;
+  }
+}
 ul {
   list-style-type: none;
   padding: 0;
