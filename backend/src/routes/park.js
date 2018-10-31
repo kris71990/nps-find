@@ -73,7 +73,21 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
     })
     // return all data, depending on user preferences
     .then(() => {
+      if (request.body && !request.body.interests) {
+        return models.park.findAll({
+          where: {
+            stateCode: request.params.state,
+          },
+        })
+          .then((retrievedParks) => {
+            logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state}`);
+            return response.json(retrievedParks);
+          })
+          .catch(next);
+      }
+
       const { parkTypes, camping } = request.body;
+      
       if (parkTypes.length > 0 && !camping) {
         return models.park.findAll({
           where: {
@@ -113,17 +127,7 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
             return response.json(parksWithCampgrounds);
           });
       }
-
-      return models.park.findAll({
-        where: {
-          stateCode: request.params.state,
-        },
-      })
-        .then((retrievedParks) => {
-          logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state}`);
-          return response.json(retrievedParks);
-        })
-        .catch(next);
+      return null;
     })
     .catch(next);
 });
