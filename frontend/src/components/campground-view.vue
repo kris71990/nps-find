@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1>{{ campground.name }}</h1>
-    <h4>Type: <span>{{ campground.accessibility.classifications[0] }}</span></h4>
-    <h4>Access: <span>{{ campground.accessibility.accessRoads[0] }}</span></h4>
+    <h2>{{ campground.name }}</h2>
+    <h4 v-if="campground.accessibility.classifications[0]">Type: <span>{{ campground.accessibility.classifications[0] }}</span></h4>
+    <h4 v-if="campground.accessibility.accessRoads[0]">Access: <span>{{ campground.accessibility.accessRoads[0] }}</span></h4>
     <h3>About...</h3>
     <p>{{ campground.description }}</p>
     <h3>How to get here...</h3>
@@ -64,11 +64,16 @@ export default {
 </script>
 
 <style lang="scss">
-// .campground-view {
-//   text-align: left;
-//   -webkit-animation: fade 5s;
-//   animation: fade 5s;
-//   -moz-animation: fade 5s;
-//   -o-animation: fade 5s;
-// }
+.campground-view {
+  padding-left: 20px;
+  background-color: #E8EAEB;
+  border: 5px dashed grey;
+  padding: 2%;
+  line-height: 2;
+  h2 {
+    letter-spacing: 0.1em;
+    text-decoration: underline;
+    font-style: italic;
+  }
+}
 </style>

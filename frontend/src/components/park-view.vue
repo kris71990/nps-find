@@ -19,12 +19,12 @@
       <p>{{ computedPark.weatherInfo }}</p>
       <h3>Camping...</h3>
       <div>
-        <p v-if="computedPark.camping" @click="getCampgrounds">
-          See camping options in {{ computedPark.name }}.
+        <p v-if="computedPark.camping">
+          See <span @click="getCampgrounds">camping</span> options in {{ computedPark.name }}.
         </p>
         <p v-else>No camping available.</p> 
       </div>
-      <p>View page on <a :href=computedPark.url>National Park Service</a></p>
+      <p>View page on <a :href=computedPark.url target="_blank">National Park Service</a></p>
     </div>
   </div>
 </template>
@@ -76,6 +76,14 @@ export default {
     padding: 2%;
     h3 {
       text-decoration: underline;
+    }
+    span {
+      color: grey;
+      font-weight: bold;
+    }
+    span:hover {
+      cursor: pointer;
+      color: #00CB94;
     }
   }
 }
