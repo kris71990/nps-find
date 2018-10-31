@@ -73,7 +73,8 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
     })
     // return all data, depending on user preferences
     .then(() => {
-      if (request.body.parkTypes) {
+      const { parkTypes, camping } = request.body;
+      if (parkTypes.length > 0 && !camping) {
         return models.park.findAll({
           where: {
             stateCode: request.params.state,
@@ -84,7 +85,35 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
             logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state} that meet user requirements`);
             return response.json(retrievedParks);
           });
+      } 
+
+      if (parkTypes.length > 0 && camping) {
+        return models.park.findAll({
+          where: {
+            stateCode: request.params.state,
+            designation: request.body.parkTypes,
+            camping: true,
+          },
+        })
+          .then((retrievedParks) => {
+            logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state} with camping`);
+            return response.json(retrievedParks);
+          });
       }
+
+      if (parkTypes.length === 0 && camping) {
+        return models.park.findAll({
+          where: {
+            stateCode: request.params.state,
+            camping: true,
+          },
+        })
+          .then((parksWithCampgrounds) => {
+            logger.log(logger.INFO, `Returning ${parksWithCampgrounds.length} parks in ${request.params.state} with camping`);
+            return response.json(parksWithCampgrounds);
+          });
+      }
+
       return models.park.findAll({
         where: {
           stateCode: request.params.state,

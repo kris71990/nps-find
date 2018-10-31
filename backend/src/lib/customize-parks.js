@@ -75,35 +75,36 @@ const customizeParks = (query) => {
   } else {
     reqArr = query.interests;
   }
-
+  
   logger.log(logger.INFO, `Filtering for user preferences: ${[...reqArr]}`);
-  const interestParkTypes = [];
-
+  const customizations = { parkTypes: [], camping: false };
+  
   if (reqArr) {
     reqArr.forEach((interest) => {
+      if (interest === 'camping') customizations.camping = true;
       if (interest === 'history') {
         history.forEach((type) => {
-          if (interestParkTypes.indexOf(type) < 0) {
-            interestParkTypes.push(type);
+          if (customizations.parkTypes.indexOf(type) < 0) {
+            customizations.parkTypes.push(type);
           }
         });
       } else if (interest === 'hiking') {
         hiking.forEach((type) => {
-          if (interestParkTypes.indexOf(type) < 0) {
-            interestParkTypes.push(type);
+          if (customizations.parkTypes.indexOf(type) < 0) {
+            customizations.parkTypes.push(type);
           }
         });
       } else if (interest === 'nature') {
         nature.forEach((type) => {
-          if (interestParkTypes.indexOf(type) < 0) {
-            interestParkTypes.push(type);
+          if (customizations.parkTypes.indexOf(type) < 0) {
+            customizations.parkTypes.push(type);
           }
         });
       }
     });
   }
 
-  return interestParkTypes;
+  return customizations;
 };
 
 export default customizeParks;

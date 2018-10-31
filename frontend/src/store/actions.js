@@ -8,10 +8,10 @@ const foundParks = (context, selections) => {
   return superagent.get(`${API_URL}/parks/${state}`)
     .query({ interests })
     .then((response) => {
-      let parkTypes;
-      if (response.body) parkTypes = response.body;
+      let customParks;
+      if (response.body) customParks = response.body;
       return superagent.put(`${API_URL}/parks/${state}`)
-        .send({ parkTypes })
+        .send(customParks)
         .then((updatedResponse) => {
           parks = updatedResponse.body;
           parksNumber = updatedResponse.body.length;
