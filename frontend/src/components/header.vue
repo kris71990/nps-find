@@ -2,11 +2,11 @@
   <header class="header">
     <div id="header-img">
       <router-link to="/">
-        <img src="../utils/bison.png">
+        <img v-on:click='resetDefault' src="../utils/bison.png">
       </router-link>
     </div>
     <div id="header-nav">
-      <router-link to="/"><h1>Explore American Public Lands</h1></router-link>
+      <router-link to="/"><h1 v-on:click='resetDefault'>Explore American Public Lands</h1></router-link>
       <nav>
         <ul>
           <router-link to="/"><li v-on:click='resetDefault'>Home</li></router-link>

@@ -12,8 +12,8 @@
       <h4>{{ total }} locations found.</h4>
       <ul>
         <li v-for="park in parks" :key="park.parkCode">
-          <div class="park-card">
-            <p><a v-on:click="renderPark(park)">{{ park.fullName }}</a></p>
+          <div v-on:click="renderPark(park)" class="park-card">
+            <p><a>{{ park.fullName }}</a></p>
             <img v-bind:src="randomizedImage(park)"/>
           </div>
         </li>

@@ -73,7 +73,7 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
     })
     // return all data, depending on user preferences
     .then(() => {
-      if (request.body && !request.body.interests) {
+      if (request.body && !request.body.parkTypes) {
         return models.park.findAll({
           where: {
             stateCode: request.params.state,

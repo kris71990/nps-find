@@ -21,4 +21,6 @@ campgroundRouter.get('/campgrounds/:parkKey', (request, response, next) => {
     .catch(next);
 });
 
+// campgroundRouter.get('/campgrounds/:state', (request, ))
+
 export default campgroundRouter;
