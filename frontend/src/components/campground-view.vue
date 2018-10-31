@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>{{ campground.name }}</h2>
+    <CampgroundViewMap :coordinates="campground.latLong" :campgroundName="campground.name"/>
     <h4 v-if="campground.accessibility.classifications[0]">Type: <span>{{ campground.accessibility.classifications[0] }}</span></h4>
     <h4 v-if="campground.accessibility.accessRoads[0]">Access: <span>{{ campground.accessibility.accessRoads[0] }}</span></h4>
     <h3>About...</h3>
@@ -29,8 +30,13 @@
 </template>
 
 <script>
+import CampgroundViewMap from './campground-view-map.vue';
+
 export default {
   name: 'CampgroundView',
+  components: {
+    CampgroundViewMap,
+  },
   props: {
     campground: Object,
   },

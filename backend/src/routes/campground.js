@@ -15,7 +15,8 @@ campgroundRouter.get('/campgrounds/:parkKey', (request, response, next) => {
     },
   })
     .then((campgrounds) => {
-      return response.json(campgrounds);
+      const filtered = campgrounds.filter(campground => campground.name.toLowerCase() !== 'a');
+      return response.json(filtered);
     })
     .catch(next);
 });
