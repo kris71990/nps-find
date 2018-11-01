@@ -77,14 +77,35 @@ This route is primarily used for chart rendering on the front-end. For specific 
 The park router deals with the primary functionality of the app, as it relates to the user's ability to discover parks of interest. 
 
 1. GET /parks/:state
+  - Takes in a query object of user preferences for specific or nonspecific types of parks in a particular state. If the data needed does not exist in the database, it is fetched from the external API and saved to the database to minimize dependence on external data and maximize performance. 
+  - All relevant data for the state, parks, and campgrounds related to the user query is fetched, entered, and retrieved in this process.
+  - Returns an object of park specific data to aid in the retrieval of all park data 
+    * ex. `{ camping: true, parkTypes: ['National Monument', 'National Preserve'] }`
+    * This example is a response to a user query expressing interest in camping as well as activities that may be found in those types of parks.
 
 2. PUT /parks/:state
+  - All functionality could be handled in the above endpoint, but a user request also triggers an update request to data in the `Park` table to improve handling of camping related requests. 
+  - This route accepts the user query object returned from the above route and, after all data is updated, returns an array of parks to satisfy the user's preferences.
+  - Data returned depends entirely on the user query object
+
 
 *Campground Router*
 
-The campground router deals with campground related functionality, such as when a user is looking for camping options.
+The campground router deals with the retrieval of campground information. Campground data is procured and handled in the user query process detailed above in the *Park Router*.
 
 1. GET /campgrounds/parks/:parkKey
+  - Returns an array of campgrounds for a specific park
+  - Each campground is an object of data specific to each campground
 
 2. GET /campgrounds/:state
+  - Returns an array of all campgrounds present in a specific state
+  - Each campground is an object of data specific to each campground
 
+
+## Testing
+
+*Unit Testing*
+
+All functionality is tested using the Jest library. 
+
+To run unit tests: `npm run test`
