@@ -49,7 +49,7 @@ Models hold important relationships with eachother, which makes a relational dat
 
 **Routing and Functionality**
 
-**State Router**
+*State Router*
 
 The state router handles two routes that respond with data necessary to render a series of charts to the user, giving a visual representation of state and park statistics.
 
@@ -70,3 +70,21 @@ The data returned from a request to this endpoint is ordered by total number of 
   - The park types that this endpoint returns includes every type of park in the database, across all states in the database.
 
 This route is primarily used for chart rendering on the front-end. For specific front-end functionality that utilizes this data, consult the front-end README.
+
+
+*Park Router*
+
+The park router deals with the primary functionality of the app, as it relates to the user's ability to discover parks of interest. 
+
+1. GET /parks/:state
+
+2. PUT /parks/:state
+
+*Campground Router*
+
+The campground router deals with campground related functionality, such as when a user is looking for camping options.
+
+1. GET /campgrounds/parks/:parkKey
+
+2. GET /campgrounds/:state
+
