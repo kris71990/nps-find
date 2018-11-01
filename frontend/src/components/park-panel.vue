@@ -10,6 +10,12 @@
     </div>
     <div class="panel">
       <h4>{{ total }} locations found.</h4>
+      <p 
+        v-if="interests.includes('camping') && parks.length > 0"
+        v-on:click="renderCampgrounds(state)"
+      >
+      Or see all campgrounds in the state.
+      </p>
       <ul>
         <li v-for="park in parks" :key="park.parkCode">
           <div v-on:click="renderPark(park)" class="park-card">
@@ -29,6 +35,7 @@ export default {
     parks: Array,
     interests: Array,
     total: Number,
+    state: String,
   },
   methods: {
     randomizedImage:
@@ -43,6 +50,13 @@ export default {
         return this.$store.dispatch('renderPark', park)
           .then(() => {
             this.$router.push({ name: 'ParkView', params: { id: park.parkCode }});
+          })
+      },
+    renderCampgrounds:
+      function (state) {
+        return this.$store.dispatch('renderCampgroundsState', state)
+          .then(() => {
+            this.$router.push(`/campgrounds/${state}`);
           })
       }
   }

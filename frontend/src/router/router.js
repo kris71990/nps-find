@@ -35,5 +35,10 @@ export default new Router({
       name: 'CampgroundOptions',
       component: CampgroundOptions,
     },
+    {
+      path: '/campgrounds/:state',
+      name: 'CampgroundsState',
+      component: CampgroundOptions,
+    },
   ],
 });

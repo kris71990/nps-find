@@ -6,7 +6,7 @@ import models from '../models';
 
 const campgroundRouter = new Router();
 
-campgroundRouter.get('/campgrounds/:parkKey', (request, response, next) => {
+campgroundRouter.get('/campgrounds/park/:parkKey', (request, response, next) => {
   logger.log(logger.INFO, `Processing a get on /park/${request.params.parkKey}/campgrounds`);
 
   return models.campground.findAll({
@@ -21,6 +21,19 @@ campgroundRouter.get('/campgrounds/:parkKey', (request, response, next) => {
     .catch(next);
 });
 
-// campgroundRouter.get('/campgrounds/:state', (request, ))
+campgroundRouter.get('/campgrounds/:state', (request, response, next) => {
+  logger.log(logger.INFO, `Processing a get on /campgrounds/${request.params.state}`);
+
+  return models.campground.findAll({
+    where: {
+      state: request.params.state,
+    },
+  })
+    .then((campgrounds) => {
+      const filtered = campgrounds.filter(campground => campground.name.toLowerCase() !== 'a');
+      return response.json(filtered);
+    })
+    .catch(next);
+});
 
 export default campgroundRouter;

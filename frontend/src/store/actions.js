@@ -27,8 +27,17 @@ const foundParks = (context, selections) => {
 const getCampgrounds = (context, park) => {
   const { commit } = context;
   const { pKeyCode } = park;
-  return superagent.get(`${API_URL}/campgrounds/${pKeyCode}`)
+  return superagent.get(`${API_URL}/campgrounds/park/${pKeyCode}`)
     .then((response) => {
+      commit('setCampgrounds', response.body);
+    });
+};
+
+const renderCampgroundsState = (context, state) => {
+  const { commit } = context;
+  return superagent.get(`${API_URL}/campgrounds/${state}`)
+    .then((response) => {
+      console.log(response.body);
       commit('setCampgrounds', response.body);
     });
 };
@@ -63,5 +72,5 @@ const renderPark = (context, park) => {
 };
 
 export {
-  foundParks, renderPark, setTypes, stateChart, getCampgrounds,
+  foundParks, renderPark, setTypes, stateChart, getCampgrounds, renderCampgroundsState,
 };

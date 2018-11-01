@@ -1,7 +1,13 @@
 <template>
   <div class="options">
-    <h1>Camping in {{ computedPark.name }}</h1>
-    <p>{{ computedCampgrounds.length }} found in {{ computedPark.fullName }}</p>
+    <div v-if="computedPark">
+      <h1>Camping in {{ computedPark.name }}</h1>
+      <p>{{ computedCampgrounds.length }} found in {{ computedPark.fullName }}</p>
+    </div>
+    <div v-else>
+      <h1>Campgrounds in {{ computedState }}</h1>
+      <p>{{ computedCampgrounds.length }} found in {{ computedState }}</p>
+    </div>
     <div class="campground">
       <div class="list">
         <ul>
@@ -75,7 +81,7 @@ export default {
       li {
         text-align: center;
         height: 100%;
-        background-color: grey;
+        background-color: #81B2A2;
         width: 100%;
         border: 1px solid black;
         box-sizing: border-box;
@@ -100,16 +106,15 @@ export default {
         padding-right: 2%;
       }
       background: none;
-      background-color: #E64545;
+      background-color: #09C184;
       color: black;
       font-weight: bold;
       font-style: italic;
-      border: 5px solid #B30303;
+      border: 5px solid #037A53;
       box-sizing: border-box;
     }
   }
   .view {
-    border: 2px solid black;
     width: 60%;
     margin: 0 auto;
     .select-message {

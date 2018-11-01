@@ -2,7 +2,7 @@
   <div id="search-results" >
     <h1>{{ computedState }}</h1>
     <div v-if="computedInterests.length > 0">
-      <ParkPanel :parks="computedParks" :interests="computedInterests" :total="computedTotal"/>
+      <ParkPanel :parks="computedParks" :interests="computedInterests" :total="computedTotal" :state="computedStateAbbrev"/>
     </div>
     <div v-else id="all-parks">
       <h3>National Parks in {{ computedState }} ({{ computedTotal }})</h3>
@@ -31,6 +31,7 @@ export default {
     mapState({
       computedParks: state => state.parks,
       computedState: state => state.stateFull,
+      computedStateAbbrev: state => state.stateAbbrev,
       computedTotal: state => state.parksTotal,
       computedInterests: state => state.interests,
     }),

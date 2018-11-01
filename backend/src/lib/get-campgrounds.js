@@ -12,20 +12,31 @@ const getCampgrounds = (state) => {
     .set('api_key', process.env.NPS_API_KEY)
     .type('application/json')
     .then((campgroundsRaw) => {
-      const campgroundsBody = campgroundsRaw.body.data.filter(campground => campground.name);
-      logger.log(logger.INFO, `Inserting ${campgroundsBody.length} campgrounds in ${state}`);
+      const campgroundsBody = campgroundsRaw.body.data.filter((campground) => {
+        if (!campground.name || campground.name.toLowerCase() === 'a') return null;
+        return campground;
+      });
 
-      return campgroundsBody.forEach((campground) => {
+      const uniqueCgs = {};
+      campgroundsBody.forEach((cg) => {
+        if (!uniqueCgs[cg.name]) uniqueCgs[cg.name] = cg;
+        return null;
+      });
+
+      const totalCgs = Object.keys(uniqueCgs).length;
+      logger.log(logger.INFO, `Inserting ${totalCgs} campgrounds in ${state}`);
+
+      return Object.keys(uniqueCgs).forEach((campgroundName) => {
         return models.campground.create({
-          parkId: `${state}-${campground.parkCode}`,
+          parkId: `${state}-${uniqueCgs[campgroundName].parkCode}`,
           state,
-          name: campground.name,
-          description: campground.description,
-          latLong: campground.latLong,
-          directionsOverview: campground.directionsOverview,
-          campsites: campground.campsites,
-          amenities: campground.amenities,
-          accessibility: campground.accessibility,
+          name: uniqueCgs[campgroundName].name,
+          description: uniqueCgs[campgroundName].description,
+          latLong: uniqueCgs[campgroundName].latLong,
+          directionsOverview: uniqueCgs[campgroundName].directionsOverview,
+          campsites: uniqueCgs[campgroundName].campsites,
+          amenities: uniqueCgs[campgroundName].amenities,
+          accessibility: uniqueCgs[campgroundName].accessibility,
         });
       });
     });
