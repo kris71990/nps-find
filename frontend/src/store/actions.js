@@ -37,7 +37,6 @@ const renderCampgroundsState = (context, state) => {
   const { commit } = context;
   return superagent.get(`${API_URL}/campgrounds/${state}`)
     .then((response) => {
-      console.log(response.body);
       commit('setCampgrounds', response.body);
     });
 };
