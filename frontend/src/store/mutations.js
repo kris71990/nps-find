@@ -18,8 +18,11 @@ const createStateList = (state, statesFromDB) => {
 
 const setPark = (state, park) => {
   state.singlePark = park;
-  state.interests = null;
-  state.parks = null;
+  return state;
+};
+
+const setCampgrounds = (state, campgrounds) => {
+  state.campgrounds = campgrounds;
   return state;
 };
 
@@ -41,6 +44,7 @@ const setDefault = (state) => {
   state.stateList = null;
   state.typesList = null;
   state.interests = null;
+  state.campgrounds = null;
   state.singlePark = null;
   return state;
 };
@@ -53,4 +57,5 @@ export {
   setTotal, 
   setTypes, 
   setDefault,
+  setCampgrounds,
 };

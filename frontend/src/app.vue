@@ -21,11 +21,6 @@ export default {
     Footer,
   },
   mounted() {
-    let scriptElStatesView = document.createElement('script');
-    scriptElStatesView.setAttribute('id', 'state-map-loader');
-    scriptElStatesView.setAttribute('src', 'https://www.gstatic.com/charts/loader.js');
-    document.head.appendChild(scriptElStatesView);
-
     let scriptElParkView = document.createElement('script');
     scriptElParkView.setAttribute('id', 'map-view');
     scriptElParkView.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}`);

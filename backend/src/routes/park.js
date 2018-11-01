@@ -1,14 +1,17 @@
 'use strict';
 
 import { Router } from 'express';
+import { json } from 'body-parser';
 import logger from '../lib/logger';
 import models from '../models';
 
 import getData from '../lib/get-parks';
 import customizeParks from '../lib/customize-parks';
 
+const jsonParser = json();
 const parkRouter = new Router();
 
+// retrieve initial data, either from database or API
 parkRouter.get('/parks/:state', (request, response, next) => {
   logger.log(logger.INFO, `Processing a get for /parks/${request.params.state}...`);
 
@@ -24,58 +27,107 @@ parkRouter.get('/parks/:state', (request, response, next) => {
     },
   })
     .then((results) => {
-      // if it exists, return all parks associated with the state
+      // if it exists, return status
       if (results.length > 0) {
-        if (!parkTypes) {
-          return models.park.findAll({
-            where: {
-              stateCode: request.params.state,
-            },
-          })
-            .then((retrievedParks) => {
-              logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state}`);
-              return response.json(retrievedParks);
-            });
-        }
+        return response.json(parkTypes);
+      }
+
+      // if it doesn't, call this function to get data from the api, then return status
+      return getData(request.params.state)
+        .then(() => {
+          return response.json(parkTypes);
+        })
+        .catch(next);
+    })
+    .catch(next);
+});
+
+// once data has been retrieved, perform necessary updates and return data
+parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
+  logger.log(logger.INFO, `Updating ${request.params.state}`);
+
+  // find all campgrounds in state
+  return models.campground.findAll({
+    where: {
+      state: request.params.state,
+    },
+    attributes: ['state', 'parkId', 'name'],
+  })
+    // find only the parks with campgrounds and update camping data
+    .then((campgrounds) => {
+      logger.log(logger.INFO, `Finding parks with campgrounds in ${request.params.state}`);
+
+      const mapped = campgrounds.map(cg => cg.dataValues.parkId);
+      const uniqueParkCodes = mapped.filter((cg, i) => {
+        return mapped.indexOf(cg) === i;
+      });
+      return uniqueParkCodes;
+    })
+    .then((uniqueParks) => {
+      logger.log(logger.INFO, `Updating ${uniqueParks.length} parks in ${request.params.state} with campgrounds`);
+
+      return models.park.update(
+        { camping: true },
+        { where: { pKeyCode: [...uniqueParks] } },
+      );
+    })
+    // return all data, depending on user preferences
+    .then(() => {
+      if (request.body && !request.body.parkTypes) {
         return models.park.findAll({
           where: {
             stateCode: request.params.state,
-            designation: parkTypes,
+          },
+        })
+          .then((retrievedParks) => {
+            logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state}`);
+            return response.json(retrievedParks);
+          })
+          .catch(next);
+      }
+
+      const { parkTypes, camping } = request.body;
+      
+      if (parkTypes.length > 0 && !camping) {
+        return models.park.findAll({
+          where: {
+            stateCode: request.params.state,
+            designation: request.body.parkTypes,
           },
         })
           .then((retrievedParks) => {
             logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state} that meet user requirements`);
             return response.json(retrievedParks);
           });
+      } 
+
+      if (parkTypes.length > 0 && camping) {
+        return models.park.findAll({
+          where: {
+            stateCode: request.params.state,
+            designation: request.body.parkTypes,
+            camping: true,
+          },
+        })
+          .then((retrievedParks) => {
+            logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state} with camping`);
+            return response.json(retrievedParks);
+          });
       }
 
-      // if it doesn't, call this function to get data from the api
-      return getData(request.params.state)
-        .then(() => {
-          if (!parkTypes) {
-            return models.park.findAll({
-              where: {
-                stateCode: request.params.state,
-              },
-            })
-              .then((retrievedParks) => {
-                logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state}`);
-                return response.json(retrievedParks);
-              });
-          }
-          return models.park.findAll({
-            where: {
-              stateCode: request.params.state,
-              designation: parkTypes,
-            },
-          })
-            .then((retrievedParks) => {
-              logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state} that meet user requirements`);
-              return response.json(retrievedParks);
-            })
-            .catch(next);
+      if (parkTypes.length === 0 && camping) {
+        return models.park.findAll({
+          where: {
+            stateCode: request.params.state,
+            camping: true,
+          },
         })
-        .catch(next);
+          .then((parksWithCampgrounds) => {
+            logger.log(logger.INFO, `Returning ${parksWithCampgrounds.length} parks in ${request.params.state} with camping`);
+            return response.json(parksWithCampgrounds);
+          });
+      }
+      return null;
     })
     .catch(next);
 });

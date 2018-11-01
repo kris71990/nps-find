@@ -18,7 +18,13 @@
       <h3>Weather...</h3>
       <p>{{ computedPark.weatherInfo }}</p>
       <h3>Camping...</h3>
-      <p>View page on <a :href=computedPark.url>National Park Service</a></p>
+      <div>
+        <p v-if="computedPark.camping">
+          See <span @click="getCampgrounds">camping</span> options in {{ computedPark.name }}.
+        </p>
+        <p v-else>No camping available.</p> 
+      </div>
+      <p>View page on <a :href=computedPark.url target="_blank">National Park Service</a></p>
     </div>
   </div>
 </template>
@@ -27,16 +33,27 @@
 import { mapState } from 'vuex';
 import ImageCarousel from './image-carousel.vue';
 import MapView from './park-view-map.vue';
+import CampgroundOptions from './campground-options.vue';
 
 export default {
   name: 'ParkView',
   components: {
     ImageCarousel,
     MapView,
+    CampgroundOptions,
   },
   computed: mapState({
     computedPark: state => state.singlePark,
-  })
+  }),
+  methods: {
+    getCampgrounds: function() {
+      const { pKeyCode, parkCode } = this.computedPark;
+      return this.$store.dispatch('getCampgrounds', { pKeyCode, parkCode })
+        .then(() => {
+          this.$router.push(`/park/${parkCode}/campgrounds`);
+        });
+    }
+  }
 }
 </script>
 
@@ -59,6 +76,14 @@ export default {
     padding: 2%;
     h3 {
       text-decoration: underline;
+    }
+    span {
+      color: grey;
+      font-weight: bold;
+    }
+    span:hover {
+      cursor: pointer;
+      color: #00CB94;
     }
   }
 }

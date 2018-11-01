@@ -4,6 +4,7 @@ import Landing from '../components/landing.vue';
 import Dashboard from '../components/dashboard.vue';
 import StateRankings from '../components/state-rankings.vue';
 import ParkView from '../components/park-view.vue';
+import CampgroundOptions from '../components/campground-options.vue';
 
 Vue.use(Router);
 
@@ -28,6 +29,16 @@ export default new Router({
       path: '/park/:id',
       name: 'ParkView',
       component: ParkView,
+    },
+    {
+      path: '/park/:id/campgrounds',
+      name: 'CampgroundOptions',
+      component: CampgroundOptions,
+    },
+    {
+      path: '/campgrounds/:state',
+      name: 'CampgroundsState',
+      component: CampgroundOptions,
     },
   ],
 });

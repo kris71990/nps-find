@@ -16,22 +16,11 @@ The frontend is built with **Vue** and **Vuex**.
 
 The API also utilizes data from the National Park Service API (https://www.nps.gov/subjects/developer/index.htm)
 
-## Usage
+## Getting Started
 
-**Starting the Server**:
-
-```
-git clone https://github.com/kris71990/nps-find.git
-cd front-end npm i
-cd back-end npm i
-```
-
-Configure environment variables in both directores - information in sub-directory READMEs.
-
-```
-/back-end: npm run start
-/front-end: npm run watch
-```
+1. Clone the repo: `git clone https://github.com/kris71990/nps-find.git`
+2. Create `.env` files and install node modules in front and back end directories - consult directory READMEs for specific information.
+3. Start server
 
 ## Testing
 
