@@ -11,6 +11,10 @@ const sequelize = new Sequelize(DATABASE_URL, {
 const state = sequelize.import('./state.js');
 const park = sequelize.import('./park.js');
 const campground = sequelize.import('./campground.js');
+const account = sequelize.import('./account.js');
+const profile = sequelize.import('./profile.js');
+
+profile.belongsTo(account);
 
 state.hasMany(park, {
   foreignKey: 'stateCode',
@@ -27,6 +31,8 @@ campground.belongsTo(park, {
   targetKey: 'pKeyCode',
 });
 
+db[account.name] = account;
+db[profile.name] = profile;
 db[state.name] = state;
 db[park.name] = park;
 db[campground.name] = campground;
