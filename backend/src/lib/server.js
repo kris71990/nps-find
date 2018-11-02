@@ -7,6 +7,7 @@ import HttpError from 'http-errors';
 import logger from './logger';
 import models from '../models';
 import accountRouter from '../routes/account';
+import profileRouter from '../routes/profile';
 import stateRouter from '../routes/state';
 import parkRouter from '../routes/park';
 import campgroundRouter from '../routes/campground';
@@ -20,6 +21,7 @@ let server = null;
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
 
 app.use(accountRouter);
+app.use(profileRouter);
 app.use(stateRouter);
 app.use(parkRouter);
 app.use(campgroundRouter);

@@ -11,6 +11,10 @@ const Profile = (sequelize, DataTypes) => sequelize.define('profile', {
   homeState: {
     type: DataTypes.STRING,
   },
+  account: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 export default Profile;
