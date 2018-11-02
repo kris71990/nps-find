@@ -30,7 +30,7 @@ const Account = (sequelize, DataTypes) => sequelize.define('account', {
   },
 });
 
-function generateToken() {
+Account.generateToken = function generateToken() {
   this.tokenSeed = crypto.randomBytes(TOKEN_SEED_LENGTH).toString('hex');
   return this.save()
     .then((account) => {
@@ -39,9 +39,9 @@ function generateToken() {
       }, process.env.ACCOUNT_SECRET);
     })
     .catch(() => new HttpError(401, 'Error creating token'));
-}
+};
 
-function verifyPassword(password) {
+Account.verifyPassword = function verifyPassword(password) {
   return bcrypt.compare(password, this.passwordHash)
     .then((result) => {
       if (!result) {
@@ -49,7 +49,7 @@ function verifyPassword(password) {
       }
       return this;
     });
-}
+};
 
 Account.create = (username, email, password) => {
   return bcrypt.hash(password, HASH_ROUNDS)
@@ -61,7 +61,7 @@ Account.create = (username, email, password) => {
         email,
         passwordHash,
         tokenSeed,
-      }).save();
+      });
     });
 };
 
