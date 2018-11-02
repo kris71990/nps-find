@@ -1,7 +1,7 @@
 'use strict';
 
 import HttpError from 'http-errors';
-import Account from '../models/account';
+import models from '../models/index';
 
 export default (request, response, next) => {
   if (!request.headers.authorization) {
@@ -20,7 +20,7 @@ export default (request, response, next) => {
     return next(new HttpError(400, 'AUTH - invalid request'));
   }
 
-  return Account.findOne({ 
+  return models.account.findOne({ 
     where: { username },
   })
     .then((account) => {
