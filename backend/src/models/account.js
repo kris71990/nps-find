@@ -32,12 +32,8 @@ export default (sequelize, DataTypes) => {
   });
 
   Account.prototype.generateToken = function () { // eslint-disable-line
-    console.log(this.tokenSeed);
-    console.log(this);
-    // this.tokenSeed = crypto.randomBytes(TOKEN_SEED_LENGTH).toString('hex');
     return this.update({ tokenSeed: crypto.randomBytes(TOKEN_SEED_LENGTH).toString('hex') })
       .then((account) => {
-        console.log(account);
         return jsonWebToken.sign({
           tokenSeed: account.tokenSeed,
         }, process.env.ACCOUNT_SECRET);

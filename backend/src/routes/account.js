@@ -26,7 +26,7 @@ accountRouter.post('/signup', jsonParser, (request, response, next) => {
     .then((token) => {
       logger.log(logger.INFO, 'Returning successfully created token');
       response.cookie('nps-token', token, { maxAge: 900000 });
-      return response.send(token);
+      return response.json({ token });
     })
     .catch(next);
 });
@@ -37,7 +37,7 @@ accountRouter.get('/login', basicAuthMiddleware, (request, response, next) => {
     .then((token) => {
       logger.log(logger.INFO, 'Returning token');
       response.cookie('nps-token', token, { maxAge: 900000 });
-      return response.send(token);
+      return response.json({ token });
     })
     .catch(next);
 });
