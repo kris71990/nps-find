@@ -31,10 +31,13 @@ export default (sequelize, DataTypes) => {
     },
   });
 
-  Account.generateToken = function (account) { // eslint-disable-line
-    account.tokenSeed = crypto.randomBytes(TOKEN_SEED_LENGTH).toString('hex');
-    return account.save()
-      .then(() => {
+  Account.prototype.generateToken = function () { // eslint-disable-line
+    console.log(this.tokenSeed);
+    console.log(this);
+    // this.tokenSeed = crypto.randomBytes(TOKEN_SEED_LENGTH).toString('hex');
+    return this.update({ tokenSeed: crypto.randomBytes(TOKEN_SEED_LENGTH).toString('hex') })
+      .then((account) => {
+        console.log(account);
         return jsonWebToken.sign({
           tokenSeed: account.tokenSeed,
         }, process.env.ACCOUNT_SECRET);
@@ -42,13 +45,13 @@ export default (sequelize, DataTypes) => {
       .catch(() => new HttpError(401, 'Error creating token'));
   };
   
-  Account.verifyPassword = function (password, account) { // eslint-disable-line
-    return bcrypt.compare(password, account.passwordHash)
+  Account.prototype.verifyPassword = function (password) { // eslint-disable-line
+    return bcrypt.compare(password, this.passwordHash)
       .then((result) => {
         if (!result) {
           throw new HttpError(400, 'AUTH - incorrect password');
         }
-        return account;
+        return this;
       });
   };
 
