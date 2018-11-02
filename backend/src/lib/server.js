@@ -5,7 +5,7 @@ import cors from 'cors';
 import HttpError from 'http-errors';
 
 import logger from './logger';
-import models from '../models';
+import models from '../models/index';
 import accountRouter from '../routes/account';
 import profileRouter from '../routes/profile';
 import stateRouter from '../routes/state';

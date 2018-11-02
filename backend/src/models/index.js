@@ -36,6 +36,7 @@ db[profile.name] = profile;
 db[state.name] = state;
 db[park.name] = park;
 db[campground.name] = campground;
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

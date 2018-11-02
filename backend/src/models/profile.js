@@ -6,14 +6,10 @@ const Profile = (sequelize, DataTypes) => sequelize.define('profile', {
     allowNull: false,
   },
   age: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
   },
   homeState: {
     type: DataTypes.STRING,
-  },
-  account: {
-    type: DataTypes.STRING,
-    allowNull: false,
   },
 });
 
