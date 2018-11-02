@@ -24,7 +24,7 @@ accountRouter.post('/signup', jsonParser, (request, response, next) => {
       return account.generateToken();
     })
     .then((token) => {
-      logger.log(logger.INFO, 'Successfully created token');
+      logger.log(logger.INFO, 'Returning successfully created token');
       response.cookie('nps-token', token, { maxAge: 900000 });
       return response.send(token);
     })
@@ -35,7 +35,7 @@ accountRouter.get('/login', basicAuthMiddleware, (request, response, next) => {
   if (!request.account) return next(new HttpError(400), 'Invalid account');
   return request.account.generateToken()
     .then((token) => {
-      logger.log(logger.INFO, 'Successfully created token');
+      logger.log(logger.INFO, 'Returning token');
       response.cookie('nps-token', token, { maxAge: 900000 });
       return response.send(token);
     })
