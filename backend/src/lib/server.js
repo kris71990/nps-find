@@ -6,11 +6,11 @@ import HttpError from 'http-errors';
 
 import logger from './logger';
 import models from '../models/index';
-import accountRouter from '../routes/account';
-import profileRouter from '../routes/profile';
-import stateRouter from '../routes/state';
-import parkRouter from '../routes/park';
-import campgroundRouter from '../routes/campground';
+import accountRouter from '../routes/account-router';
+import profileRouter from '../routes/profile-router';
+import stateRouter from '../routes/state-router';
+import parkRouter from '../routes/park-router';
+import campgroundRouter from '../routes/campground-router';
 import errorMiddleware from './error-middleware';
 
 const CLIENT_URL = process.env.CLIENT_URL;
