@@ -5,10 +5,12 @@ import cors from 'cors';
 import HttpError from 'http-errors';
 
 import logger from './logger';
-import models from '../models';
-import stateRouter from '../routes/state';
-import parkRouter from '../routes/park';
-import campgroundRouter from '../routes/campground';
+import models from '../models/index';
+import accountRouter from '../routes/account-router';
+import profileRouter from '../routes/profile-router';
+import stateRouter from '../routes/state-router';
+import parkRouter from '../routes/park-router';
+import campgroundRouter from '../routes/campground-router';
 import errorMiddleware from './error-middleware';
 
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -18,6 +20,8 @@ let server = null;
 
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
 
+app.use(accountRouter);
+app.use(profileRouter);
 app.use(stateRouter);
 app.use(parkRouter);
 app.use(campgroundRouter);
