@@ -13,7 +13,7 @@ export default (error, request, response, next) => { // eslint-disable-line no-u
 
   const errorMessage = error.message.toLowerCase();
 
-  if (errorMessage.includes('sequelizedatabaseerror')) {
+  if (errorMessage.includes('notnull violation')) {
     logger.log(logger.INFO, 'Responding with 400 code - bad data');
     return response.sendStatus(400);
   }
@@ -23,7 +23,7 @@ export default (error, request, response, next) => { // eslint-disable-line no-u
     return response.sendStatus(404);
   }
 
-  if (errorMessage.includes('duplicate key')) {
+  if (errorMessage.includes('validation error')) {
     logger.log(logger.INFO, 'Responding with a 409 code - conflict');
     return response.sendStatus(409);
   }
