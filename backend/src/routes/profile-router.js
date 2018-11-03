@@ -33,7 +33,7 @@ profileRouter.get('/profile/me', bearerAuthMiddleware, (request, response, next)
   )
     .then((profile) => {
       if (!profile) next(new HttpError(404, 'Profile Not Found'));
-      return response.json({ profile });
+      return response.json(profile);
     })
     .catch(next);
 });
@@ -44,11 +44,11 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
 
   return models.profile.update(
     { ...request.body },
-    { where: { id: request.params.id } },
+    { where: { id: request.params.id }, returning: true },
   )
     .then((profile) => {
       logger.log(logger.INFO, 'Returning updated profile');
-      return response.json({ profile });
+      return response.json(profile);
     })
     .catch(next);
 });

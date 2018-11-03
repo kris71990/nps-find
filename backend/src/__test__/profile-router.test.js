@@ -5,7 +5,7 @@ import superagent from 'superagent';
 
 import { startServer, stopServer } from '../lib/server';
 import { createAccountMock } from './lib/account-mock';
-import { removeProfileMock } from './lib/profile-mock';
+import { removeProfileMock, createProfileMock } from './lib/profile-mock';
 
 const API_URL = `http://localhost:${process.env.PORT}`;
 
@@ -68,5 +68,73 @@ describe('/profile', () => {
           expect(response.body).toBeFalsy();
         });
     });
+  });
+
+  describe('GET /profile/me', () => {
+    test('GET /profile/me should return my profile', () => {
+      let profileMockSet = null;
+      return createProfileMock()
+        .then((profileMock) => {
+          profileMockSet = profileMock;
+          return superagent.get(`${API_URL}/profile/me`)
+            .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`);
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body.id).toEqual(profileMockSet.profile.id);
+          expect(response.body.firstName).toEqual(profileMockSet.profile.firstName);
+          expect(response.body.age).toEqual(profileMockSet.profile.age);
+          expect(response.body.homeState).toEqual(profileMockSet.profile.homeState);
+        });
+    });
+
+    test('GET /profile/me without credentials returns 401', () => {
+      return createProfileMock()
+        .then(() => {
+          return superagent.get(`${API_URL}/profile/me`);
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(401);
+        });
+    });
+  });
+
+  describe('PUT /profile/:id', () => {
+    test('PUT /profile/:id with new data returns updated profile', () => {
+      let profileMockSet = null;
+      return createProfileMock()
+        .then((profileMock) => {
+          profileMockSet = profileMock;
+          return superagent.put(`${API_URL}/profile/${profileMock.profile.id}`)
+            .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
+            .send({
+              age: 30,
+              homeState: 'CA',
+            });
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body).toBeInstanceOf(Array);
+          expect(response.body[0]).toEqual(1);
+          expect(response.body[1][0].id).toEqual(profileMockSet.profile.id);
+          expect(response.body[1][0].age).toEqual(30);
+          expect(response.body[1][0].homeState).toEqual('CA');
+          expect(response.body[1][0].firstName).toEqual(profileMockSet.profile.firstName);
+        });
+    });
+
+    test('PUT /profile/:id without token returns 401', () => {
+      return createProfileMock()
+        .then((profileMock) => {
+          return superagent.put(`${API_URL}/profile/${profileMock.profile.id}`)
+            .send({
+              age: 30,
+              homeState: 'CA',
+            });
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(401);
+        });
+    }); 
   });
 });
