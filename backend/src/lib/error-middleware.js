@@ -18,6 +18,11 @@ export default (error, request, response, next) => { // eslint-disable-line no-u
     return response.sendStatus(400);
   }
 
+  if (errorMessage.includes('unauthorized')) {
+    logger.log(logger.INFO, 'Responding with 401 code - unauthorized');
+    return response.sendStatus(401);
+  }
+  
   if (errorMessage.includes('objectid failed')) {
     logger.log(logger.INFO, 'Responding with a 404 code - not found');
     return response.sendStatus(404);
