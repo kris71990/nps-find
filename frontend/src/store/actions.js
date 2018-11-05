@@ -1,4 +1,31 @@
 import superagent from 'superagent';
+import { deleteCookie } from '../utils/cookie';
+
+const signupReq = (context, user) => {
+  const { commit } = context;
+  return superagent.post(`${API_URL}/signup`)
+    .send(user)
+    .withCredentials()
+    .then((response) => {
+      commit('setToken', response.text);
+    });
+};
+
+const loginReq = (context, user) => {
+  const { commit } = context;
+  return superagent.get(`${API_URL}/login`)
+    .auth(user.username, user.password)
+    .withCredentials()
+    .then((response) => {
+      commit('setToken', response.text);
+    });
+};
+
+const logoutReq = (context) => {
+  const { commit } = context;
+  deleteCookie('nps-token');
+  commit('removeToken');
+};
 
 const foundParks = (context, selections) => {
   const { commit } = context;
@@ -71,5 +98,13 @@ const renderPark = (context, park) => {
 };
 
 export {
-  foundParks, renderPark, setTypes, stateChart, getCampgrounds, renderCampgroundsState,
+  signupReq,
+  loginReq,
+  logoutReq,
+  foundParks, 
+  renderPark, 
+  setTypes, 
+  stateChart, 
+  getCampgrounds, 
+  renderCampgroundsState,
 };

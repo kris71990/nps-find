@@ -1,5 +1,18 @@
 <template>
   <div id="home">
+    <div>
+      <div v-if="!loggedIn">
+        <router-link to="/login">Login</router-link> 
+        or 
+        <router-link to="/signup">Signup</router-link>
+      </div>
+      <div v-else>
+        <AuthForm 
+          v-bind:type="this.$route === '/login' ? 'Login' : 'Signup'"
+          v-bind:onComplete="this.$route === '/login' ? handleLogin : handleSignup"
+        />
+      </div>
+    </div>
     <h3>Choose a state to find National Parks near you...</h3>
     <h4>Or see an <a v-on:click="getStateList">overview</a> of all parks</h4>
     <SearchForm :handleSearch="handleSearch"/>
@@ -8,6 +21,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import AuthForm from './auth-form.vue';
 import SearchForm from './search-form.vue';
 
 export default {
@@ -24,6 +38,12 @@ export default {
     }
   },
   methods: {
+    handleLogin() {
+
+    },
+    handleSignup() {
+
+    },
     handleSearch(event, a, b, c) {
       this.state = event.state;
       this.stateFull = event.stateFull;
@@ -44,6 +64,7 @@ export default {
     computedParks: state => state.parks,
     stateList: state => state.stateList,
     singlePark: state => state.singlePark,
+    loggedIn: state => state.loggedIn,
   }),
 }
 </script>

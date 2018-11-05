@@ -16,6 +16,16 @@ export default new Router({
       component: Landing,
     },
     {
+      path: '/login',
+      name: 'HomeLogin',
+      component: Landing,
+    },
+    {
+      path: '/signup',
+      name: 'HomeSignup',
+      component: Landing,
+    },
+    {
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard,

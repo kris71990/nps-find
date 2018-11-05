@@ -5,6 +5,16 @@ const changeState = (state, selection) => {
   return state;
 };
 
+const setToken = (state, token) => {
+  state.token = token;
+  return state;
+};
+
+const removeToken = (state) => {
+  state.token = null;
+  return state;
+};
+
 const foundParks = (state, fromApi) => {
   state.parks = fromApi;
   state.stateList = null;
@@ -50,6 +60,8 @@ const setDefault = (state) => {
 };
 
 export {
+  setToken,
+  removeToken,
   changeState, 
   foundParks, 
   createStateList, 

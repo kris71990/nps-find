@@ -3,11 +3,16 @@ import Vuex from 'vuex';
 
 import * as actions from './actions';
 import * as mutations from './mutations';
+import { fetchCookie } from '../utils/cookie';
 
 Vue.use(Vuex);
 
+const token = fetchCookie('nps-token');
+const tokenState = token || null;
+
 const store = new Vuex.Store({
   state: {
+    token: tokenState,
     stateAbbrev: null,
     stateFull: null,
     interests: null,
