@@ -9,10 +9,12 @@ Vue.use(Vuex);
 
 const token = fetchCookie('nps-token');
 const tokenState = token || null;
+const loggedInState = token ? true : false;
 
 const store = new Vuex.Store({
   state: {
     token: tokenState,
+    loggedIn: loggedInState,
     stateAbbrev: null,
     stateFull: null,
     interests: null,

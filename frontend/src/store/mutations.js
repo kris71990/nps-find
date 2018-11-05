@@ -7,11 +7,13 @@ const changeState = (state, selection) => {
 
 const setToken = (state, token) => {
   state.token = token;
+  state.loggedIn = true;
   return state;
 };
 
 const removeToken = (state) => {
   state.token = null;
+  state.loggedIn = false;
   return state;
 };
 

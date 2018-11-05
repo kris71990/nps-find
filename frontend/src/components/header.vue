@@ -12,6 +12,7 @@
           <router-link to="/"><li v-on:click='resetDefault'>Home</li></router-link>
           <li><a href="#">Profile</a></li>
           <li><a href="#">About</a></li>
+          <router-link v-if="this.loggedIn" to="/"><li v-on:click='handleLogout'>Logout</li></router-link>
         </ul>
       </nav>
     </div>
@@ -19,13 +20,24 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'Header',
   methods: {
     resetDefault() { 
       this.$store.commit('setDefault');
+    },
+    handleLogout() {
+      return this.$store.dispatch('logoutReq')
+        .then(() => {
+          Promise.resolve();
+        });
     }
-  }
+  },
+  computed: mapState({
+    loggedIn: state => state.loggedIn,
+  })
 }
 </script>
 

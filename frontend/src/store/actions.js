@@ -13,6 +13,7 @@ const signupReq = (context, user) => {
 
 const loginReq = (context, user) => {
   const { commit } = context;
+  console.log(user);
   return superagent.get(`${API_URL}/login`)
     .auth(user.username, user.password)
     .withCredentials()
@@ -24,7 +25,19 @@ const loginReq = (context, user) => {
 const logoutReq = (context) => {
   const { commit } = context;
   deleteCookie('nps-token');
-  commit('removeToken');
+  return commit('removeToken');
+};
+
+const createProfileReq = (context, profile) => {
+  const { commit } = context;
+
+  return superagent.post(`${API_URL}/profile`)
+    .set('Authorization', `Bearer ${'sdf'}`)
+    .set('Content-Type', 'application/json')
+    .send(profile)
+    .then((response) => {
+      return commit('setProfile', response.body);
+    });
 };
 
 const foundParks = (context, selections) => {
@@ -101,6 +114,7 @@ export {
   signupReq,
   loginReq,
   logoutReq,
+  createProfileReq,
   foundParks, 
   renderPark, 
   setTypes, 

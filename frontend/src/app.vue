@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Header from './components/header.vue';
 import Footer from './components/footer.vue';
 import store from './store/store';
@@ -17,6 +18,9 @@ export default {
     Header,
     Footer,
   },
+  computed: mapState({
+    loggedIn: state => state.loggedIn,
+  }),
   mounted() {
     let scriptElParkView = document.createElement('script');
     scriptElParkView.setAttribute('id', 'map-view');

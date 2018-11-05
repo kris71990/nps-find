@@ -6,10 +6,10 @@
         or 
         <router-link to="/signup">Signup</router-link>
       </div>
-      <div v-else>
+      <div v-if="this.$route.path === '/login' || this.$route.path === '/signup'">
         <AuthForm 
-          v-bind:type="this.$route === '/login' ? 'Login' : 'Signup'"
-          v-bind:onComplete="this.$route === '/login' ? handleLogin : handleSignup"
+          v-bind:type="this.$route.path === '/login' ? 'Login' : 'Signup'"
+          v-bind:onComplete="this.$route.path === '/login' ? handleLogin : handleSignup"
         />
       </div>
     </div>
@@ -28,6 +28,7 @@ export default {
   name: 'Landing',
   components: {
     SearchForm,
+    AuthForm,
   },
   data() {
     return {
@@ -38,11 +39,17 @@ export default {
     }
   },
   methods: {
-    handleLogin() {
-
+    handleLogin(event, a) {
+      return this.$store.dispatch('loginReq', event)
+        .then(() => {
+          return this.$router.push('/');
+        })
     },
-    handleSignup() {
-
+    handleSignup(event) {
+      return this.$store.dispatch('signupReq', event)
+        .then(() => {
+          return this.$router.push('/');
+        })
     },
     handleSearch(event, a, b, c) {
       this.state = event.state;
@@ -64,7 +71,7 @@ export default {
     computedParks: state => state.parks,
     stateList: state => state.stateList,
     singlePark: state => state.singlePark,
-    loggedIn: state => state.loggedIn,
+    loggedIn: state => state.token,
   }),
 }
 </script>
