@@ -15,7 +15,7 @@ const promisify = callback => (...args) => {
 
 export default (request, response, next) => {
   if (!request.headers.authorization) {
-    return next(new HttpError(400, 'AUTH - invalid request'));
+    return next(new HttpError(401, 'AUTH - unauthorized'));
   }
 
   const token = request.headers.authorization.split('Bearer ')[1];

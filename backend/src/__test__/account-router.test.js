@@ -5,16 +5,16 @@ import { startServer, stopServer } from '../lib/server';
 import { createAccountMock, removeAccountMock } from './lib/account-mock';
 
 
-const apiUrl = `http://localhost:${process.env.PORT}`;
+const API_URL = `http://localhost:${process.env.PORT}`;
 
-describe('User Authentication', () => {
+describe('User Authentication - Account router', () => {
   beforeAll(startServer);
   afterAll(stopServer);
   afterEach(removeAccountMock);
 
   describe('POST to /signup', () => {
-    test('POST - 200 - success', () => {
-      return superagent.post(`${apiUrl}/signup`)
+    test('POST with credentials returns 200 status and access token', () => {
+      return superagent.post(`${API_URL}/signup`)
         .send({
           username: 'Kris',
           email: 'test@test.com',
@@ -25,18 +25,70 @@ describe('User Authentication', () => {
           expect(response.body.token).toBeTruthy();
         });
     });
+
+    test('POST with missing credentials returns 400', () => {
+      return superagent.post(`${API_URL}/signup`)
+        .send({
+          username: 'dfjknsf',
+          password: '1234',
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(400);
+          expect(response.body).toBeFalsy();
+        });
+    });
+
+    test('POST with existing credentials returns 409', () => {
+      return createAccountMock()
+        .then((mockAccount) => {
+          return superagent.post(`${API_URL}/signup`)
+            .send({
+              username: mockAccount.request.username,
+              password: '123455',
+              email: 'dfsfsdfsdf',
+            })
+            .catch((response) => {
+              expect(response.status).toEqual(409);
+              expect(response.body).toBeFalsy();
+            });
+        });
+    }); 
   });
 
   describe('GET from /login', () => {
-    test('GET - 200 success', () => {
+    test('GET with credentials should return access token', () => {
       return createAccountMock()
         .then((mock) => {
-          return superagent.get(`${apiUrl}/login`)
+          return superagent.get(`${API_URL}/login`)
             .auth(mock.request.username, mock.request.password);
         })
         .then((response) => {
           expect(response.status).toEqual(200);
           expect(response.body.token).toBeTruthy();
+        });
+    });
+
+    test('GET with incorrect username returns 400', () => {
+      return createAccountMock()
+        .then((mock) => {
+          return superagent.get(`${API_URL}/login`)
+            .auth('incorrectusername', mock.request.password);
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(400);
+          expect(response.body).toBeFalsy();
+        });
+    });
+
+    test('GET with incorrect password returns 400', () => {
+      return createAccountMock()
+        .then((mock) => {
+          return superagent.get(`${API_URL}/login`)
+            .auth(mock.request.username, 'incorrectpassword');
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(400);
+          expect(response.body).toBeFalsy();
         });
     });
   });

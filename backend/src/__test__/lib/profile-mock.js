@@ -15,7 +15,7 @@ const createProfileMock = () => {
         firstName: faker.name.firstName(),
         age: faker.random.number(),
         homeState: faker.address.state(),
-        account: accountSetMock.account._id,
+        accountId: accountSetMock.account.id,
       });
     })
     .then((profile) => {

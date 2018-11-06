@@ -7,10 +7,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Header from './components/header.vue';
-import Dashboard from './components/dashboard.vue';
-import Landing from './components/landing.vue';
-import StateRanking from './components/state-rankings.vue'
 import Footer from './components/footer.vue';
 import store from './store/store';
 
@@ -20,12 +18,23 @@ export default {
     Header,
     Footer,
   },
+  computed: mapState({
+    loggedIn: state => state.authModule.loggedIn,
+  }),
   mounted() {
+    if (document.getElementById('map-view')) return;
     let scriptElParkView = document.createElement('script');
     scriptElParkView.setAttribute('id', 'map-view');
     scriptElParkView.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}`);
     document.body.appendChild(scriptElParkView);
+
   },
+  updated() {
+    if (this.loggedIn) {
+      return this.$store.dispatch('fetchProfileReq')
+        .catch(console.errror);
+    }
+  }
 }
 </script>
 

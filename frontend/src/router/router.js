@@ -4,6 +4,7 @@ import Landing from '../components/landing.vue';
 import Dashboard from '../components/dashboard.vue';
 import StateRankings from '../components/state-rankings.vue';
 import ParkView from '../components/park-view.vue';
+import ProfileView from '../components/profile-view.vue';
 import CampgroundOptions from '../components/campground-options.vue';
 
 Vue.use(Router);
@@ -14,6 +15,21 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Landing,
+    },
+    {
+      path: '/login',
+      name: 'HomeLogin',
+      component: Landing,
+    },
+    {
+      path: '/signup',
+      name: 'HomeSignup',
+      component: Landing,
+    },
+    {
+      path: '/profile',
+      name: 'ProfileView',
+      component: ProfileView,
     },
     {
       path: '/dashboard',
