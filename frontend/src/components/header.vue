@@ -10,9 +10,13 @@
       <nav>
         <ul>
           <router-link to="/"><li v-on:click='resetDefault'>Home</li></router-link>
-          <li><a href="#">Profile</a></li>
+          <router-link v-if="this.loggedIn" to="/profile">
+            <li>Profile</li>
+          </router-link>
           <li><a href="#">About</a></li>
-          <router-link v-if="this.loggedIn" to="/"><li v-on:click='handleLogout'>Logout</li></router-link>
+          <router-link v-if="this.loggedIn" to="/">
+            <li v-on:click='handleLogout'>Logout</li>
+          </router-link>
         </ul>
       </nav>
     </div>
