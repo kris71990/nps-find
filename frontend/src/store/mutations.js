@@ -11,7 +11,8 @@ const setToken = (state, token) => {
   return state;
 };
 
-const setProfile = (state, profile) => {
+const setProfile = (state, profileSet) => {
+  const { profile } = profileSet;
   state.profile = profile;
   return state;
 };

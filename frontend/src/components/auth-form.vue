@@ -62,15 +62,15 @@ export default {
       if (this.type === 'Login') {
         return this.onComplete({ username: this.username, password: this.password })
           .then(() => {
-            this.username = null;
-            this.password = null;
+            this.username = '';
+            this.password = '';
           });
       } else {
         return this.onComplete({ username: this.username, password: this.password, email: this.email })
           .then(() => {
-            this.username = null;
-            this.email = null;
-            this.password = null;
+            this.username = '';
+            this.email = '';
+            this.password = '';
           });
       }
     }

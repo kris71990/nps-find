@@ -3,7 +3,7 @@
     <p>Profile</p>
     <div>
       <div v-if="!profile">
-        <ProfileForm/>
+        <ProfileForm v-bind:onComplete="handleCreate"/>
       </div>
       <div v-else>
         <h3>Name: <span>{{ profile.firstName }}</span></h3>
@@ -25,7 +25,15 @@ export default {
   },
   computed: mapState({
     profile: state => state.profile,
-  })
+  }),
+  methods: {
+    handleCreate(event, a) {
+      return this.$store.dispatch('createProfileReq', event)
+        .then(() => {
+          return this.$router.push('/profile');
+        })
+    }
+  }
 }
 </script>
 

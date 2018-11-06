@@ -7,7 +7,7 @@ const signupReq = (context, user) => {
     .send(user)
     .withCredentials()
     .then((response) => {
-      commit('setToken', response.text);
+      commit('setToken', response.body.token);
     });
 };
 
@@ -17,7 +17,7 @@ const loginReq = (context, user) => {
     .auth(user.username, user.password)
     .withCredentials()
     .then((response) => {
-      commit('setToken', response.text);
+      commit('setToken', response.body.token);
     });
 };
 
@@ -28,10 +28,11 @@ const logoutReq = (context) => {
 };
 
 const createProfileReq = (context, profile) => {
-  const { commit } = context;
+  const { commit, state } = context;
+  console.log(profile);
 
   return superagent.post(`${API_URL}/profile`)
-    .set('Authorization', `Bearer ${'token'}`)
+    .set('Authorization', `Bearer ${state.token}`)
     .set('Content-Type', 'application/json')
     .send(profile)
     .then((response) => {
@@ -40,10 +41,10 @@ const createProfileReq = (context, profile) => {
 };
 
 const updateProfileReq = (context, profile) => {
-  const { commit } = context;
+  const { commit, state } = context;
 
   return superagent.put(`${API_URL}/profile/${profile.id}`)
-    .set('Authorization', `Bearer ${'token'}`)
+    .set('Authorization', `Bearer ${state.token}`)
     .set('Content-Type', 'application/json')
     .send(profile)
     .then((response) => {
@@ -52,10 +53,10 @@ const updateProfileReq = (context, profile) => {
 };
 
 const fetchProfileReq = (context) => {
-  const { commit } = context;
+  const { commit, state } = context;
 
   return superagent.get(`${API_URL}/profile/me`)
-    .set('Authorization', `Bearer ${'token'}`)
+    .set('Authorization', `Bearer ${state.token}`)
     .then((response) => {
       return commit('setProfile', response.body);
     });

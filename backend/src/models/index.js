@@ -14,7 +14,7 @@ const campground = sequelize.import('./campground.js');
 const account = sequelize.import('./account.js');
 const profile = sequelize.import('./profile.js');
 
-profile.belongsTo(account);
+account.hasOne(profile);
 
 state.hasMany(park, {
   foreignKey: 'stateCode',
