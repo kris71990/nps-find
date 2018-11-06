@@ -11,6 +11,11 @@ const setToken = (state, token) => {
   return state;
 };
 
+const setProfile = (state, profile) => {
+  state.profile = profile;
+  return state;
+};
+
 const removeToken = (state) => {
   state.token = null;
   state.loggedIn = false;
@@ -64,6 +69,7 @@ const setDefault = (state) => {
 export {
   setToken,
   removeToken,
+  setProfile,
   changeState, 
   foundParks, 
   createStateList, 

@@ -31,9 +31,31 @@ const createProfileReq = (context, profile) => {
   const { commit } = context;
 
   return superagent.post(`${API_URL}/profile`)
-    .set('Authorization', `Bearer ${'sdf'}`)
+    .set('Authorization', `Bearer ${'token'}`)
     .set('Content-Type', 'application/json')
     .send(profile)
+    .then((response) => {
+      return commit('setProfile', response.body);
+    });
+};
+
+const updateProfileReq = (context, profile) => {
+  const { commit } = context;
+
+  return superagent.put(`${API_URL}/profile/${profile.id}`)
+    .set('Authorization', `Bearer ${'token'}`)
+    .set('Content-Type', 'application/json')
+    .send(profile)
+    .then((response) => {
+      return commit('setProfile', response.body);
+    });
+};
+
+const fetchProfileReq = (context) => {
+  const { commit } = context;
+
+  return superagent.get(`${API_URL}/profile/me`)
+    .set('Authorization', `Bearer ${'token'}`)
     .then((response) => {
       return commit('setProfile', response.body);
     });
@@ -114,6 +136,8 @@ export {
   loginReq,
   logoutReq,
   createProfileReq,
+  updateProfileReq,
+  fetchProfileReq,
   foundParks, 
   renderPark, 
   setTypes, 

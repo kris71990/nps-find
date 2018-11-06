@@ -1,10 +1,13 @@
 <template>
   <div id="home">
     <div>
-      <div v-if="!loggedIn">
+      <div class="login-signup" v-if="!loggedIn">
         <router-link to="/login">Login</router-link> 
         or 
         <router-link to="/signup">Signup</router-link>
+      </div>
+      <div class="login-signup" v-if="loggedIn && !profile">
+        <p>Create your <router-link to="/profile">profile!</router-link></p>
       </div>
       <div v-if="this.$route.path === '/login' || this.$route.path === '/signup'">
         <AuthForm 
@@ -72,6 +75,7 @@ export default {
     stateList: state => state.stateList,
     singlePark: state => state.singlePark,
     loggedIn: state => state.token,
+    profile: state => state.profile,
   }),
 }
 </script>
@@ -80,6 +84,13 @@ export default {
 #home {
   width: 40%;
   margin: 5% auto;
+  .login-signup {
+    width: 60%;
+    margin: 0 auto;
+    padding: 2%;
+    background-color: #D0D2D3;
+    border: 1px solid black;
+  }
   a {
     color: #336E55;
   }

@@ -15,6 +15,7 @@ const store = new Vuex.Store({
   state: {
     token: tokenState,
     loggedIn: loggedInState,
+    profile: null,
     stateAbbrev: null,
     stateFull: null,
     interests: null,
