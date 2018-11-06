@@ -26,6 +26,11 @@ export default {
     scriptElParkView.setAttribute('id', 'map-view');
     scriptElParkView.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}`);
     document.body.appendChild(scriptElParkView);
+
+    if (loggedIn) {
+      return this.$store.dispatch('fetchProfileReq')
+        .catch(console.error);
+    }
   },
 }
 </script>

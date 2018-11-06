@@ -45,6 +45,7 @@ export default {
     handleLogin(event, a) {
       return this.$store.dispatch('loginReq', event)
         .then(() => {
+          this.$store.dispatch('fetchProfileReq');
           return this.$router.push('/');
         })
     },
