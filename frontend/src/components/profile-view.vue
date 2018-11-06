@@ -1,15 +1,15 @@
 <template>
   <div id="profile-view">
-    <p>Profile</p>
     <div>
       <div v-if="!profile">
         <ProfileForm v-bind:onComplete="handleCreate" v-bind:editing="false"
         v-bind:handleClose="handleClose"/>
       </div>
       <div v-else>
-        <h3>Name: <span>{{ profile.firstName }}</span></h3>
-        <h3>Age: <span>{{ profile.age }}</span></h3>
-        <h3>Home State: <span>{{ profile.homeState }}</span></h3>
+        <h2>
+          {{ profile.firstName }} -/- {{ profile.age }} -/- 
+          <span>{{ states[profile.homeState] }}</span>
+        </h2>
         <p id="update-button" v-on:click="editing = !editing">
           {{ editing ? 'Close' : 'Update Details' }}
         </p>
@@ -24,6 +24,7 @@
 <script>
 import { mapState } from 'vuex';
 import ProfileForm from './profile-form.vue';
+import { stateAbbreviations } from '../utils/states';
 
 export default {
   name: 'ProfileView',
@@ -33,6 +34,7 @@ export default {
   data() {
     return {
       editing: false,
+      states: stateAbbreviations,
     }
   },
   computed: mapState({
@@ -64,7 +66,9 @@ export default {
 #profile-view {
   width: 50%;
   margin: 0 auto;
-  border: 2px solid black;
+  span {
+    font-style: oblique;
+  }
   #update-button {
     width: 25%;
     margin: 0 auto;

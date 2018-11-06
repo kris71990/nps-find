@@ -19,7 +19,7 @@ export default {
     Footer,
   },
   computed: mapState({
-    loggedIn: state => state.profileModule.loggedIn,
+    loggedIn: state => state.authModule.loggedIn,
   }),
   mounted() {
     if (document.getElementById('map-view')) return;
