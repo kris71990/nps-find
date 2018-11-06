@@ -12,7 +12,7 @@ const setToken = (state, token) => {
 };
 
 const setProfile = (state, profileSet) => {
-  const { profile } = profileSet;
+  const profile = profileSet;
   state.profile = profile;
   return state;
 };

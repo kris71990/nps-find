@@ -29,7 +29,6 @@ const logoutReq = (context) => {
 
 const createProfileReq = (context, profile) => {
   const { commit, state } = context;
-  console.log(profile);
 
   return superagent.post(`${API_URL}/profile`)
     .set('Authorization', `Bearer ${state.token}`)
@@ -43,12 +42,12 @@ const createProfileReq = (context, profile) => {
 const updateProfileReq = (context, profile) => {
   const { commit, state } = context;
 
-  return superagent.put(`${API_URL}/profile/${profile.id}`)
+  return superagent.put(`${API_URL}/profile/${state.profile.id}`)
     .set('Authorization', `Bearer ${state.token}`)
     .set('Content-Type', 'application/json')
     .send(profile)
     .then((response) => {
-      return commit('setProfile', response.body);
+      return commit('setProfile', response.body[0]);
     });
 };
 

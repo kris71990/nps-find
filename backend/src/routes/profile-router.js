@@ -20,7 +20,7 @@ profileRouter.post('/profile', bearerAuthMiddleware, jsonParser, (request, respo
   })
     .then((profile) => {
       logger.log(logger.INFO, 'Returning new profile');
-      return response.json({ profile });
+      return response.json(profile);
     })
     .catch(next);
 });
@@ -32,7 +32,7 @@ profileRouter.get('/profile/me', bearerAuthMiddleware, (request, response, next)
     { where: { accountId: request.account.id } },
   )
     .then((profile) => {
-      if (!profile) next(new HttpError(404, 'Profile Not Found'));
+      if (!profile) return response.json(null);
       return response.json(profile);
     })
     .catch(next);
@@ -41,15 +41,20 @@ profileRouter.get('/profile/me', bearerAuthMiddleware, (request, response, next)
 profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   logger.log(logger.INFO, 'Processing PUT on /profile');
 
+  if (typeof request.body.age === 'string') {
+    request.body.age = parseInt(request.body.age, 10);
+  }
+
   return models.profile.update(
     { ...request.body },
-    { where: { id: request.params.id }, returning: true },
+    { where: { accountId: request.params.id }, returning: true },
   )
     .then((profile) => {
       if (profile[0] === 0) return next(new HttpError(404, 'Profile does not exist'));
       logger.log(logger.INFO, 'Returning updated profile');
-      return response.json(profile);
-    });
+      return response.json(profile[1]);
+    })
+    .catch(next);
 });
 
 profileRouter.delete('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
