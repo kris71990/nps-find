@@ -75,8 +75,8 @@ export default {
     computedParks: state => state.parks,
     stateList: state => state.stateList,
     singlePark: state => state.singlePark,
-    loggedIn: state => state.token,
-    profile: state => state.profile,
+    loggedIn: state => state.authModule.token,
+    profile: state => state.profileModule.profile,
   }),
 }
 </script>

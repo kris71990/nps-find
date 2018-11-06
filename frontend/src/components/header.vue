@@ -40,7 +40,7 @@ export default {
     }
   },
   computed: mapState({
-    loggedIn: state => state.loggedIn,
+    loggedIn: state => state.authModule.loggedIn,
   })
 }
 </script>

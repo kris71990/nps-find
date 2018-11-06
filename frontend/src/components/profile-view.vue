@@ -36,7 +36,7 @@ export default {
     }
   },
   computed: mapState({
-    profile: state => state.profile,
+    profile: state => state.profileModule.profile,
   }),
   methods: {
     handleCreate(event, a) {

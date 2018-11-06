@@ -3,19 +3,18 @@ import Vuex from 'vuex';
 
 import * as actions from './actions';
 import * as mutations from './mutations';
-import { fetchCookie } from '../utils/cookie';
+import authModule from './modules/auth';
+import profileModule from './modules/profile';
+// import { fetchCookie } from '../utils/cookie';
 
 Vue.use(Vuex);
 
-const token = fetchCookie('nps-token');
-const tokenState = token || null;
-const loggedInState = token ? true : false;
+// const token = fetchCookie('nps-token');
+// const tokenState = token || null;
+// const loggedInState = token ? true : false;
 
 const store = new Vuex.Store({
   state: {
-    token: tokenState,
-    loggedIn: loggedInState,
-    profile: null,
     stateAbbrev: null,
     stateFull: null,
     interests: null,
@@ -33,6 +32,10 @@ const store = new Vuex.Store({
     getParks: (state) => {
       return state.parks;
     },
+  },
+  modules: {
+    authModule,
+    profileModule,
   },
   mutations,
   actions,

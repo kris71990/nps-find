@@ -1,65 +1,4 @@
 import superagent from 'superagent';
-import { deleteCookie } from '../utils/cookie';
-
-const signupReq = (context, user) => {
-  const { commit } = context;
-  return superagent.post(`${API_URL}/signup`)
-    .send(user)
-    .withCredentials()
-    .then((response) => {
-      commit('setToken', response.body.token);
-    });
-};
-
-const loginReq = (context, user) => {
-  const { commit } = context;
-  return superagent.get(`${API_URL}/login`)
-    .auth(user.username, user.password)
-    .withCredentials()
-    .then((response) => {
-      commit('setToken', response.body.token);
-    });
-};
-
-const logoutReq = (context) => {
-  const { commit } = context;
-  deleteCookie('nps-token');
-  return commit('removeToken');
-};
-
-const createProfileReq = (context, profile) => {
-  const { commit, state } = context;
-
-  return superagent.post(`${API_URL}/profile`)
-    .set('Authorization', `Bearer ${state.token}`)
-    .set('Content-Type', 'application/json')
-    .send(profile)
-    .then((response) => {
-      return commit('setProfile', response.body);
-    });
-};
-
-const updateProfileReq = (context, profile) => {
-  const { commit, state } = context;
-
-  return superagent.put(`${API_URL}/profile/${state.profile.id}`)
-    .set('Authorization', `Bearer ${state.token}`)
-    .set('Content-Type', 'application/json')
-    .send(profile)
-    .then((response) => {
-      return commit('setProfile', response.body[0]);
-    });
-};
-
-const fetchProfileReq = (context) => {
-  const { commit, state } = context;
-
-  return superagent.get(`${API_URL}/profile/me`)
-    .set('Authorization', `Bearer ${state.token}`)
-    .then((response) => {
-      return commit('setProfile', response.body);
-    });
-};
 
 const foundParks = (context, selections) => {
   const { commit } = context;
@@ -132,12 +71,6 @@ const renderPark = (context, park) => {
 };
 
 export {
-  signupReq,
-  loginReq,
-  logoutReq,
-  createProfileReq,
-  updateProfileReq,
-  fetchProfileReq,
   foundParks, 
   renderPark, 
   setTypes, 

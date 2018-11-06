@@ -5,24 +5,6 @@ const changeState = (state, selection) => {
   return state;
 };
 
-const setToken = (state, token) => {
-  state.token = token;
-  state.loggedIn = true;
-  return state;
-};
-
-const setProfile = (state, profileSet) => {
-  const profile = profileSet;
-  state.profile = profile;
-  return state;
-};
-
-const removeToken = (state) => {
-  state.token = null;
-  state.loggedIn = false;
-  return state;
-};
-
 const foundParks = (state, fromApi) => {
   state.parks = fromApi;
   state.stateList = null;
@@ -68,9 +50,6 @@ const setDefault = (state) => {
 };
 
 export {
-  setToken,
-  removeToken,
-  setProfile,
   changeState, 
   foundParks, 
   createStateList, 
