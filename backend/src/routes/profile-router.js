@@ -39,7 +39,6 @@ profileRouter.get('/profile/me', bearerAuthMiddleware, (request, response, next)
 });
 
 profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, response, next) => {
-  if (!request.params.id) next(new HttpError(400, 'AUTH - invalid request'));
   logger.log(logger.INFO, 'Processing PUT on /profile');
 
   return models.profile.update(
@@ -47,10 +46,10 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
     { where: { id: request.params.id }, returning: true },
   )
     .then((profile) => {
+      if (profile[0] === 0) return next(new HttpError(404, 'Profile does not exist'));
       logger.log(logger.INFO, 'Returning updated profile');
       return response.json(profile);
-    })
-    .catch(next);
+    });
 });
 
 profileRouter.delete('/profile/:id', bearerAuthMiddleware, (request, response, next) => {

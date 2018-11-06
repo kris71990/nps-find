@@ -55,7 +55,6 @@ describe('User Authentication - Account router', () => {
     }); 
   });
 
-
   describe('GET from /login', () => {
     test('GET with credentials should return access token', () => {
       return createAccountMock()

@@ -68,6 +68,22 @@ describe('/profile', () => {
           expect(response.body).toBeFalsy();
         });
     });
+
+    test('POST /profile when profile exists returns 409', () => {
+      return createProfileMock()
+        .then((profileMock) => {
+          return superagent.post(`${API_URL}/profile`)
+            .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
+            .send({
+              firstName: 'kris',
+              age: 28,
+              homeState: 'WA',
+            });
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(409);
+        });
+    }); 
   });
 
   describe('GET /profile/me', () => {
@@ -136,5 +152,51 @@ describe('/profile', () => {
           expect(response.status).toEqual(401);
         });
     }); 
+
+    test('PUT /profile/:id with wrong id returns 404', () => {
+      return createProfileMock()
+        .then((profileMock) => {
+          return superagent.put(`${API_URL}/profile/28374`)
+            .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
+            .send({
+              age: 30,
+              homeState: 'CA',
+            });
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(404);
+        });
+    });
+
+    test('PUT /profile/:id without id returns 404', () => {
+      return createProfileMock()
+        .then((profileMock) => {
+          return superagent.put(`${API_URL}/profile`)
+            .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
+            .send({
+              age: 30,
+              homeState: 'CA',
+            });
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(404);
+        });
+    });
+
+    test('PUT /profile/:id removing required fields returns 400', () => {
+      return createProfileMock()
+        .then((profileMock) => {
+          return superagent.put(`${API_URL}/profile/${profileMock.profile.id}`)
+            .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
+            .send({
+              firtName: null,
+              age: undefined,
+              homeState: '',
+            });
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(400);
+        });
+    });
   });
 });
