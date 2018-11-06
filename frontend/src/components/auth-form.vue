@@ -59,7 +59,6 @@ export default {
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      console.log(e);
       if (this.type === 'Login') {
         return this.onComplete({ username: this.username, password: this.password })
           .then(() => {

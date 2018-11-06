@@ -13,7 +13,6 @@ const signupReq = (context, user) => {
 
 const loginReq = (context, user) => {
   const { commit } = context;
-  console.log(user);
   return superagent.get(`${API_URL}/login`)
     .auth(user.username, user.password)
     .withCredentials()
