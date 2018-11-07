@@ -41,9 +41,9 @@ export default {
   },
   computed:
     mapState({
-      computedPark: state => state.singlePark,
-      computedState: state => state.stateFull,
-      computedCampgrounds: state => state.campgrounds,
+      computedPark: state => state.parkModule.singlePark,
+      computedState: state => state.parkModule.stateFull,
+      computedCampgrounds: state => state.campgroundModule.campgrounds,
     }),
   methods: {
     viewDetails: function(e, cg) {

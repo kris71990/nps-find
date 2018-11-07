@@ -29,11 +29,11 @@ export default {
   },
   computed:
     mapState({
-      computedParks: state => state.parks,
-      computedState: state => state.stateFull,
-      computedStateAbbrev: state => state.stateAbbrev,
-      computedTotal: state => state.parksTotal,
-      computedInterests: state => state.interests,
+      computedParks: state => state.parkModule.parks,
+      computedState: state => state.parkModule.stateFull,
+      computedStateAbbrev: state => state.parkModule.stateAbbrev,
+      computedTotal: state => state.parkModule.parksTotal,
+      computedInterests: state => state.parkModule.interests,
     }),
 }
 </script>

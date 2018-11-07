@@ -72,9 +72,9 @@ export default {
     }
   },
   computed: mapState({
-    computedParks: state => state.parks,
-    stateList: state => state.stateList,
-    singlePark: state => state.singlePark,
+    computedParks: state => state.parkModule.parks,
+    stateList: state => state.stateModule.stateList,
+    singlePark: state => state.parkModule.singlePark,
     loggedIn: state => state.authModule.token,
     profile: state => state.profileModule.profile,
   }),

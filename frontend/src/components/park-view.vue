@@ -43,7 +43,7 @@ export default {
     CampgroundOptions,
   },
   computed: mapState({
-    computedPark: state => state.singlePark,
+    computedPark: state => state.parkModule.singlePark,
   }),
   methods: {
     getCampgrounds: function() {
