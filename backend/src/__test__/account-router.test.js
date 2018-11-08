@@ -4,8 +4,18 @@ import superagent from 'superagent';
 import { startServer, stopServer } from '../lib/server';
 import { createAccountMock, removeAccountMock } from './lib/account-mock';
 
-
 const API_URL = `http://localhost:${process.env.PORT}`;
+
+/* Account Router test coverage - (AUTH REQUIRED)
+
+POST /signup - 200 - success
+POST /signup - 400 - fails due to missing required fields
+POST /signup - 409 - fails due to duplicate input of unique field
+
+GET /login - 200 - success
+GET /login - 400 - fails due to incorrect username or password
+
+*/
 
 describe('User Authentication - Account router', () => {
   beforeAll(startServer);

@@ -7,6 +7,13 @@ import mockParks from './lib/park-mock';
 
 const API_URL = `http://localhost:${process.env.PORT}`;
 
+/* State router test coverage - (NO AUTH REQUIRED)
+
+GET /states - 200 - returns state data
+GET /states/types - 200 - returns park type data
+
+*/
+
 describe('Testing state router - /states', () => {
   beforeAll(startServer);
   afterEach(removeMocks);

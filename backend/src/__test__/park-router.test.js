@@ -7,6 +7,13 @@ import mockParks from './lib/park-mock';
 
 const API_URL = `http://localhost:${process.env.PORT}`;
 
+/* Park Router test coverage
+
+GET /parks/:stateId - 200 - success, returns all parks in a single state
+GET /parks/:stateId - 400 - fails if stateId is anything but an existing state
+
+*/
+
 describe('Test state-router - /state', () => {
   beforeAll(startServer);
   afterEach(removeMocks);

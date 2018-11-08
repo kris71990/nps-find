@@ -26,7 +26,7 @@ export default (request, response, next) => {
 
   return promisify(jsonWebToken.verify)(token, process.env.ACCOUNT_SECRET)
     .catch((error) => {
-      Promise.reject(new HttpError(401, `AUTH - jsonWebToken Error ${error}`));
+      return next(new HttpError(401, `AUTH - jsonWebToken Error ${error}`));
     })
     .then((decryptedToken) => {
       return models.account.findOne({ 

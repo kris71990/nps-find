@@ -11,6 +11,13 @@ import setDefault from './mutations';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  modules: {
+    authModule,
+    profileModule,
+    stateModule,
+    parkModule,
+    campgroundModule,
+  },
   getters: {
     getState: (state) => {
       return state.stateSelection;
@@ -18,13 +25,6 @@ const store = new Vuex.Store({
     getParks: (state) => {
       return state.parks;
     },
-  },
-  modules: {
-    authModule,
-    profileModule,
-    stateModule,
-    parkModule,
-    campgroundModule,
   },
   mutations: {
     setDefault,

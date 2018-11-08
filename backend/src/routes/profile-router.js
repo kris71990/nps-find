@@ -50,7 +50,7 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
     { where: { accountId: request.params.id }, returning: true },
   )
     .then((profile) => {
-      if (profile[0] === 0) return next(new HttpError(404, 'Profile does not exist'));
+      if (profile[0] === 0) return next(new HttpError(400, 'Bad request'));
       logger.log(logger.INFO, 'Returning updated profile');
       return response.json(profile[1]);
     })
