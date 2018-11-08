@@ -9,7 +9,7 @@ const API_URL = `http://localhost:${process.env.PORT}`;
 
 /* Park Router test coverage
 
-GET /parks/:stateId - 200 - success, returns all parks in a single state
+GET /parks/:stateId - 200 - success, returns park types associated with interests, returns null if no interests
 GET /parks/:stateId - 400 - fails if stateId is anything but an existing state
 
 */
@@ -19,31 +19,41 @@ describe('Test state-router - /state', () => {
   afterEach(removeMocks);
   afterAll(stopServer);
 
-  test('GET from /parks/:stateId should return parks in that state from db', () => {
+  test('GET from /parks/:stateId should return preferences object and enter state and park data in to db', () => {
     return mockParks('NH', 5)
+      .then(() => {
+        return superagent.get(`${API_URL}/parks/NH`)
+          .query({ interests: ['hiking', 'camping'] })
+          .then((response) => {
+            expect(response.status).toEqual(200);
+            expect(response.body).toBeInstanceOf(Object);
+            expect(response.body.parkTypes).toBeInstanceOf(Array);
+            expect(response.body.parkTypes[0]).toBeTruthy();
+            expect(response.body.camping).toEqual(true);
+          });
+      });
+  });
+
+  test('GET from /parks/:stateId should return null if no preferences', () => {
+    return mockParks('NH', 2)
       .then(() => {
         return superagent.get(`${API_URL}/parks/NH`)
           .then((response) => {
             expect(response.status).toEqual(200);
-            expect(response.body).toBeInstanceOf(Array);
-            expect(response.body).toHaveLength(5);
-            expect(response.body[0]).toBeInstanceOf(Object);
-            expect(response.body[0].parkCode).not.toBe(null);
-            expect(response.body[0].stateCode).not.toBe(null);
-            expect(response.body[0].pKeyCode).not.toBe(null);
+            expect(response.body).toBeNull();
           });
       });
   });
 
   test('GET from /parks/:stateId should return parks in that state from api', () => {
     return superagent.get(`${API_URL}/parks/MA`)
+      .query({ interests: ['hiking', 'camping'] })
       .then((response) => {
         expect(response.status).toEqual(200);
-        expect(response.body).toBeInstanceOf(Array);
-        expect(response.body[0]).toBeInstanceOf(Object);
-        expect(response.body[0].parkCode).not.toBe(null);
-        expect(response.body[0].stateCode).not.toBe(null);
-        expect(response.body[0].pKeyCode).not.toBe(null);
+        expect(response.body).toBeInstanceOf(Object);
+        expect(response.body.parkTypes).toBeInstanceOf(Array);
+        expect(response.body.parkTypes[0]).toBeTruthy();
+        expect(response.body.camping).toEqual(true);
       });
   });
 

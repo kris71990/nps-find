@@ -2,9 +2,11 @@
 
 import { Router } from 'express';
 import { json } from 'body-parser';
+import HttpError from 'http-errors';
 import logger from '../lib/logger';
 import models from '../models';
 
+import { stateAbbreviations } from '../lib/states';
 import getData from '../lib/get-parks';
 import customizeParks from '../lib/customize-parks';
 
@@ -13,9 +15,10 @@ const parkRouter = new Router();
 
 // retrieve initial data, either from database or API
 parkRouter.get('/parks/:state', (request, response, next) => {
+  if (!stateAbbreviations[request.params.state]) return next(new HttpError(400, 'Bad request'));
   logger.log(logger.INFO, `Processing a get for /parks/${request.params.state}...`);
 
-  let parkTypes;
+  let parkTypes = null;
   if (request.query.interests) {
     parkTypes = customizeParks(request.query);
   }
