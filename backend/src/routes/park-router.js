@@ -77,11 +77,13 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
     // return all data, depending on user preferences
     .then(() => {
       if (request.body && !request.body.parkTypes) {
-        return models.park.findAll({
-          where: {
-            stateCode: request.params.state,
+        return models.sequelize.query(
+          'SELECT parks.*, "reports" FROM parks LEFT JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" WHERE "stateCode"=?', 
+          { 
+            replacements: [request.params.state], 
+            type: models.sequelize.QueryTypes.SELECT, 
           },
-        })
+        )
           .then((retrievedParks) => {
             logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state}`);
             return response.json(retrievedParks);
@@ -92,12 +94,16 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
       const { parkTypes, camping } = request.body;
       
       if (parkTypes.length > 0 && !camping) {
-        return models.park.findAll({
-          where: {
-            stateCode: request.params.state,
-            designation: request.body.parkTypes,
+        const desigParams = parkTypes.map(() => '?');
+        parkTypes.unshift(request.params.state);
+
+        return models.sequelize.query(
+          `SELECT parks.*, "reports" FROM parks LEFT JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" WHERE "stateCode"=? AND "designation" IN (${desigParams.join(',')})`, 
+          { 
+            replacements: parkTypes, 
+            type: models.sequelize.QueryTypes.SELECT, 
           },
-        })
+        )
           .then((retrievedParks) => {
             logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state} that meet user requirements`);
             return response.json(retrievedParks);
@@ -105,13 +111,16 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
       } 
 
       if (parkTypes.length > 0 && camping) {
-        return models.park.findAll({
-          where: {
-            stateCode: request.params.state,
-            designation: request.body.parkTypes,
-            camping: true,
+        const desigParams = parkTypes.map(() => '?');
+        parkTypes.unshift(request.params.state, camping);
+
+        return models.sequelize.query(
+          `SELECT parks.*, "reports" FROM parks LEFT JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" WHERE "stateCode"=? AND "camping"=? AND "designation" IN (${desigParams.join(',')})`, 
+          { 
+            replacements: parkTypes, 
+            type: models.sequelize.QueryTypes.SELECT, 
           },
-        })
+        )
           .then((retrievedParks) => {
             logger.log(logger.INFO, `Returning ${retrievedParks.length} parks in ${request.params.state} with camping`);
             return response.json(retrievedParks);
@@ -119,12 +128,13 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
       }
 
       if (parkTypes.length === 0 && camping) {
-        return models.park.findAll({
-          where: {
-            stateCode: request.params.state,
-            camping: true,
+        return models.sequelize.query(
+          'SELECT parks.*, "reports" FROM parks LEFT JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" WHERE "stateCode"=? AND "camping"=?', 
+          { 
+            replacements: [request.params.state, camping], 
+            type: models.sequelize.QueryTypes.SELECT, 
           },
-        })
+        )
           .then((parksWithCampgrounds) => {
             logger.log(logger.INFO, `Returning ${parksWithCampgrounds.length} parks in ${request.params.state} with camping`);
             return response.json(parksWithCampgrounds);

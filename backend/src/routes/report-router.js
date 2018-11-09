@@ -2,11 +2,11 @@
 
 import { Router } from 'express';
 import { json } from 'body-parser';
-import HttpError from 'http-errors';
+// import HttpError from 'http-errors';
 
 import logger from '../lib/logger';
 import models from '../models/index';
-import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
+// import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 
 const jsonParser = json();
 const reportRouter = new Router();
@@ -18,6 +18,7 @@ reportRouter.post('/report', jsonParser, (request, response, next) => {
     lengthOfStay: 3,
     activities: 'hiking',
     profileId: 1,
+    parkId: 'CA-moja',
     rating: 1,
   })
     .then((report) => {

@@ -39,7 +39,7 @@ profile.hasMany(report, {
 
 park.hasMany(report, {
   foreignKey: 'parkId',
-  sourceKey: 'parkCode',
+  sourceKey: 'pKeyCode',
 });
 
 db[account.name] = account;
