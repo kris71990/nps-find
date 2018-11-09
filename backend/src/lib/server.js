@@ -11,6 +11,7 @@ import profileRouter from '../routes/profile-router';
 import stateRouter from '../routes/state-router';
 import parkRouter from '../routes/park-router';
 import campgroundRouter from '../routes/campground-router';
+import reportRouter from '../routes/report-router';
 import errorMiddleware from './error-middleware';
 
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -25,6 +26,7 @@ app.use(profileRouter);
 app.use(stateRouter);
 app.use(parkRouter);
 app.use(campgroundRouter);
+app.use(reportRouter);
 
 app.all('*', (request, response) => {
   logger.log(logger.INFO, '404 - not found - catch-all');

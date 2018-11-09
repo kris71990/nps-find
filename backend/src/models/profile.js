@@ -11,6 +11,15 @@ const Profile = (sequelize, DataTypes) => sequelize.define('profile', {
   homeState: {
     type: DataTypes.STRING,
   },
+  residentialLocaleType: {
+    type: DataTypes.STRING,
+  },
+  favoredClimate: {
+    type: DataTypes.STRING,
+  },
+  favoredLandscape: {
+    type: DataTypes.STRING,
+  },
   accountId: {
     type: DataTypes.INTEGER,
     unique: true,
