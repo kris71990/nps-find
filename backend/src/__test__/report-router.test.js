@@ -6,6 +6,7 @@ import { startServer, stopServer } from '../lib/server';
 import { removeProfileMock, createProfileMock } from './lib/profile-mock';
 import mockParks from './lib/park-mock';
 import { removeMocks } from './lib/state-mock';
+import createReports from './lib/report-mock';
 
 const API_URL = `http://localhost:${process.env.PORT}`;
 
@@ -13,6 +14,9 @@ const API_URL = `http://localhost:${process.env.PORT}`;
 
 POST /report - 200 - returns successfully submitted report
 POST /report - 400 - fails with missing profileId, parkId, or other required data
+POST /report - 401 - fails with missing auth token
+
+GET /report/:profileId - 200 - returns all reports for specific profile
 
 */
 
@@ -29,6 +33,7 @@ describe('Report Router', () => {
           return createProfileMock()
             .then((profileMock) => {
               return superagent.post(`${API_URL}/report`)
+                .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
                 .send({
                   parkId: parks[0].pKeyCode,
                   profileId: profileMock.profile.id,
@@ -52,6 +57,7 @@ describe('Report Router', () => {
       return createProfileMock()
         .then((profileMock) => {
           return superagent.post(`${API_URL}/report`)
+            .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
             .send({
               profileId: profileMock.profile.id,
               rating: 5,
@@ -67,15 +73,19 @@ describe('Report Router', () => {
     test('POST /report with missing profileId will return bad request', () => {
       return mockParks('AZ', 3)
         .then((parks) => {
-          return superagent.post(`${API_URL}/report`)
-            .send({
-              parkId: parks[0].pKeyCode,
-              rating: 5,
-              lengthOfStay: 72,
-              activities: 'hiking, fishing, photography',
-            })
-            .catch((response) => {
-              expect(response.status).toEqual(400);
+          return createProfileMock()
+            .then((profileMock) => {
+              return superagent.post(`${API_URL}/report`)
+                .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
+                .send({
+                  parkId: parks[0].pKeyCode,
+                  rating: 5,
+                  lengthOfStay: 72,
+                  activities: 'hiking, fishing, photography',
+                })
+                .catch((response) => {
+                  expect(response.status).toEqual(400);
+                });
             });
         });        
     });
@@ -86,6 +96,7 @@ describe('Report Router', () => {
           return createProfileMock()
             .then((profileMock) => {
               return superagent.post(`${API_URL}/report`)
+                .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
                 .send({
                   parkId: parks[0].pKeyCode,
                   profileId: profileMock.profile.id,
@@ -95,6 +106,45 @@ describe('Report Router', () => {
                 .catch((response) => {
                   expect(response.status).toEqual(400);
                 });
+            });
+        });
+    });
+
+    test('POST /report with missing token returns unauthorized', () => {
+      return mockParks('AK', 2)
+        .then((parks) => {
+          return createProfileMock()
+            .then((profileMock) => {
+              return superagent.post(`${API_URL}/report`)
+                .send({
+                  parkId: parks[0].pKeyCode,
+                  profileId: profileMock.profile.id,
+                  rating: 5,
+                  lengthOfStay: 72,
+                  activities: 'hiking, fishing, photography',
+                })
+                .catch((response) => {
+                  expect(response.status).toEqual(401);
+                });
+            });
+        });
+    });
+  });
+  
+  describe('GET /report/:profileId', () => {
+    test('GET /report/:profileId should return all reports posted by profile', () => {
+      return createReports(4)
+        .then((reportMock) => {
+          return superagent.get(`${API_URL}/report/${reportMock.profile.profile.id}`)
+            .set('Authorization', `Bearer ${reportMock.profile.accountSetMock.token}`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(response.body).toBeInstanceOf(Array);
+              expect(response.body).toHaveLength(4);
+              expect(response.body[0].profileId).toEqual(reportMock.profile.profile.id);
+              expect(response.body[1].profileId).toEqual(reportMock.profile.profile.id);
+              expect(response.body[2].profileId).toEqual(reportMock.profile.profile.id);
+              expect(response.body[3].profileId).toEqual(reportMock.profile.profile.id);
             });
         });
     });
