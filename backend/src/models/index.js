@@ -15,7 +15,7 @@ const account = sequelize.import('./account.js');
 const profile = sequelize.import('./profile.js');
 const report = sequelize.import('./report.js');
 
-profile.belongsTo(account);
+profile.belongsTo(account, { as: 'account' });
 
 state.hasMany(park, {
   foreignKey: 'stateCode',
