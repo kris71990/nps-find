@@ -17,6 +17,9 @@ POST /report - 400 - fails with missing profileId, parkId, or other required dat
 POST /report - 401 - fails with missing auth token
 
 GET /report/:profileId - 200 - returns all reports for specific profile
+GET /report/:prodileId - 401 - fails with missing auth token
+
+GET /report/:parkId - 200 - returns all reports for specific park, if any exist
 
 */
 
@@ -131,11 +134,11 @@ describe('Report Router', () => {
     });
   });
   
-  describe('GET /report/:profileId', () => {
-    test('GET /report/:profileId should return all reports posted by profile', () => {
+  describe('GET /report/profile/:profileId', () => {
+    test('GET /report/profile/:profileId should return all reports posted by profile', () => {
       return createReports(4)
         .then((reportMock) => {
-          return superagent.get(`${API_URL}/report/${reportMock.profile.profile.id}`)
+          return superagent.get(`${API_URL}/report/profile/${reportMock.profile.profile.id}`)
             .set('Authorization', `Bearer ${reportMock.profile.accountSetMock.token}`)
             .then((response) => {
               expect(response.status).toEqual(200);
@@ -145,6 +148,43 @@ describe('Report Router', () => {
               expect(response.body[1].profileId).toEqual(reportMock.profile.profile.id);
               expect(response.body[2].profileId).toEqual(reportMock.profile.profile.id);
               expect(response.body[3].profileId).toEqual(reportMock.profile.profile.id);
+            });
+        });
+    });
+
+    test('GET /report/profile/:profileId with no auth token should return 401', () => {
+      return createReports(3)
+        .then((reportMock) => {
+          return superagent.get(`${API_URL}/report/profile/${reportMock.profile.profile.id}`)
+            .catch((response) => {
+              expect(response.status).toEqual(401);
+            });
+        });
+    });
+  });
+
+  describe('GET /report/park/:parkId', () => {
+    test('GET /report/park/:parkId should return all reports for one park', () => {
+      return createReports(3)
+        .then((reportMock) => {
+          return superagent.get(`${API_URL}/report/park/${reportMock.parks[0].pKeyCode}`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(response.body).toHaveLength(3);
+              expect(response.body[0].parkId).toEqual(reportMock.parks[0].pKeyCode);
+              expect(response.body[1].parkId).toEqual(reportMock.parks[0].pKeyCode);
+              expect(response.body[2].parkId).toEqual(reportMock.parks[0].pKeyCode);
+            });
+        });
+    }); 
+
+    test('GET /report/park/:parkId should return empty array if no reports exist', () => {
+      return createReports(2)
+        .then((reportMock) => {
+          return superagent.get(`${API_URL}/report/park/${reportMock.parks[1].pKeyCode}`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(response.body).toHaveLength(0);
             });
         });
     });

@@ -26,7 +26,10 @@ const mockParks = (stateCode, total) => {
           designation: designationTypes[Math.floor(Math.random() * 3)],
         });
       }
-      return models.park.bulkCreate(arr);
+      return models.park.bulkCreate(arr)
+        .then((parks) => {
+          return parks;
+        });
     });
 };
 

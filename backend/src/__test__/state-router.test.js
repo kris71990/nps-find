@@ -14,7 +14,7 @@ GET /states/types - 200 - returns park type data
 
 */
 
-describe('Testing state router - /states', () => {
+describe('State Router - /states', () => {
   beforeAll(startServer);
   afterEach(removeMocks);
   afterAll(stopServer);
