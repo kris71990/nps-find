@@ -13,6 +13,15 @@
         <p id="update-button" v-on:click="editing = !editing">
           {{ editing ? 'Close' : 'Update Details' }}
         </p>
+        <div v-if="profile.reports.length > 0" id="report-view">
+          <h3>{{ createReportLine(profile.reports) }}</h3>
+          <ul>
+            Park | Rating
+            <li v-for="report in profile.reports" :key="report.id">
+              {{ report.parkId }} | {{ report.rating }}
+            </li>
+          </ul>
+        </div>
       </div>
       <div v-if="profile && editing">
         <ProfileForm :onComplete="handleUpdate" :editing="true" :profile="profile" v-bind:handleClose="handleClose"/>
@@ -58,6 +67,13 @@ export default {
     handleClose() {
       return this.editing = !this.editing;
     },
+    createReportLine(reports) {
+      const unique = new Map();
+      reports.filter((report) => {
+        if (!unique[report.parkId]) unique.set(report.parkId, 1);
+      })
+      return `You have submitted ${reports.length} reports for ${unique.size} parks.`
+    }
   }
 }
 </script>
@@ -78,6 +94,12 @@ export default {
     border-radius: 5px;
     cursor: pointer;
     color: black;
+  }
+  #report-view {
+    ul {
+      padding: 0;
+      list-style-type: none;
+    }
   }
 }
 </style>

@@ -33,7 +33,16 @@ profileRouter.get('/profile/me', bearerAuthMiddleware, (request, response, next)
   )
     .then((profile) => {
       if (!profile) return response.json(null);
-      return response.json(profile);
+
+      return models.report.findAll({
+        where: {
+          profileId: profile.id,
+        },
+        order: [['updatedAt', 'DESC']],
+      })
+        .then((reports) => {
+          return response.json({ profile, reports });
+        });
     })
     .catch(next);
 });
