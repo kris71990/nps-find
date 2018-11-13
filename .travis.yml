@@ -7,11 +7,11 @@ env:
   matrix:
   - TEST_DIR=backend
   global:
-    - secure: l5tXvCtNY3tM2TjMXlYufA017UKcuzNgxty9Cg/mKJf3FkFMa7iC1YSKYImOxzouHaSKryBVwLGnsjg3a1kC5YQDuoTdZmWkUK1D7OcXaq8nR+qh1InExQUwDeY8zIcHMqmwD1z+qREcOVn8VOZYAEnDxCL0k7FyKAywQQ9L0QcsKZl89QgIhYRmlZn1kCX2xpJIZWpDLjTxYYcgZzrbem1h6g2q1UHdwEuDLOSFQFWqbyIzqeWujowXDEF+TkHW0n/tcTxUwnECCgnJIvhoJ++u7voDKvq6jpciLw32jvPxe3oPpEvU+rU199DdMtF/BaBLnV9DiCJrD5/giXyWyKXcsmhBmIhlRQcW1STXQ0sdkBzdBnbKXQ3BzRObUtD0+XZxBDblNP9SeNBek+mi7dn8B0wNWKNmaGc7n5vIian8vafRXgviVIVBPK6sb3mWQD5jW2Pk2X6RPsxVEoUHc/0CPNAXkyOKlm37A02CUWlSA4YaRHgEqyfeH4K+nEH/4oTvw1jusJtbkgemqXKJHyjd90ieNN0hXzYG91L50WwpkRTJhx2weRATUeKe4Kpff6KgYu41CS5BHX4E1TDAdlqiP1JfKlXCY4i0MwmW/fgr4CCAnWYtFVVq5hH/6HMnqqHiqmV1gzTNdOstPeXDPmk5U6QqNvlr5JxOuN1lwkY=
-    - NODE_ENV=development
-    - PORT=9000
-    - DATABASE_URL=postgres://localhost:5432/npstest
-    - ACCOUNT_SECRET=feirbhowbeheuiqoh3euohruoehnn
+  - secure: cCZ2IaP8ZsMFS8DNL0vevLgznWZfj4jJ+I2LrFtZUk2iH4Iq3r7A08YSMkmb33QRg8vgzE65vhjWHfMTYZdnO/WtmlYqukFzTDgjaDvLVC7pSKdpstb0Gpcf1kMkM74ti1r5LwhgBbdDKOsNNMxRPnbi+43ZjTV2lbFjdrrURsPywxlS+7ibIRwlyIQiztIj1kib9OaOWl30h/LWFFCCY1mgPPZa9xElsblsghRQUMArStRuSWa7vUnJZmQw4ANafJBBuexpdGNGteE3bm+Xmq1LZa/5VdPeXjWWL8GRB2vRyE9/pD9iq0MG0VlOKzFhduffhZTHNW+fJTEvXOXMcKo/zopwAIQgvrwVbQzbaPeiYkqzXuhwyRM4pNZevp1/8yEg5c2GDFUOPX5oXbECndbvSMci9QAJ31ndWZI3gP06QpbweH9ez3qWJBYeEkw12IqKAIOHKSCur6eztpQTtv66GbQqn+sbVIwl48en378OcIhsFuRGjSu3Um4tXujaV/7d0rsN8eHrZl+6KlfHBeYLdI/v47g71yVCWpzvofbYaIsbGNcE7/mXJxEy04JlkntQBwuO0SrELPDjw2PcKeXK7Liymn+PR0dD0ZZy657IYWNfNChQwMH0Q0q9zI2HGJmJ0Pr7exzIEFp2sTAqCb3fi+VpGFBCG1GiVudrdCM=
+  - NODE_ENV=development
+  - PORT=9000
+  - DATABASE_URL=postgres://localhost:5432/npstest
+  - ACCOUNT_SECRET=feirbhowbeheuiqoh3euohruoehnn
 before_script:
 - psql -c "CREATE DATABASE npstest;" -U postgres
 script: cd $TEST_DIR && npm install && npm test
