@@ -4,12 +4,8 @@ node_js:
 services: 
   - postgresql
 env:
-  - TEST_DIR=backend
+  - global: NODE_ENV=development PORT=9000 DATABASE_URL=postgres://localhost:5432/npstest ACCOUNT_SECRET=fhsdbfshbfldnjwelnjnjflns
+  - matrix: TEST_DIR=backend
 before_script:
   - psql -c "CREATE DATABASE npstest;" -U postgres
 script: cd $TEST_DIR && npm install && npm test
-env:
-  - NODE_ENV=development
-  - PORT=9000
-  - DATABASE_URL=postgres://localhost:5432/npstest
-  - ACCOUNT_SECRET=fhsdbfshbfldnjwelnjnjflns
