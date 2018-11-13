@@ -33,7 +33,16 @@ profileRouter.get('/profile/me', bearerAuthMiddleware, (request, response, next)
   )
     .then((profile) => {
       if (!profile) return response.json(null);
-      return response.json(profile);
+
+      return models.report.findAll({
+        where: {
+          profileId: profile.id,
+        },
+        order: [['updatedAt', 'DESC']],
+      })
+        .then((reports) => {
+          return response.json({ profile, reports });
+        });
     })
     .catch(next);
 });
@@ -50,7 +59,7 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
     { where: { accountId: request.params.id }, returning: true },
   )
     .then((profile) => {
-      if (profile[0] === 0) return next(new HttpError(404, 'Profile does not exist'));
+      if (profile[0] === 0) return next(new HttpError(400, 'Bad request'));
       logger.log(logger.INFO, 'Returning updated profile');
       return response.json(profile[1]);
     })

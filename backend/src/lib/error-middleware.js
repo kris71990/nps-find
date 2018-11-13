@@ -18,12 +18,12 @@ export default (error, request, response, next) => { // eslint-disable-line no-u
     return response.sendStatus(400);
   }
 
-  if (errorMessage.includes('sequelizedatabaseerror')) {
+  if (errorMessage.includes('sequelizedatabaseerror') || error.message.includes('sequelizeforeignkeyconstrainterror')) {
     logger.log(logger.INFO, 'Responding with 400 code - bad data');
     return response.sendStatus(400);
   }
 
-  if (errorMessage.includes('unauthorized')) {
+  if (errorMessage.includes('unauthorized') || errorMessage.includes('jwt malformed')) {
     logger.log(logger.INFO, 'Responding with 401 code - unauthorized');
     return response.sendStatus(401);
   }

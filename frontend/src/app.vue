@@ -28,6 +28,10 @@ export default {
     scriptElParkView.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}`);
     document.body.appendChild(scriptElParkView);
 
+    if (this.loggedIn) {
+      return this.$store.dispatch('fetchProfileReq')
+        .catch(console.errror);
+    }
   },
   updated() {
     if (this.loggedIn) {

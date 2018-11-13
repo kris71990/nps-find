@@ -16,6 +16,7 @@ campgroundRouter.get('/campgrounds/park/:parkKey', (request, response, next) => 
   })
     .then((campgrounds) => {
       const filtered = campgrounds.filter(campground => campground.name.toLowerCase() !== 'a');
+      logger.log(logger.INFO, `Returning all campgrounds in ${request.params.parkKey}`);
       return response.json(filtered);
     })
     .catch(next);
@@ -31,6 +32,7 @@ campgroundRouter.get('/campgrounds/:state', (request, response, next) => {
   })
     .then((campgrounds) => {
       const filtered = campgrounds.filter(campground => campground.name.toLowerCase() !== 'a');
+      logger.log(logger.INFO, `Returning all campgrounds in ${request.params.state}`);
       return response.json(filtered);
     })
     .catch(next);

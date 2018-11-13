@@ -13,6 +13,28 @@
         <p id="update-button" v-on:click="editing = !editing">
           {{ editing ? 'Close' : 'Update Details' }}
         </p>
+        <div v-if="profile.reports.length > 0" id="report-view">
+          <h3>{{ createReportLine(profile.reports) }}</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Park</th>
+                <th>Rating</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="report in profile.reports" 
+                  :key="report.id" 
+                  v-bind:class="`star${report.rating}`"
+              >
+                <td>{{ report.parkId }}</td>
+                <td>{{ report.rating }}</td>
+                <td>{{ createDate(report.updatedAt) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div v-if="profile && editing">
         <ProfileForm :onComplete="handleUpdate" :editing="true" :profile="profile" v-bind:handleClose="handleClose"/>
@@ -58,6 +80,18 @@ export default {
     handleClose() {
       return this.editing = !this.editing;
     },
+    createReportLine(reports) {
+      const unique = new Map();
+      reports.filter((report) => {
+        if (!unique[report.parkId]) unique.set(report.parkId, 1);
+      })
+      return `You have submitted ${reports.length} reports for ${unique.size} parks.`
+    },
+    createDate(date) {
+      let dateSliced = date.slice(0, -1);
+      const dateReadable = new Date(dateSliced);
+      return `${dateReadable.toLocaleString()}`;
+    }
   }
 }
 </script>
@@ -66,6 +100,7 @@ export default {
 #profile-view {
   width: 50%;
   margin: 0 auto;
+  margin-bottom: 5%;
   span {
     font-style: oblique;
   }
@@ -78,6 +113,25 @@ export default {
     border-radius: 5px;
     cursor: pointer;
     color: black;
+  }
+  #report-view {
+    table {
+      margin: 0 auto;
+      border: 2px solid black;
+      border-collapse: collapse;
+      th {
+        padding: 1.5em;
+        background-color: #B89587;
+        border: 2px solid black;
+      }
+      td {
+        padding: 1em;
+        border: 1px dotted black;
+      }
+      .star1 {
+        background-color: #D12727;
+      }
+    }
   }
 }
 </style>

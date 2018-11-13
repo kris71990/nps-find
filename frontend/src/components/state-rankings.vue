@@ -49,8 +49,8 @@ export default {
     }
   },
   computed: mapState({
-      computedStateList: state => state.stateList,
-      computedTypesArr: state => state.typesList,
+      computedStateList: state => state.stateModule.stateList,
+      computedTypesArr: state => state.stateModule.typesList,
     }),
 }
 </script>
