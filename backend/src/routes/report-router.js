@@ -10,6 +10,7 @@ import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 
 const jsonParser = json();
 const reportRouter = new Router();
+const Op = models.Sequelize.Op;
 
 reportRouter.post('/report', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   logger.log(logger.INFO, 'Processing a POST on /report');
@@ -29,7 +30,7 @@ reportRouter.get('/report/profile/:profileId', bearerAuthMiddleware, (request, r
 
   return models.report.findAll({
     where: {
-      profileId: request.params.profileId,
+      profileId: { [Op.eq]: request.params.profileId },
     },
   })
     .then((reports) => {
@@ -44,7 +45,7 @@ reportRouter.get('/report/park/:parkId', (request, response, next) => {
 
   return models.report.findAll({
     where: {
-      parkId: request.params.parkId,
+      parkId: { [Op.eq]: request.params.parkId },
     },
   }) 
     .then((reports) => {

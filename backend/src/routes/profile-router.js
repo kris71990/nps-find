@@ -9,6 +9,7 @@ import logger from '../lib/logger';
 
 const jsonParser = json();
 const profileRouter = new Router();
+const Op = models.Sequelize.Op;
 
 profileRouter.post('/profile', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   if (!request.account) next(new HttpError(400, 'AUTH - invalid request'));
@@ -29,7 +30,7 @@ profileRouter.get('/profile/me', bearerAuthMiddleware, (request, response, next)
   logger.log(logger.INFO, 'Processing GET /profile/me');
 
   return models.profile.findOne(
-    { where: { accountId: request.account.id } },
+    { where: { accountId: { [Op.eq]: request.account.id } } },
   )
     .then((profile) => {
       if (!profile) return response.json(null);
@@ -56,7 +57,7 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
 
   return models.profile.update(
     { ...request.body },
-    { where: { accountId: request.params.id }, returning: true },
+    { where: { accountId: { [Op.eq]: request.params.id } }, returning: true },
   )
     .then((profile) => {
       if (profile[0] === 0) return next(new HttpError(400, 'Bad request'));
@@ -73,7 +74,7 @@ profileRouter.delete('/profile/:id', bearerAuthMiddleware, (request, response, n
     return next(new HttpError(404, 'Profile not found'));
   }
 
-  return models.profile.destroy({ where: { id: request.params.id } })
+  return models.profile.destroy({ where: { id: { [Op.eq]: request.params.id } } })
     .then((profile) => {
       if (!profile) next(new HttpError(404, 'profile not found'));
       logger.log(logger.INFO, 'Profile deleted');

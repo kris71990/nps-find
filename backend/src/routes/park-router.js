@@ -12,6 +12,7 @@ import customizeParks from '../lib/customize-parks';
 
 const jsonParser = json();
 const parkRouter = new Router();
+const Op = models.Sequelize.Op;
 
 // retrieve initial data, either from database or API
 parkRouter.get('/parks/:state', (request, response, next) => {
@@ -26,7 +27,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
   // find if state exists in db
   return models.state.findAll({
     where: {
-      stateId: request.params.state,
+      stateId: { [Op.eq]: request.params.state },
     },
   })
     .then((results) => {
@@ -52,7 +53,7 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
   // find all campgrounds in state
   return models.campground.findAll({
     where: {
-      state: request.params.state,
+      state: { [Op.eq]: request.params.state },
     },
     attributes: ['state', 'parkId', 'name'],
   })
