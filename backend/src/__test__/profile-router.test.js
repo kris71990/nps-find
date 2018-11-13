@@ -123,10 +123,10 @@ describe('/profile', () => {
         })
         .then((response) => {
           expect(response.status).toEqual(200);
-          expect(response.body.id).toEqual(profileMockSet.profile.id);
-          expect(response.body.firstName).toEqual(profileMockSet.profile.firstName);
-          expect(response.body.age).toEqual(profileMockSet.profile.age);
-          expect(response.body.homeState).toEqual(profileMockSet.profile.homeState);
+          expect(response.body.profile.id).toEqual(profileMockSet.profile.id);
+          expect(response.body.profile.firstName).toEqual(profileMockSet.profile.firstName);
+          expect(response.body.profile.age).toEqual(profileMockSet.profile.age);
+          expect(response.body.profile.homeState).toEqual(profileMockSet.profile.homeState);
         });
     });
 
