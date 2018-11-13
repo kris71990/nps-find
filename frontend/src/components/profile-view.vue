@@ -15,12 +15,25 @@
         </p>
         <div v-if="profile.reports.length > 0" id="report-view">
           <h3>{{ createReportLine(profile.reports) }}</h3>
-          <ul>
-            Park | Rating
-            <li v-for="report in profile.reports" :key="report.id">
-              {{ report.parkId }} | {{ report.rating }}
-            </li>
-          </ul>
+          <table>
+            <thead>
+              <tr>
+                <th>Park</th>
+                <th>Rating</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="report in profile.reports" 
+                  :key="report.id" 
+                  v-bind:class="`star${report.rating}`"
+              >
+                <td>{{ report.parkId }}</td>
+                <td>{{ report.rating }}</td>
+                <td>{{ createDate(report.updatedAt) }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div v-if="profile && editing">
@@ -73,6 +86,11 @@ export default {
         if (!unique[report.parkId]) unique.set(report.parkId, 1);
       })
       return `You have submitted ${reports.length} reports for ${unique.size} parks.`
+    },
+    createDate(date) {
+      let dateSliced = date.slice(0, -1);
+      const dateReadable = new Date(dateSliced);
+      return `${dateReadable.toLocaleString()}`;
     }
   }
 }
@@ -82,6 +100,7 @@ export default {
 #profile-view {
   width: 50%;
   margin: 0 auto;
+  margin-bottom: 5%;
   span {
     font-style: oblique;
   }
@@ -96,9 +115,22 @@ export default {
     color: black;
   }
   #report-view {
-    ul {
-      padding: 0;
-      list-style-type: none;
+    table {
+      margin: 0 auto;
+      border: 2px solid black;
+      border-collapse: collapse;
+      th {
+        padding: 1.5em;
+        background-color: #B89587;
+        border: 2px solid black;
+      }
+      td {
+        padding: 1em;
+        border: 1px dotted black;
+      }
+      .star1 {
+        background-color: #D12727;
+      }
     }
   }
 }

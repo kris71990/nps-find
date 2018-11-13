@@ -7,9 +7,9 @@ const profileModule = {
   mutations: {
     setProfile: (state, profileSet) => {
       if (!profileSet) return state;
-      const { profile, reports } = profileSet;
-      if (reports) {
-        profile.reports = reports;
+      const { profile } = profileSet;
+      if (profileSet.reports) {
+        profile.reports = profileSet.reports;
       }
       state.profile = profile;
       return state;
