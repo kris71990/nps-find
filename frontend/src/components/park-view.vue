@@ -24,19 +24,23 @@
         </p>
         <p v-else>No camping available.</p> 
       </div>
+      <h3>User Reports...</h3>
+      <div class="report-box">
+        <div v-if="computedPark.reports" >
+          <p @click="getReports">{{ createReportLinePark(computedPark.reports, computedPark.name) }}</p>
+        </div>
+        <div v-else>
+          <p @click="reportForm = !reportForm">No user reports - Submit the first!</p>
+          <ReportForm 
+            v-if="reportForm"
+            v-bind:onComplete="submitReport" 
+            v-bind:park="computedPark"
+            v-bind:profile="computedProfile"
+          />
+        </div>
+      </div>
+      <h3>More...</h3>
       <p>View page on <a :href=computedPark.url target="_blank">National Park Service</a></p>
-    </div>
-    <div class="report-box">
-      <div v-if="computedPark.reports" >
-        <p>{{ computedPark.reports }}</p>
-      </div>
-      <div v-else>
-        <ReportForm 
-          v-bind:onComplete="submitReport" 
-          v-bind:park="computedPark"
-          v-bind:profile="computedProfile"
-        />
-      </div>
     </div>
   </div>
 </template>
@@ -58,6 +62,11 @@ export default {
     ReportForm,
     ReportView,
   },
+  data() {
+    return {
+      reportForm: false,
+    }
+  },
   computed: mapState({
     computedPark: state => state.parkModule.singlePark,
     computedProfile: state => state.profileModule.profile,
@@ -77,12 +86,26 @@ export default {
           return this.$router.push(`/park/${parkCode}`);
         })
     },
-    createReportLine(reports) {
+    getReports(event, a) {
+      const { parkCode, pKeyCode } = this.computedPark;
+      return this.$store.dispatch('fetchReportReq', pKeyCode)
+        .then(() => {
+          return this.$router.push(`/park/${parkCode}`)
+        })
+    },
+    createReportLineTable(reports) {
       const unique = new Map();
       reports.filter((report) => {
         if (!unique[report.parkId]) unique.set(report.parkId, 1);
       })
       return `You have submitted ${reports.length} reports for ${unique.size} parks.`
+    },
+    createReportLinePark(reports, name) {
+      if (reports > 1) {
+        return `${reports} user reports for ${name}`;
+      } else if (reports == 1) {
+        return `${reports} user report for ${name}`;
+      } 
     },
     createDate(date) {
       let dateSliced = date.slice(0, -1);
@@ -121,9 +144,6 @@ export default {
       cursor: pointer;
       color: #00CB94;
     }
-  }
-  .report-box {
-    margin: 5%;
   }
 }
 </style>

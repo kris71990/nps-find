@@ -6,7 +6,7 @@ import profileModule from './modules/profile';
 import stateModule from './modules/state';
 import parkModule from './modules/park';
 import campgroundModule from './modules/campground';
-// import reportModule from './modules/report';
+import reportModule from './modules/report';
 import setDefault from './mutations';
 
 Vue.use(Vuex);
@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     stateModule,
     parkModule,
     campgroundModule,
+    reportModule,
   },
   getters: {
     getState: (state) => {

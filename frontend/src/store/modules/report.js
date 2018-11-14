@@ -1,25 +1,25 @@
-// import superagent from 'superagent';
+import superagent from 'superagent';
 
 const reportModule = {
   state: {
-
+    singleParkReports: null,
   },
   mutations: {
-
+    setReports: (state, reports) => {
+      state.singleParkReports = reports;
+      return state;
+    },
   },
   actions: {
-    // postReportReq: (context, reportData) => {
-    //   const { commit, rootState } = context;
-    //   console.log(reportData);
+    fetchReportReq: (context, parkCode) => {
+      const { commit, rootState } = context;
     
-    //   return superagent.post(`${API_URL}/report`)
-    //     .set('Authorization', `Bearer ${rootState.authModule.token}`)
-    //     .set('Content-Type', 'application/json')
-    //     .send(reportData)
-    //     .then((response) => {
-    //       console.log(response.body);
-    //     });
-    // },
+      return superagent.get(`${API_URL}/report/park/${parkCode}`)
+        .set('Authorization', `Bearer ${rootState.authModule.token}`)
+        .then((response) => {
+          return commit('setReports', response.body);
+        });
+    },
   },
 };
 

@@ -14,7 +14,6 @@ const Op = models.Sequelize.Op;
 
 reportRouter.post('/report', bearerAuthMiddleware, jsonParser, (request, response, next) => {
   logger.log(logger.INFO, 'Processing a POST on /report');
-  console.log(request.body);
 
   return models.report.create({
     ...request.body,
