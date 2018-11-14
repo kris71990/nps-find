@@ -7,11 +7,13 @@ const profileModule = {
   mutations: {
     setProfile: (state, profileSet) => {
       if (!profileSet) return state;
-      const { profile } = profileSet;
       if (profileSet.reports) {
-        profile.reports = profileSet.reports;
-      }
-      state.profile = profile;
+        const { profile, reports } = profileSet;
+        profile.reports = reports;
+        state.profile = profile;
+        return state;
+      } 
+      state.profile = profileSet;
       return state;
     },
   },
@@ -47,6 +49,22 @@ const profileModule = {
         .set('Authorization', `Bearer ${rootState.authModule.token}`)
         .then((response) => {
           return commit('setProfile', response.body);
+        });
+    },
+
+    postReportReq: (context, reportData) => {
+      const { commit, rootState } = context;
+    
+      return superagent.post(`${API_URL}/report`)
+        .set('Authorization', `Bearer ${rootState.authModule.token}`)
+        .set('Content-Type', 'application/json')
+        .send(reportData)
+        .then(() => {
+          return superagent.get(`${API_URL}/profile/me`)
+            .set('Authorization', `Bearer ${rootState.authModule.token}`)
+            .then((response) => {
+              return commit('setProfile', response.body);
+            });
         });
     },
   },

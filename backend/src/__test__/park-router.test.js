@@ -91,7 +91,6 @@ describe('Park Router', () => {
             .send(userQueryObj.body)
             .then((response) => {
               expect(response.status).toEqual(200);
-              expect(response.body[0].camping).toBeFalsy();
               expect(userQueryObj.body.parkTypes.includes(response.body[0].designation)).toBeTruthy();
             });
         });

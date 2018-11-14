@@ -26,6 +26,22 @@
       </div>
       <p>View page on <a :href=computedPark.url target="_blank">National Park Service</a></p>
     </div>
+    <div class="report-box">
+      <div v-if="computedPark.reports" >
+        <!-- <ReportView 
+          v-bind:createReportLine="createReportLine"
+          v-bind:createDate="createDate"
+          v-bind:reports="profile.reports"
+        /> -->
+      </div>
+      <div v-else>
+        <ReportForm 
+          v-bind:onComplete="submitReport" 
+          v-bind:park="computedPark"
+          v-bind:profile="computedProfile"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,6 +50,8 @@ import { mapState } from 'vuex';
 import ImageCarousel from './image-carousel.vue';
 import MapView from './park-view-map.vue';
 import CampgroundOptions from './campground-options.vue';
+import ReportForm from './report-form.vue';
+import ReportView from './report-view.vue';
 
 export default {
   name: 'ParkView',
@@ -41,9 +59,12 @@ export default {
     ImageCarousel,
     MapView,
     CampgroundOptions,
+    ReportForm,
+    ReportView,
   },
   computed: mapState({
     computedPark: state => state.parkModule.singlePark,
+    computedProfile: state => state.profileModule.profile,
   }),
   methods: {
     getCampgrounds: function() {
@@ -52,6 +73,13 @@ export default {
         .then(() => {
           this.$router.push(`/park/${parkCode}/campgrounds`);
         });
+    },
+    submitReport(event, a) {
+      const { parkCode } = this.computedPark;
+      return this.$store.dispatch('postReportReq', event)
+        .then(() => {
+          return this.$router.push(`/park/${parkCode}`);
+        })
     }
   }
 }
@@ -85,6 +113,9 @@ export default {
       cursor: pointer;
       color: #00CB94;
     }
+  }
+  .report-box {
+    margin: 5%;
   }
 }
 </style>

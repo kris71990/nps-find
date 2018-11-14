@@ -13,8 +13,13 @@
         <p id="update-button" v-on:click="editing = !editing">
           {{ editing ? 'Close' : 'Update Details' }}
         </p>
-        <div v-if="profile.reports.length > 0" id="report-view">
-          <h3>{{ createReportLine(profile.reports) }}</h3>
+        <div v-if="profile.reports && profile.reports.length > 0" id="report-view">
+          <ReportView 
+            v-bind:createReportLine="createReportLine"
+            v-bind:createDate="createDate"
+            v-bind:reports="profile.reports"
+          />
+          <!-- <h3>{{ createReportLine(profile.reports) }}</h3>
           <table>
             <thead>
               <tr>
@@ -33,7 +38,7 @@
                 <td>{{ createDate(report.updatedAt) }}</td>
               </tr>
             </tbody>
-          </table>
+          </table> -->
         </div>
       </div>
       <div v-if="profile && editing">
@@ -46,12 +51,14 @@
 <script>
 import { mapState } from 'vuex';
 import ProfileForm from './profile-form.vue';
+import ReportView from './report-view.vue';
 import { stateAbbreviations } from '../utils/states';
 
 export default {
   name: 'ProfileView',
   components: {
     ProfileForm,
+    ReportView,
   },
   data() {
     return {
