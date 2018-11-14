@@ -28,11 +28,7 @@
     </div>
     <div class="report-box">
       <div v-if="computedPark.reports" >
-        <!-- <ReportView 
-          v-bind:createReportLine="createReportLine"
-          v-bind:createDate="createDate"
-          v-bind:reports="profile.reports"
-        /> -->
+        <p>{{ computedPark.reports }}</p>
       </div>
       <div v-else>
         <ReportForm 
@@ -80,7 +76,19 @@ export default {
         .then(() => {
           return this.$router.push(`/park/${parkCode}`);
         })
-    }
+    },
+    createReportLine(reports) {
+      const unique = new Map();
+      reports.filter((report) => {
+        if (!unique[report.parkId]) unique.set(report.parkId, 1);
+      })
+      return `You have submitted ${reports.length} reports for ${unique.size} parks.`
+    },
+    createDate(date) {
+      let dateSliced = date.slice(0, -1);
+      const dateReadable = new Date(dateSliced);
+      return `${dateReadable.toLocaleString()}`;
+    },
   }
 }
 </script>

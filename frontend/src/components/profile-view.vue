@@ -13,32 +13,12 @@
         <p id="update-button" v-on:click="editing = !editing">
           {{ editing ? 'Close' : 'Update Details' }}
         </p>
-        <div v-if="profile.reports && profile.reports.length > 0" id="report-view">
+        <div v-if="profile.reports && profile.reports.length > 0">
           <ReportView 
             v-bind:createReportLine="createReportLine"
             v-bind:createDate="createDate"
             v-bind:reports="profile.reports"
           />
-          <!-- <h3>{{ createReportLine(profile.reports) }}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Park</th>
-                <th>Rating</th>
-                <th>Submitted</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="report in profile.reports" 
-                  :key="report.id" 
-                  v-bind:class="`star${report.rating}`"
-              >
-                <td>{{ report.parkId }}</td>
-                <td>{{ report.rating }}</td>
-                <td>{{ createDate(report.updatedAt) }}</td>
-              </tr>
-            </tbody>
-          </table> -->
         </div>
       </div>
       <div v-if="profile && editing">
@@ -120,25 +100,6 @@ export default {
     border-radius: 5px;
     cursor: pointer;
     color: black;
-  }
-  #report-view {
-    table {
-      margin: 0 auto;
-      border: 2px solid black;
-      border-collapse: collapse;
-      th {
-        padding: 1.5em;
-        background-color: #B89587;
-        border: 2px solid black;
-      }
-      td {
-        padding: 1em;
-        border: 1px dotted black;
-      }
-      .star1 {
-        background-color: #D12727;
-      }
-    }
   }
 }
 </style>

@@ -35,7 +35,37 @@ export default {
 </script>
 
 <style lang="scss">
-
+#report-view {
+  table {
+    margin: 0 auto;
+    border: 2px solid black;
+    border-collapse: collapse;
+    th {
+      padding: 1.5em;
+      background-color: #B89587;
+      border: 2px solid black;
+    }
+    td {
+      padding: 1em;
+      border: 1px dotted black;
+    }
+    .star1 {
+      background-color: #D12727;
+    }
+    .star2 {
+      background-color: #B95B0D;
+    }
+    .star3 {
+      background-color: #BDBA5E;
+    }
+    .star4 {
+      background-color: #30B08D;
+    }
+    .star5 {
+      background-color: #1B9399;
+    }
+  }
+}
 </style>
 
 
