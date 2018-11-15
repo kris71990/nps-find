@@ -38,7 +38,6 @@
           <div v-else>
             <p>{{ createReportLinePark(computedPark.reports, computedPark.name) }}</p>
             <span @click="getReports">Click to view</span><br/>
-            <!-- <span v-if="loggedIn" @click="reportForm = !reportForm">Submit a report</span> -->
             <router-link v-if="loggedIn" :to="{ path: `/park/${computedPark.parkCode}/report` }">Submit a report</router-link>
             <router-link v-else to="/">Login/signup to contribute</router-link>
             <ReportForm 

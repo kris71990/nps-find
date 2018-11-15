@@ -29,9 +29,49 @@
           <input
             type="text"
             name="state"
-            placeholder="State"
+            placeholder="ex. WA"
             value=homeState
             v-model="homeState"
+          >
+        </div>
+        <div>
+          <label>What are your interests?</label>
+          <input
+            type="text"
+            name="interests"
+            placeholder="ex. hiking, fishing, camping"
+            value=interests
+            v-model="interests"
+          >
+        </div>
+        <div>
+          <label>What weather do you prefer?</label>
+          <input
+            type="text"
+            name="weather"
+            placeholder="ex. sunny, warm"
+            value=weather
+            v-model="weather"
+          >
+        </div>
+        <div>
+          <label>What is your favorite type of landscape?</label>
+          <input
+            type="text"
+            name="landscape"
+            placeholder="ex. mountains"
+            value=landscape
+            v-model="landscape"
+          >
+        </div>
+        <div>
+          <label>What type of area do you live in?</label>
+          <input
+            type="text"
+            name="residentialLocaleType"
+            placeholder="ex. suburbs"
+            value=residentialLocaleType
+            v-model="residentialLocaleType"
           >
         </div>
         <div id="modal-buttons">
@@ -59,6 +99,10 @@ export default {
       firstName: '',
       age: 0,
       homeState: '',
+      interests: '',
+      weather: '',
+      landscape: '',
+      residentialLocaleType: '',
     }
   },
   computed: mapState({
@@ -71,11 +115,19 @@ export default {
         firstName: this.firstName,
         age: this.age,
         homeState: this.homeState,
+        interests: this.interests,
+        favoredLandscape: this.landscape,
+        favoredClimate: this.weather,
+        residentialLocaleType: this.residentialLocaleType,
       })
         .then(() => {
           this.firstName = '';
           this.age = 0;
           this.homeState = '';
+          this.interests = '';
+          this.weather = '';
+          this.landscape = '';
+          this.residentialLocaleType = '';
         })
     }
   }

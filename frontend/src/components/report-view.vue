@@ -14,7 +14,7 @@
             :key="report.id" 
             v-bind:class="`star${report.rating}`"
         >
-          <td>{{ report.parkId }}</td>
+          <td>{{ report.parkName }}</td>
           <td>{{ report.rating }}</td>
           <td>{{ createDate(report.updatedAt) }}</td>
         </tr>
