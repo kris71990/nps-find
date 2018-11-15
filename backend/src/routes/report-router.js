@@ -52,7 +52,6 @@ reportRouter.get('/report/park/:parkId', (request, response, next) => {
   }) 
     .then((reports) => {
       logger.log(logger.INFO, `Returning all reports for ${request.params.parkId}`);
-      console.log(reports);
       return response.json(reports);
     })
     .catch(next);

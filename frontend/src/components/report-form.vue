@@ -4,7 +4,7 @@
       <fieldset>
         <legend>Submit a report for {{ this.park.name }}</legend>
         <div>
-          <div id="rating">
+          <div class="input">
             <label>Overall Score (1-5, 5 is best)</label>
             <select 
               v-model="rating"
@@ -18,7 +18,7 @@
               <option value="1">1</option>
             </select>
           </div>
-          <div id="length">
+          <div class="input">
             <label>How long was your visit?</label>
             <select 
               v-model="lengthOfStay"
@@ -36,18 +36,22 @@
               <option value="168">> 168 (more than one week)</option>
             </select>
           </div>
-          <div id="activites">
+          <div class="input">
             <label>What did you do during your stay?</label>
             <textarea
+              rows="4"
+              cols="20"
               name="activities"
               placeholder="I went hiking on several trails, enjoyed some fishing..."
               value=activities
               v-model="activities"
             ></textarea>
           </div>
-          <div id="wildlife">
+          <div class="input">
             <label>What wildlife did you see?</label>
             <textarea
+              rows="4"
+              cols="20"
               name="wildlife"
               placeholder="One grizzly bear, a bald eagle, and some marmots..."
               value=wildlife
@@ -115,47 +119,42 @@ export default {
     position: relative;
     height: 100%;
     fieldset {
-      width: 30%;
-      position: absolute;
-      top: 25%;
-      left: 50%;
-      transform: translate(-50%, -25%);
+      width: 75%;
+      margin: 1% auto;
       background-color: #E8EAEB;
       div {
+        padding: 1%;
+      }
+      textarea {
         display: block;
-        padding: 5%;
       }
-      button {
-        margin: 5% auto;
-        padding: 3% 25%;
-        background-color: rgb(126, 182, 112);
-        border-radius: 5px;
-        border: 2px solid #336E55;
+      #modal-buttons {
+        button {
+          margin: 3%;
+          padding: 0.6% 1%;
+          background-color: rgb(126, 182, 112);
+          border-radius: 5px;
+          border: 2px solid #336E55;
+        }
+        button:hover {
+          cursor: pointer;
+        }
+        a {
+          background-color: #96AFA7;
+          border-radius: 5px;
+          border: 2px solid #4A8571;
+          padding: 0% 1.5%;
+          cursor: pointer;
+          text-decoration: none;
+          color: black;
+          display: inline-block;
+        }
       }
-      button:hover {
-        cursor: pointer;
-      }
-        // a {
-        //   width: 54%;
-        //   margin: 0% auto;
-        //   padding: 3% 5%;
-        //   background-color: #96AFA7;
-        //   border-radius: 5px;
-        //   border: 2px solid #4A8571;
-        //   cursor: pointer;
-        //   text-decoration: none;
-        //   color: black;
-        //   display: block;
-        // }
     }
     legend {
       border: 1px solid black;
       background-color: white;
       padding: 2%;
-      margin-bottom: 5%;
-    }
-    button {
-      display: inline-block;
     }
   }
 }
