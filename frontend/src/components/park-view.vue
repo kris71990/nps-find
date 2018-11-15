@@ -33,13 +33,15 @@
               v-bind:createDate="createDate"
               v-bind:reports="computedReports"
             />
-            <p @click="reportView = !reportView"><span>Close</span></p>
+            <div class="report-buttons"><p @click="reportView = !reportView">Close</p></div>
           </div>
           <div v-else>
             <p>{{ createReportLinePark(computedPark.reports, computedPark.name) }}</p>
-            <span @click="getReports">Click to view</span><br/>
-            <router-link v-if="loggedIn" :to="{ path: `/park/${computedPark.parkCode}/report` }">Submit a report</router-link>
-            <router-link v-else to="/">Login/signup to contribute</router-link>
+            <div class="report-buttons">
+              <p @click="getReports">Click to view</p>
+              <router-link v-if="loggedIn" :to="{ path: `/park/${computedPark.parkCode}/report` }">Submit a report</router-link>
+              <router-link v-else to="/">Login/signup to contribute</router-link>
+            </div>
             <ReportForm 
               v-if="this.$route.path === `/park/${computedPark.parkCode}/report`"
               v-bind:onComplete="submitReport" 
@@ -49,9 +51,9 @@
           </div>
         </div>
         <div v-else>
-          <p @click="reportForm = !reportForm">No user reports - Submit the first!</p>
+          <p @click="$router.push(`/park/${computedPark.parkCode}/report`)">No user reports - <span>Submit the first!</span></p>
           <ReportForm 
-            v-if="reportForm"
+            v-if="this.$route.path === `/park/${computedPark.parkCode}/report`"
             v-bind:onComplete="submitReport" 
             v-bind:park="computedPark"
             v-bind:profile="computedProfile"
@@ -83,7 +85,6 @@ export default {
   },
   data() {
     return {
-      reportForm: false,
       reportView: false,
     }
   },
@@ -105,7 +106,6 @@ export default {
       const { parkCode } = this.computedPark;
       return this.$store.dispatch('postReportReq', event)
         .then(() => {
-          this.reportForm = !this.reportForm;
           return this.$router.push(`/park/${parkCode}`);
         })
     },
@@ -118,24 +118,17 @@ export default {
         })
     },
     createReportLinePark(reports, name) {
-      if (reports > 1) {
-        return `${reports} submitted for ${name}`;
-      } else if (reports == 1) {
-        return `${reports} submitted for ${name}`;
-      } 
+      return reports > 1 ? `${reports} submitted for ${name}` : `${reports} submitted for ${name}`;
     },
     createReportLineParkTable(reports) {
       const unique = new Map();
       reports.filter((report) => {
         if (!unique[report.profileId]) unique.set(report.profileId, 1);
       })
-      let userFormat;
-      if (unique.size === 1) {
-        userFormat = 'user';
-      } else {
-        userFormat = 'users';
-      }
-      return `Report Summary: ${reports.length} reports have been submitted by ${unique.size} ${userFormat}.`
+      let userFormat, reportFormat;
+      unique.size > 1 ? userFormat = 'users' : userFormat = 'user';
+      reports.length > 1 ? reportFormat = 'reports have' : reportFormat = 'report has';
+      return `Report Summary: ${reports.length} ${reportFormat} been submitted by ${unique.size} ${userFormat}.`
     },
     createDate(date) {
       const dateReadable = new Date(date);
@@ -172,6 +165,26 @@ export default {
     span:hover {
       cursor: pointer;
       color: #00CB94;
+    }
+  }
+  .report-box {
+    .report-buttons {
+      a, p {
+        background-color: #96AFA7;
+        border-radius: 5px;
+        border: 2px solid #4A8571;
+        padding: 0% 1.5%;
+        text-decoration: none;
+        color: black;
+        display: inline-block;
+      }
+      p:hover {
+        cursor: pointer;
+        border: 2px solid #E7CF03;
+      }
+      a:hover {
+        border: 2px solid #E7CF03;
+      }
     }
   }
 }

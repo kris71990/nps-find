@@ -2,9 +2,9 @@
   <div class="report-add">
     <form @submit="handleSubmit">
       <fieldset>
-        <legend>Submit a report for {{ this.park.name }}</legend>
-        <div>
-          <div class="input">
+        <legend>Submit a report for {{ this.park.fullName }}</legend>
+        <div class="input">
+          <div>
             <label>Overall Score (1-5, 5 is best)</label>
             <select 
               v-model="rating"
@@ -16,9 +16,9 @@
               <option value="3">3</option>
               <option value="2">2</option>
               <option value="1">1</option>
-            </select>
+            </select><span> *</span>
           </div>
-          <div class="input">
+          <div>
             <label>How long was your visit?</label>
             <select 
               v-model="lengthOfStay"
@@ -34,34 +34,34 @@
               <option value="72">72-120 (3-5 days)</option>
               <option value="120">120-168 (5-7 days)</option>
               <option value="168">> 168 (more than one week)</option>
-            </select>
+            </select><span> *</span>
           </div>
-          <div class="input">
-            <label>What did you do during your stay?</label>
+        </div>
+        <div class="textbox">
+          <div>
+            <label>What did you do during your stay?</label><span> *</span>
             <textarea
-              rows="4"
-              cols="20"
               name="activities"
               placeholder="I went hiking on several trails, enjoyed some fishing..."
               value=activities
               v-model="activities"
             ></textarea>
           </div>
-          <div class="input">
+        </div>
+        <div class="textbox">
+          <div>
             <label>What wildlife did you see?</label>
             <textarea
-              rows="4"
-              cols="20"
               name="wildlife"
               placeholder="One grizzly bear, a bald eagle, and some marmots..."
               value=wildlife
               v-model="wildlife"
             ></textarea>
           </div>
-          <div id="modal-buttons">
-            <button type="submit">Submit</button>
-            <router-link :to="{ path: `/park/${park.parkCode}` }">Close</router-link>
-          </div>
+        </div>
+        <div id="modal-buttons">
+          <button type="submit">Submit</button>
+          <router-link :to="{ path: `/park/${park.parkCode}` }">Close</router-link>
         </div>
       </fieldset>
     </form>
@@ -90,6 +90,7 @@ export default {
       return this.onComplete({ 
         parkId: this.park.pKeyCode,
         profileId: this.profile.id,
+        parkName: this.park.fullName,
         rating: parseInt(this.rating, 10), 
         lengthOfStay: parseInt(this.lengthOfStay, 10), 
         activities: this.activities, 
@@ -120,13 +121,35 @@ export default {
     height: 100%;
     fieldset {
       width: 75%;
-      margin: 1% auto;
+      height: 75%;
+      margin: 3% auto;
       background-color: #E8EAEB;
-      div {
-        padding: 1%;
+      .input {
+        width: 100%;
+        margin: 5% auto;
+        div {
+          display: inline;
+          padding: 1%;
+          span {
+            color: red;
+          }
+        }
       }
-      textarea {
-        display: block;
+      .textbox {
+        width: 40%;
+        display: inline-block;
+        span {
+          color: red;
+        }
+        label {
+          display: inline-block;
+        }
+        textarea {
+          margin: 2% auto;
+          display: block;
+          width: 80%;
+          height: 5em;
+        }
       }
       #modal-buttons {
         button {

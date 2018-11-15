@@ -7,9 +7,27 @@
       </div>
       <div v-else>
         <h2>
-          {{ profile.firstName }} -/- {{ profile.age }} -/- 
+          {{ profile.firstName }} --- {{ profile.age }} --- 
           <span>{{ states[profile.homeState] }}</span>
         </h2>
+        <div 
+          v-if="profile.interests || 
+          profile.residentialLocaleType || 
+          profile.favoredClimate ||
+          profile.favoredLandscape">
+          <p v-if="profile.interests">
+            <span>Your interests... </span>{{ profile.interests }}
+          </p>
+          <p v-if="profile.residentialLocaleType">
+            <span>You live in... </span>{{ profile.residentialLocaleType }}
+          </p>
+          <p v-if="profile.favoredClimate">
+            <span>You prefer... </span>{{ profile.favoredClimate }}
+          </p>
+          <p v-if="profile.favoredLandscape">
+            <span>You prefer... </span>{{ profile.favoredLandscape }}
+          </p>
+        </div>
         <p id="update-button" v-on:click="editing = !editing">
           {{ editing ? 'Close' : 'Update Details' }}
         </p>
@@ -72,11 +90,13 @@ export default {
       reports.filter((report) => {
         if (!unique[report.parkId]) unique.set(report.parkId, 1);
       })
-      return `You have submitted ${reports.length} reports for ${unique.size} parks.`
+      let reportFormat, parkFormat;
+      reports.length > 1 ? reportFormat = 'reports' : reportFormat = 'report';
+      unique.size > 1 ? parkFormat = 'parks' : parkFormat = 'park';
+      return `You have submitted ${reports.length} ${reportFormat} for ${unique.size} ${parkFormat}.`
     },
     createDate(date) {
-      let dateSliced = date.slice(0, -1);
-      const dateReadable = new Date(dateSliced);
+      const dateReadable = new Date(date);
       return `${dateReadable.toLocaleString()}`;
     }
   }
@@ -89,6 +109,7 @@ export default {
   margin: 0 auto;
   margin-bottom: 5%;
   span {
+    font-weight: bold;
     font-style: oblique;
   }
   #update-button {
