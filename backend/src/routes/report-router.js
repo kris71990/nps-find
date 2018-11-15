@@ -32,6 +32,7 @@ reportRouter.get('/report/profile/:profileId', bearerAuthMiddleware, (request, r
     where: {
       profileId: { [Op.eq]: request.params.profileId },
     },
+    order: [['updatedAt', 'DESC']],
   })
     .then((reports) => {
       logger.log(logger.INFO, `Returning all reports posted by ${request.params.profileId}`);
@@ -47,9 +48,11 @@ reportRouter.get('/report/park/:parkId', (request, response, next) => {
     where: {
       parkId: { [Op.eq]: request.params.parkId },
     },
+    order: [['updatedAt', 'DESC']],
   }) 
     .then((reports) => {
       logger.log(logger.INFO, `Returning all reports for ${request.params.parkId}`);
+      console.log(reports);
       return response.json(reports);
     })
     .catch(next);

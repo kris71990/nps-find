@@ -47,6 +47,11 @@ export default new Router({
       component: ParkView,
     },
     {
+      path: '/park/:id/report',
+      name: 'ParkPostReport',
+      component: ParkView,
+    },
+    {
       path: '/park/:id/campgrounds',
       name: 'CampgroundOptions',
       component: CampgroundOptions,

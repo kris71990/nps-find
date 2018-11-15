@@ -27,7 +27,27 @@
       <h3>User Reports...</h3>
       <div class="report-box">
         <div v-if="computedPark.reports" >
-          <p @click="getReports">{{ createReportLinePark(computedPark.reports, computedPark.name) }}</p>
+          <div v-if="reportView">
+            <ReportView
+              v-bind:createReportLine="createReportLineParkTable"
+              v-bind:createDate="createDate"
+              v-bind:reports="computedReports"
+            />
+            <p @click="reportView = !reportView"><span>Close</span></p>
+          </div>
+          <div v-else>
+            <p>{{ createReportLinePark(computedPark.reports, computedPark.name) }}</p>
+            <span @click="getReports">Click to view</span><br/>
+            <!-- <span v-if="loggedIn" @click="reportForm = !reportForm">Submit a report</span> -->
+            <router-link v-if="loggedIn" :to="{ path: `/park/${computedPark.parkCode}/report` }">Submit a report</router-link>
+            <router-link v-else to="/">Login/signup to contribute</router-link>
+            <ReportForm 
+              v-if="this.$route.path === `/park/${computedPark.parkCode}/report`"
+              v-bind:onComplete="submitReport" 
+              v-bind:park="computedPark"
+              v-bind:profile="computedProfile"
+            />
+          </div>
         </div>
         <div v-else>
           <p @click="reportForm = !reportForm">No user reports - Submit the first!</p>
@@ -65,11 +85,14 @@ export default {
   data() {
     return {
       reportForm: false,
+      reportView: false,
     }
   },
   computed: mapState({
+    loggedIn: state => state.authModule.loggedIn,
     computedPark: state => state.parkModule.singlePark,
     computedProfile: state => state.profileModule.profile,
+    computedReports: state => state.reportModule.singleParkReports,
   }),
   methods: {
     getCampgrounds: function() {
@@ -83,6 +106,7 @@ export default {
       const { parkCode } = this.computedPark;
       return this.$store.dispatch('postReportReq', event)
         .then(() => {
+          this.reportForm = !this.reportForm;
           return this.$router.push(`/park/${parkCode}`);
         })
     },
@@ -90,26 +114,32 @@ export default {
       const { parkCode, pKeyCode } = this.computedPark;
       return this.$store.dispatch('fetchReportReq', pKeyCode)
         .then(() => {
+          this.reportView = !this.reportView;
           return this.$router.push(`/park/${parkCode}`)
         })
     },
-    createReportLineTable(reports) {
-      const unique = new Map();
-      reports.filter((report) => {
-        if (!unique[report.parkId]) unique.set(report.parkId, 1);
-      })
-      return `You have submitted ${reports.length} reports for ${unique.size} parks.`
-    },
     createReportLinePark(reports, name) {
       if (reports > 1) {
-        return `${reports} user reports for ${name}`;
+        return `${reports} submitted for ${name}`;
       } else if (reports == 1) {
-        return `${reports} user report for ${name}`;
+        return `${reports} submitted for ${name}`;
       } 
     },
+    createReportLineParkTable(reports) {
+      const unique = new Map();
+      reports.filter((report) => {
+        if (!unique[report.profileId]) unique.set(report.profileId, 1);
+      })
+      let userFormat;
+      if (unique.size === 1) {
+        userFormat = 'user';
+      } else {
+        userFormat = 'users';
+      }
+      return `Report Summary: ${reports.length} reports have been submitted by ${unique.size} ${userFormat}.`
+    },
     createDate(date) {
-      let dateSliced = date.slice(0, -1);
-      const dateReadable = new Date(dateSliced);
+      const dateReadable = new Date(date);
       return `${dateReadable.toLocaleString()}`;
     },
   }

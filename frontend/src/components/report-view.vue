@@ -1,6 +1,6 @@
 <template>
   <div id="report-view">
-    <h3>{{ createReportLine(reports) }}</h3>
+    <h4>{{ createReportLine(reports) }}</h4>
     <table>
       <thead>
         <tr>
@@ -37,17 +37,18 @@ export default {
 <style lang="scss">
 #report-view {
   table {
+    width: 100%;
     margin: 0 auto;
-    border: 2px solid black;
+    border: 3px solid black;
     border-collapse: collapse;
     th {
       padding: 1.5em;
       background-color: #B89587;
-      border: 2px solid black;
+      border: 1px solid black;
     }
     td {
       padding: 1em;
-      border: 1px dotted black;
+      border: 1px solid black;
     }
     .star1 {
       background-color: #D12727;

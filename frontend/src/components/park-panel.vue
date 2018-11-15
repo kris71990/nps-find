@@ -22,7 +22,7 @@
             <p><a>{{ park.fullName }}</a></p>
             <img v-bind:src="randomizedImage(park)"/>
           </div>
-          <p>- {{ createReportBlurb(park.reports) }} -</p>
+          <p v-bind:class="park.reports ? 'yes' : 'no'">- {{ createReportBlurb(park.reports) }} -</p>
         </li>
       </ul>
     </div>
@@ -87,6 +87,7 @@ export default {
   }
 }
 .panel {
+  width: 100%;
   margin-bottom: 5%;
   ul {
     padding-left: 0;
@@ -94,7 +95,7 @@ export default {
     flex-wrap: wrap;
     justify-content: center;
     li {
-      margin: 2% 2% 3% 2%;
+      margin: 3% 1%;
       width: 25%;
       list-style-type: none;
       .park-card {
@@ -113,6 +114,9 @@ export default {
       border: 8px solid #930000;
       transform: scale(1.01,1.01);
       cursor: pointer;
+    }
+    .yes {
+      font-weight: bold;
     }
   }
 }
