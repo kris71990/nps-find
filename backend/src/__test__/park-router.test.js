@@ -49,17 +49,17 @@ describe('Park Router', () => {
         });
     });
   
-    // test('GET from /parks/:stateId should return parks in that state from api', () => {
-    //   return superagent.get(`${API_URL}/parks/MA`)
-    //     .query({ interests: ['hiking', 'camping'] })
-    //     .then((response) => {
-    //       expect(response.status).toEqual(200);
-    //       expect(response.body).toBeInstanceOf(Object);
-    //       expect(response.body.parkTypes).toBeInstanceOf(Array);
-    //       expect(response.body.parkTypes[0]).toBeTruthy();
-    //       expect(response.body.camping).toEqual(true);
-    //     });
-    // });
+    test('GET from /parks/:stateId should return parks in that state from api', () => {
+      return superagent.get(`${API_URL}/parks/MA`)
+        .query({ interests: ['hiking', 'camping'] })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body).toBeInstanceOf(Object);
+          expect(response.body.parkTypes).toBeInstanceOf(Array);
+          expect(response.body.parkTypes[0]).toBeTruthy();
+          expect(response.body.camping).toEqual(true);
+        });
+    });
   
     test('GET from /parks/:stateId should return bad request for non-existant state', () => {
       return superagent.get(`${API_URL}/parks/KM`)
@@ -84,7 +84,9 @@ describe('Park Router', () => {
             .send(userQueryObj)
             .then((response) => {
               expect(response.status).toEqual(200);
-              expect(response.body[0].camping).toEqual(true);
+              response.body.forEach((park) => {
+                expect(park.camping).toEqual(true);
+              });
               expect(userQueryObj.parkTypes.includes(response.body[0].designation)).toBeTruthy();
             });
         });
@@ -103,8 +105,11 @@ describe('Park Router', () => {
           return superagent.put(`${API_URL}/parks/ME`)
             .send(userQueryObj)
             .then((response) => {
+              console.log(response.body);
               expect(response.status).toEqual(200);
-              expect(response.body[0].camping).toEqual(false);
+              response.body.forEach((park) => {
+                expect(park.camping).toEqual(false);
+              });
               expect(userQueryObj.parkTypes.includes(response.body[0].designation)).toBeTruthy();
             });
         });
@@ -121,7 +126,9 @@ describe('Park Router', () => {
             .send(userQueryObj)
             .then((response) => {
               expect(response.status).toEqual(200);
-              expect(response.body[0].camping).toBeTruthy();
+              response.body.forEach((park) => {
+                expect(park.camping).toEqual(true);
+              });
               expect(userQueryObj.parkTypes).toHaveLength(0);
             });
         });
