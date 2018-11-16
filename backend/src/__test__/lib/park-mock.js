@@ -22,8 +22,10 @@ const mockParks = (stateCode, total) => {
           stateCode, 
           parkCode: faker.lorem.word(),
           pKeyCode: faker.lorem.word() + Math.random(),
+          fullName: faker.lorem.words(),
           description: faker.lorem.words(),
           designation: designationTypes[Math.floor(Math.random() * 3)],
+          camping: false,
         });
       }
       return models.park.bulkCreate(arr)
