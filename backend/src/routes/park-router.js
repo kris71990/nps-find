@@ -148,12 +148,21 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
 });
 
 // get a single park, join with report to update park view immediately
-// parkRouter.get('/park/:parkId', (request, response, next) => {
-//   return models.park.find({
-//     where: {
-//       parkCode: { [Op.eq]: request.params.parkId },
-//     }
-//   })
-// })
+parkRouter.get('/park/:parkId', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /park/:parkId');
+
+  return models.sequelize.query(
+    'SELECT parks.*, "reports" FROM parks LEFT JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" WHERE "pKeyCode"=?;',
+    {
+      replacements: [request.params.parkId],
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((singlePark) => {
+      logger.log(logger.INFO, `Returning ${singlePark.fullName}`);
+      return response.json(singlePark);
+    })
+    .catch(next);
+});
 
 export default parkRouter;
