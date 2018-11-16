@@ -52,21 +52,15 @@ const profileModule = {
         });
     },
 
-    postReportReq: (context, reportData) => {
-      const { commit, rootState } = context;
+    // postReportReq: (context, reportData) => {
+    //   const { rootState } = context;
     
-      return superagent.post(`${API_URL}/report`)
-        .set('Authorization', `Bearer ${rootState.authModule.token}`)
-        .set('Content-Type', 'application/json')
-        .send(reportData)
-        .then(() => {
-          return superagent.get(`${API_URL}/profile/me`)
-            .set('Authorization', `Bearer ${rootState.authModule.token}`)
-            .then((response) => {
-              return commit('setProfile', response.body);
-            });
-        });
-    },
+    //   return superagent.post(`${API_URL}/report`)
+    //     .set('Authorization', `Bearer ${rootState.authModule.token}`)
+    //     .set('Content-Type', 'application/json')
+    //     .send(reportData)
+    //     .then(() => Promise.resolve);
+    // },
   },
 };
 

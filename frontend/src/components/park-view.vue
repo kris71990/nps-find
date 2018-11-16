@@ -107,7 +107,7 @@ export default {
       return this.$store.dispatch('postReportReq', event)
         .then(() => {
           return this.$router.push(`/park/${parkCode}`);
-        })
+        });
     },
     getReports(event, a) {
       const { parkCode, pKeyCode } = this.computedPark;

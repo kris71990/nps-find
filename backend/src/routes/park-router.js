@@ -147,4 +147,13 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
     .catch(next);
 });
 
+// get a single park, join with report to update park view immediately
+// parkRouter.get('/park/:parkId', (request, response, next) => {
+//   return models.park.find({
+//     where: {
+//       parkCode: { [Op.eq]: request.params.parkId },
+//     }
+//   })
+// })
+
 export default parkRouter;
