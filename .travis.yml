@@ -3,14 +3,6 @@ node_js:
   - "10"
 services:
 - postgresql
-env:
-  matrix:
-    - secure: "UDDrZMeDhDUu44CSWfXllmVCAO1vhjIW/h9BAs0MtYZwskYrpWKSrhiRY/0R4BMLYLUfc6mt6KapdOZ3HbNewVwlyqHaO3gQBOq1VyWP4UiisyvqjJD2mYYBhndpL7sm4jhrES/vSLtmm+Fnbwuji9UN0C8DyK+9QyzPxfOyLUm4gbFSc7eFqcscWFSZC6Gn+9LxBTFRzaQtjWUhWYVqammiejHgORDLVOMzMT/qjh8yOAQDTMAF9YnsT0DO34m6MiXyTQeMPspaRS43/t8GLLmP9+Gtd1prbpvozNDdNy0n1u4fmgcmKAW01T1/82WeDJx2vliJd0unWOBuZNO4UbebdGXnVWApD9JzkS8ducY28RHUn6MCud6wcmPqg0SjFjGXZkF6PWTnz3BchfEJasxx3tt0Ot+sLQqaQGf1pN6PRaRjpCKR7orNU+AJxRwIoBg+fAmpQSOSpW4GqiyR56p5vQFlHfhkrtw6spU3ELXO01yNO+PlwJBU2x0nISRqsABqq+zLkSgIF1Ty34I9yCyG4zEUy59wMojni3Mtf6jQ0jozzJ5dqN1fNk0k7ovrNgVofw8l8rTVPyGmCRJ0YYwXUB0Oux1/gPkRjvfgJ26VkcaxF38oc0/S7flz2/XA/XUqOAQ581s6Yb38yDiOE0Zfp1WFCFfbeLT+NskpvuY="
-  global:
-    - NODE_ENV=development 
-    - PORT=9000 
-    - DATABASE_URL=postgres://localhost:5432/npstest
-    - ACCOUNT_SECRET=feirbhowbeheuiqoh3euohruoehnn
 before_script:
 - psql -c "CREATE DATABASE npstest;" -U postgres
 script: cd backend && npm install && npm test
