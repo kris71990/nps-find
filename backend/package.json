@@ -4,7 +4,7 @@
   "description": "nps-backend",
   "main": "index.js",
   "scripts": {
-    "test": "eslint . && jest --coverage --runInBand",
+    "test": "eslint . && jest --coverage --runInBand --forceExit",
     "test-nolint": "jest --coverage --runInBand",
     "build": "babel src -d build",
     "start": "node index.js"
