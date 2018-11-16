@@ -93,6 +93,7 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
       }
 
       const { parkTypes, camping } = request.body;
+      /* camping interest of false still returns parks that have camping, as there is much more to do besides camp. Camping interest of true only returns parks with camping options. camping = false merely implies a lack of interest, not a park requirement */
       
       if (parkTypes.length > 0 && !camping) {
         const desigParams = parkTypes.map(() => '?');

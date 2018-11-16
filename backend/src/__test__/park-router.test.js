@@ -86,8 +86,8 @@ describe('Park Router', () => {
               expect(response.status).toEqual(200);
               response.body.forEach((park) => {
                 expect(park.camping).toEqual(true);
+                expect(userQueryObj.parkTypes.includes(park.designation)).toEqual(true);
               });
-              expect(userQueryObj.parkTypes.includes(response.body[0].designation)).toBeTruthy();
             });
         });
     });
@@ -105,12 +105,10 @@ describe('Park Router', () => {
           return superagent.put(`${API_URL}/parks/ME`)
             .send(userQueryObj)
             .then((response) => {
-              console.log(response.body);
               expect(response.status).toEqual(200);
               response.body.forEach((park) => {
-                expect(park.camping).toEqual(false);
+                expect(userQueryObj.parkTypes.includes(park.designation)).toEqual(true);
               });
-              expect(userQueryObj.parkTypes.includes(response.body[0].designation)).toBeTruthy();
             });
         });
     });
