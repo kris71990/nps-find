@@ -40,6 +40,7 @@ describe('Report Router', () => {
                 .send({
                   parkId: parks[0].pKeyCode,
                   profileId: profileMock.profile.id,
+                  parkName: parks[0].fullName,
                   rating: 5,
                   lengthOfStay: 72,
                   activities: 'hiking, fishing, photography',
@@ -56,7 +57,7 @@ describe('Report Router', () => {
         });
     });
 
-    test('POST /report with missing parkId will return bad request', () => {
+    test('POST /report with missing parkId and name will return bad request', () => {
       return createProfileMock()
         .then((profileMock) => {
           return superagent.post(`${API_URL}/report`)
@@ -82,6 +83,7 @@ describe('Report Router', () => {
                 .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
                 .send({
                   parkId: parks[0].pKeyCode,
+                  fullName: parks[0].fullName,
                   rating: 5,
                   lengthOfStay: 72,
                   activities: 'hiking, fishing, photography',
@@ -102,6 +104,7 @@ describe('Report Router', () => {
                 .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
                 .send({
                   parkId: parks[0].pKeyCode,
+                  parkName: parks[0].fullName,
                   profileId: profileMock.profile.id,
                   rating: 5,
                   activities: 'hiking, fishing, photography',
@@ -122,6 +125,7 @@ describe('Report Router', () => {
                 .send({
                   parkId: parks[0].pKeyCode,
                   profileId: profileMock.profile.id,
+                  parkName: parks[0].fullName,
                   rating: 5,
                   lengthOfStay: 72,
                   activities: 'hiking, fishing, photography',

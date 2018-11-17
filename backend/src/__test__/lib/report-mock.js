@@ -19,6 +19,7 @@ const createReports = (total) => {
             arr.push({
               parkId: parks[0].pKeyCode,
               profileId: profileMock.profile.id,
+              parkName: parks[0].fullName,
               activities: faker.lorem.words(),
               lengthOfStay: faker.random.number(),
               rating: faker.random.number(),

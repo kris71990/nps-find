@@ -7,33 +7,36 @@
       </div>
       <div v-else>
         <h2>
-          {{ profile.firstName }} -/- {{ profile.age }} -/- 
+          {{ profile.firstName }} --- {{ profile.age }} --- 
           <span>{{ states[profile.homeState] }}</span>
         </h2>
+        <div 
+          v-if="profile.interests || 
+          profile.residentialLocaleType || 
+          profile.favoredClimate ||
+          profile.favoredLandscape">
+          <p v-if="profile.interests">
+            <span>Your interests... </span>{{ profile.interests }}
+          </p>
+          <p v-if="profile.residentialLocaleType">
+            <span>You live in... </span>{{ profile.residentialLocaleType }}
+          </p>
+          <p v-if="profile.favoredClimate">
+            <span>You prefer... </span>{{ profile.favoredClimate }}
+          </p>
+          <p v-if="profile.favoredLandscape">
+            <span>You prefer... </span>{{ profile.favoredLandscape }}
+          </p>
+        </div>
         <p id="update-button" v-on:click="editing = !editing">
           {{ editing ? 'Close' : 'Update Details' }}
         </p>
-        <div v-if="profile.reports.length > 0" id="report-view">
-          <h3>{{ createReportLine(profile.reports) }}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Park</th>
-                <th>Rating</th>
-                <th>Submitted</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="report in profile.reports" 
-                  :key="report.id" 
-                  v-bind:class="`star${report.rating}`"
-              >
-                <td>{{ report.parkId }}</td>
-                <td>{{ report.rating }}</td>
-                <td>{{ createDate(report.updatedAt) }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div v-if="profile.reports && profile.reports.length > 0">
+          <ReportView 
+            v-bind:createReportLine="createReportLine"
+            v-bind:createDate="createDate"
+            v-bind:reports="profile.reports"
+          />
         </div>
       </div>
       <div v-if="profile && editing">
@@ -46,12 +49,14 @@
 <script>
 import { mapState } from 'vuex';
 import ProfileForm from './profile-form.vue';
+import ReportView from './report-view.vue';
 import { stateAbbreviations } from '../utils/states';
 
 export default {
   name: 'ProfileView',
   components: {
     ProfileForm,
+    ReportView,
   },
   data() {
     return {
@@ -85,11 +90,13 @@ export default {
       reports.filter((report) => {
         if (!unique[report.parkId]) unique.set(report.parkId, 1);
       })
-      return `You have submitted ${reports.length} reports for ${unique.size} parks.`
+      let reportFormat, parkFormat;
+      reports.length > 1 ? reportFormat = 'reports' : reportFormat = 'report';
+      unique.size > 1 ? parkFormat = 'parks' : parkFormat = 'park';
+      return `You have submitted ${reports.length} ${reportFormat} for ${unique.size} ${parkFormat}.`
     },
     createDate(date) {
-      let dateSliced = date.slice(0, -1);
-      const dateReadable = new Date(dateSliced);
+      const dateReadable = new Date(date);
       return `${dateReadable.toLocaleString()}`;
     }
   }
@@ -102,6 +109,7 @@ export default {
   margin: 0 auto;
   margin-bottom: 5%;
   span {
+    font-weight: bold;
     font-style: oblique;
   }
   #update-button {
@@ -113,25 +121,6 @@ export default {
     border-radius: 5px;
     cursor: pointer;
     color: black;
-  }
-  #report-view {
-    table {
-      margin: 0 auto;
-      border: 2px solid black;
-      border-collapse: collapse;
-      th {
-        padding: 1.5em;
-        background-color: #B89587;
-        border: 2px solid black;
-      }
-      td {
-        padding: 1em;
-        border: 1px dotted black;
-      }
-      .star1 {
-        background-color: #D12727;
-      }
-    }
   }
 }
 </style>

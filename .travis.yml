@@ -1,10 +1,8 @@
 language: node_js
 node_js:
-  - "node"
-services: 
-  - postgresql
-env:
-  - TEST_DIR=backend
+  - "10"
+services:
+- postgresql
 before_script:
-  - psql -c "CREATE DATABASE npstest;" -U postgres
-script: cd $TEST_DIR && npm install && npm test
+- psql -c "CREATE DATABASE npstest;" -U postgres
+script: cd backend && npm install && npm test

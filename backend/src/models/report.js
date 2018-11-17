@@ -9,6 +9,10 @@ const Report = (sequelize, DataTypes) => sequelize.define('report', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  parkName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   rating: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -18,11 +22,11 @@ const Report = (sequelize, DataTypes) => sequelize.define('report', {
     allowNull: false,
   },
   activities: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(1000),
     allowNull: false,
   },
   wildlife: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(1000),
   },
 });
 

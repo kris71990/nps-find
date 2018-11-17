@@ -4,35 +4,73 @@
     <form @submit="handleCreate">
       <fieldset>
         <legend>{{ editing ? 'Update' : 'Create' }} your profile</legend>
-        <div>
-          <label>First Name</label>
-          <input
-            type="text"
-            name="firstName"
-            placeholder="Name"
-            value=firstName
-            v-model="firstName"
-          >
+        <div class="input">
+          <div>
+            <label>First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              placeholder="Name"
+              value=firstName
+              v-model="firstName"
+            ><span>*</span>
+          </div>
+          <div>
+            <label>Age</label>
+            <input
+              type="number"
+              name="age"
+              placeholder="Age"
+              value=age
+              v-model="age"
+            ><span>*</span>
+          </div>
+          <div>
+            <label>Home State</label>
+            <input
+              type="text"
+              name="state"
+              placeholder="ex. WA"
+              value=homeState
+              v-model="homeState"
+            ><span>*</span>
+          </div>
         </div>
-        <div>
-          <label>Age</label>
-          <input
-            type="number"
-            name="age"
-            placeholder="Age"
-            value=age
-            v-model="age"
-          >
+        <div class="textbox">
+          <div>
+            <label>What are your interests?</label>
+            <textarea
+              name="interests"
+              placeholder="ex. hiking, fishing, camping"
+              value=interests
+              v-model="interests"
+            ></textarea>
+            <label>What weather do you prefer?</label>
+            <textarea
+              name="weather"
+              placeholder="ex. sunny, warm"
+              value=weather
+              v-model="weather"
+            ></textarea>
+          </div>
         </div>
-        <div>
-          <label>Home State</label>
-          <input
-            type="text"
-            name="state"
-            placeholder="State"
-            value=homeState
-            v-model="homeState"
-          >
+        <div class="textbox">
+          <div>
+            <label>What is your favorite type of landscape?</label>
+            <textarea
+              name="landscape"
+              placeholder="ex. mountains"
+              value=landscape
+              v-model="landscape"
+            ></textarea>
+            <label>What type of area do you live in?</label>
+            <textarea
+              name="residentialLocaleType"
+              placeholder="ex. suburbs"
+              value=residentialLocaleType
+              v-model="residentialLocaleType"
+            ></textarea>
+          </div>
         </div>
         <div id="modal-buttons">
           <button type="submit">{{ editing ? 'Update' : 'Create'}}</button>
@@ -59,6 +97,10 @@ export default {
       firstName: '',
       age: 0,
       homeState: '',
+      interests: '',
+      weather: '',
+      landscape: '',
+      residentialLocaleType: '',
     }
   },
   computed: mapState({
@@ -71,11 +113,19 @@ export default {
         firstName: this.firstName,
         age: this.age,
         homeState: this.homeState,
+        interests: this.interests,
+        favoredLandscape: this.landscape,
+        favoredClimate: this.weather,
+        residentialLocaleType: this.residentialLocaleType,
       })
         .then(() => {
           this.firstName = '';
           this.age = 0;
           this.homeState = '';
+          this.interests = '';
+          this.weather = '';
+          this.landscape = '';
+          this.residentialLocaleType = '';
         })
     }
   }
@@ -94,20 +144,40 @@ export default {
     position: relative;
     height: 100%;
     fieldset {
-      width: 30%;
+      width: 75%;
+      height: 80%;
       position: absolute;
       top: 25%;
       left: 50%;
       transform: translate(-50%, -25%);
       background-color: #E8EAEB;
-      div {
-        display: block;
-        padding: 5%;
+      .input {
+        width: 100%;
+        margin-bottom: 2%;
+        div {
+          padding: 1%;
+          span {
+            color: red;
+          }
+        }
+      }
+      .textbox {
+        width: 40%;
+        display: inline-block;
+        label {
+          display: inline-block;
+        }
+        textarea {
+          margin: 2% auto;
+          display: block;
+          width: 80%;
+          height: 5em;
+        }
       }
       #modal-buttons {
         button {
-          margin: 5% auto;
-          padding: 3% 25%;
+          margin: 3%;
+          padding: 0.6% 3%;
           background-color: rgb(126, 182, 112);
           border-radius: 5px;
           border: 2px solid #336E55;
@@ -116,16 +186,16 @@ export default {
           cursor: pointer;
         }
         p {
-          width: 54%;
-          margin: 0% auto;
-          padding: 3% 5%;
+          min-width: 10%;
+          margin: 3%;
+          padding: 0.6% 1%;
           background-color: #96AFA7;
           border-radius: 5px;
           border: 2px solid #4A8571;
           cursor: pointer;
           text-decoration: none;
           color: black;
-          display: block;
+          display: inline-block;
         }
       }
     }
@@ -133,7 +203,6 @@ export default {
       border: 1px solid black;
       background-color: white;
       padding: 2%;
-      margin-bottom: 5%;
     }
     button {
       display: inline-block;

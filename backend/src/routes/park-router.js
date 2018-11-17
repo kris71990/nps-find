@@ -12,6 +12,7 @@ import customizeParks from '../lib/customize-parks';
 
 const jsonParser = json();
 const parkRouter = new Router();
+const Op = models.Sequelize.Op;
 
 // retrieve initial data, either from database or API
 parkRouter.get('/parks/:state', (request, response, next) => {
@@ -26,7 +27,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
   // find if state exists in db
   return models.state.findAll({
     where: {
-      stateId: request.params.state,
+      stateId: { [Op.eq]: request.params.state },
     },
   })
     .then((results) => {
@@ -52,7 +53,7 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
   // find all campgrounds in state
   return models.campground.findAll({
     where: {
-      state: request.params.state,
+      state: { [Op.eq]: request.params.state },
     },
     attributes: ['state', 'parkId', 'name'],
   })
@@ -92,6 +93,7 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
       }
 
       const { parkTypes, camping } = request.body;
+      /* camping interest of false still returns parks that have camping, as there is much more to do besides camp. Camping interest of true only returns parks with camping options. camping = false merely implies a lack of interest, not a park requirement */
       
       if (parkTypes.length > 0 && !camping) {
         const desigParams = parkTypes.map(() => '?');
@@ -141,6 +143,24 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
           });
       }
       return null;
+    })
+    .catch(next);
+});
+
+// get a single park, join with report to update park view immediately
+parkRouter.get('/park/:parkId', (request, response, next) => {
+  logger.log(logger.INFO, `Processing a get on /park/${request.params.parkId}`);
+
+  return models.sequelize.query(
+    'SELECT parks.*, "reports" FROM parks LEFT JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" WHERE "pKeyCode"=?;',
+    {
+      replacements: [request.params.parkId],
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((singlePark) => {
+      logger.log(logger.INFO, `Returning ${singlePark[0].fullName}`);
+      return response.json(singlePark[0]);
     })
     .catch(next);
 });

@@ -26,6 +26,6 @@ const createAccountMock = () => {
     });
 };
 
-const removeAccountMock = () => models.account.destroy({ where: {} }).then(console.log('content removed'));
+const removeAccountMock = () => models.account.destroy({ where: {} }).then(() => console.log('content removed'));
 
 export { createAccountMock, removeAccountMock };

@@ -5,13 +5,14 @@ import logger from '../lib/logger';
 import models from '../models';
 
 const campgroundRouter = new Router();
+const Op = models.Sequelize.Op;
 
 campgroundRouter.get('/campgrounds/park/:parkKey', (request, response, next) => {
   logger.log(logger.INFO, `Processing a get on /park/${request.params.parkKey}/campgrounds`);
 
   return models.campground.findAll({
     where: {
-      parkId: request.params.parkKey,
+      parkId: { [Op.eq]: request.params.parkKey },
     },
   })
     .then((campgrounds) => {
@@ -27,7 +28,7 @@ campgroundRouter.get('/campgrounds/:state', (request, response, next) => {
 
   return models.campground.findAll({
     where: {
-      state: request.params.state,
+      state: { [Op.eq]: request.params.state },
     },
   })
     .then((campgrounds) => {
