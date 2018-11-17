@@ -4,6 +4,7 @@ import superagent from 'superagent';
 import { startServer, stopServer } from '../lib/server';
 import { removeMocks } from './lib/state-mock';
 import mockParks from './lib/park-mock';
+import mockCampgrounds from './lib/campground-mock';
 
 const API_URL = `http://localhost:${process.env.PORT}`;
 
@@ -70,49 +71,69 @@ describe('Park Router', () => {
 
   describe('PUT /parks/:stateId', () => {
     test('PUT should update and return parks for one state (with camping and interests)', () => {
-      return superagent.get(`${API_URL}/parks/TN`)
-        .query({ interests: ['hiking', 'camping'] })
-        .then((userQueryObj) => {
-          return superagent.put(`${API_URL}/parks/TN`)
-            .send(userQueryObj.body)
+      const userQueryObj = {
+        parkTypes: [
+          'National Park',
+          'National Monument',
+        ],
+        camping: true,
+      };
+      return mockCampgrounds('AK', 3)
+        .then(() => {
+          return superagent.put(`${API_URL}/parks/AK`)
+            .send(userQueryObj)
             .then((response) => {
               expect(response.status).toEqual(200);
-              expect(response.body[0].camping).toBeTruthy();
-              expect(userQueryObj.body.parkTypes.includes(response.body[0].designation)).toBeTruthy();
+              response.body.forEach((park) => {
+                expect(park.camping).toEqual(true);
+                expect(userQueryObj.parkTypes.includes(park.designation)).toEqual(true);
+              });
             });
         });
     });
 
     test('PUT should update and return parks for state (with interests, without camping)', () => {
-      return superagent.get(`${API_URL}/parks/ME`)
-        .query({ interests: ['hiking'] })
-        .then((userQueryObj) => {
+      const userQueryObj = {
+        parkTypes: [
+          'National Park',
+          'National Monument',
+        ],
+        camping: false,
+      };
+      return mockCampgrounds('ME', 3)
+        .then(() => {
           return superagent.put(`${API_URL}/parks/ME`)
-            .send(userQueryObj.body)
+            .send(userQueryObj)
             .then((response) => {
               expect(response.status).toEqual(200);
-              expect(response.body[0].camping).toBeFalsy();
-              expect(userQueryObj.body.parkTypes.includes(response.body[0].designation)).toBeTruthy();
+              response.body.forEach((park) => {
+                expect(userQueryObj.parkTypes.includes(park.designation)).toEqual(true);
+              });
             });
         });
     });
 
     test('PUT should update and return parks for state (no interests but camping)', () => {
-      return superagent.get(`${API_URL}/parks/ME`)
-        .query({ interests: ['camping'] })
-        .then((userQueryObj) => {
+      const userQueryObj = {
+        parkTypes: [],
+        camping: true,
+      };
+      return mockCampgrounds('ME', 2)
+        .then(() => {
           return superagent.put(`${API_URL}/parks/ME`)
-            .send(userQueryObj.body)
+            .send(userQueryObj)
             .then((response) => {
               expect(response.status).toEqual(200);
-              expect(response.body[0].camping).toBeTruthy();
-              expect(userQueryObj.body.parkTypes).toHaveLength(0);
+              response.body.forEach((park) => {
+                expect(park.camping).toEqual(true);
+              });
+              expect(userQueryObj.parkTypes).toHaveLength(0);
             });
         });
     });
 
     test('PUT should update and return parks for state (no interests or camping)', () => {
-      return superagent.get(`${API_URL}/parks/ME`)
+      return mockCampgrounds('ME', 3)
         .then(() => {
           return superagent.put(`${API_URL}/parks/ME`)
             .then((response) => {

@@ -10,7 +10,7 @@
     </div>
     <div class="panel">
       <h4>{{ total }} locations found.</h4>
-      <p 
+      <p id="campground-button"
         v-if="interests.includes('camping') && parks.length > 0"
         v-on:click="renderCampgrounds(state)"
       >
@@ -22,7 +22,9 @@
             <p><a>{{ park.fullName }}</a></p>
             <img v-bind:src="randomizedImage(park)"/>
           </div>
-          <p>- {{ createReportBlurb(park.reports) }} -</p>
+          <p v-bind:class="park.reports ? 'yes' : 'no'" v-on:click="renderParkReport(park)">
+            - {{ createReportBlurb(park.reports) }} -
+          </p>
         </li>
       </ul>
     </div>
@@ -40,23 +42,29 @@ export default {
   },
   methods: {
     randomizedImage: function (park) {
-        const arr = park.imageUrl.split('\n');
-        arr.pop();
-        const index = Math.round(Math.random() * (arr.length - 1));
-        return arr[index];
-      }, 
+      const arr = park.imageUrl.split('\n');
+      arr.pop();
+      const index = Math.round(Math.random() * (arr.length - 1));
+      return arr[index];
+    }, 
     renderPark: function (park) {
-        return this.$store.dispatch('renderPark', park)
-          .then(() => {
-            this.$router.push(`/park/${park.parkCode}`);
-          })
-      },
+      return this.$store.dispatch('renderPark', park)
+        .then(() => {
+          this.$router.push(`/park/${park.parkCode}`);
+        })
+    },
+    renderParkReport: function(park) {
+      return this.$store.dispatch('renderPark', park)
+        .then(() => {
+          this.$router.push(`/park/${park.parkCode}/report`);
+        });
+    },
     renderCampgrounds: function (state) {
-        return this.$store.dispatch('renderCampgroundsState', state)
-          .then(() => {
-            this.$router.push(`/campgrounds/${state}`);
-          })
-      },
+      return this.$store.dispatch('renderCampgroundsState', state)
+        .then(() => {
+          this.$router.push(`/campgrounds/${state}`);
+        })
+    },
     createReportBlurb: function(reports) {
       return reports ? reports > 1 ? `${reports} reports` : `${reports} report` : 'No reports - submit the first!';
     }
@@ -87,14 +95,25 @@ export default {
   }
 }
 .panel {
+  width: 100%;
   margin-bottom: 5%;
+  #campground-button {
+    width: 20%;
+    margin: 0 auto;
+    color: grey;
+    font-weight: bold;
+  }
+  #campground-button:hover {
+    cursor: pointer;
+    color: #00CB94;
+  }
   ul {
     padding-left: 0;
     display: inline-flex;
     flex-wrap: wrap;
     justify-content: center;
     li {
-      margin: 2% 2% 3% 2%;
+      margin: 3% 1%;
       width: 25%;
       list-style-type: none;
       .park-card {
@@ -114,6 +133,17 @@ export default {
       transform: scale(1.01,1.01);
       cursor: pointer;
     }
+    .yes {
+      font-weight: bold;
+    }
+    .no {
+      color: grey;
+      font-weight: bold;
+    }
+    .no:hover {
+      cursor: pointer;
+      color: #00CB94;
+    } 
   }
 }
 </style>

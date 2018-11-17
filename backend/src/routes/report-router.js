@@ -26,12 +26,13 @@ reportRouter.post('/report', bearerAuthMiddleware, jsonParser, (request, respons
 });
 
 reportRouter.get('/report/profile/:profileId', bearerAuthMiddleware, (request, response, next) => {
-  logger.log(logger.INFO, 'Processing a GET on /report/:profileId');
+  logger.log(logger.INFO, `Processing a GET on /report/${request.params.profileId}`);
 
   return models.report.findAll({
     where: {
       profileId: { [Op.eq]: request.params.profileId },
     },
+    order: [['updatedAt', 'DESC']],
   })
     .then((reports) => {
       logger.log(logger.INFO, `Returning all reports posted by ${request.params.profileId}`);
@@ -41,12 +42,13 @@ reportRouter.get('/report/profile/:profileId', bearerAuthMiddleware, (request, r
 });
 
 reportRouter.get('/report/park/:parkId', (request, response, next) => {
-  logger.log(logger.INFO, 'Processing a GET on /report/:parkId');
+  logger.log(logger.INFO, `Processing a GET on /report/${request.params.parkId}`);
 
   return models.report.findAll({
     where: {
       parkId: { [Op.eq]: request.params.parkId },
     },
+    order: [['updatedAt', 'DESC']],
   }) 
     .then((reports) => {
       logger.log(logger.INFO, `Returning all reports for ${request.params.parkId}`);

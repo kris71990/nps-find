@@ -59,6 +59,14 @@ const parkModule = {
         });
     },
 
+    getSinglePark: (context, pKeyCode) => {
+      const { commit } = context;
+      return superagent.get(`${API_URL}/park/${pKeyCode}`)
+        .then((park) => {
+          return commit('setPark', park.body);
+        });
+    },
+
     renderPark: (context, park) => {
       const { commit } = context;
       return commit('setPark', park);

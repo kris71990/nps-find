@@ -24,6 +24,43 @@
         </p>
         <p v-else>No camping available.</p> 
       </div>
+      <h3>User Reports...</h3>
+      <div class="report-box">
+        <div v-if="computedPark.reports" >
+          <div v-if="reportView">
+            <ReportView
+              v-bind:createReportLine="createReportLineParkTable"
+              v-bind:createDate="createDate"
+              v-bind:reports="computedReports"
+            />
+            <div class="report-buttons"><p @click="reportView = !reportView">Close</p></div>
+          </div>
+          <div v-else>
+            <p>{{ createReportLinePark(computedPark.reports, computedPark.name) }}</p>
+            <div class="report-buttons">
+              <p @click="getReports">Click to view</p>
+              <router-link v-if="loggedIn" :to="{ path: `/park/${computedPark.parkCode}/report` }">Submit a report</router-link>
+              <router-link v-else to="/">Login/signup to contribute</router-link>
+            </div>
+            <ReportForm 
+              v-if="this.$route.path === `/park/${computedPark.parkCode}/report`"
+              v-bind:onComplete="submitReport" 
+              v-bind:park="computedPark"
+              v-bind:profile="computedProfile"
+            />
+          </div>
+        </div>
+        <div v-else>
+          <p @click="$router.push(`/park/${computedPark.parkCode}/report`)">No user reports - <span>Submit the first!</span></p>
+          <ReportForm 
+            v-if="this.$route.path === `/park/${computedPark.parkCode}/report`"
+            v-bind:onComplete="submitReport" 
+            v-bind:park="computedPark"
+            v-bind:profile="computedProfile"
+          />
+        </div>
+      </div>
+      <h3>More...</h3>
       <p>View page on <a :href=computedPark.url target="_blank">National Park Service</a></p>
     </div>
   </div>
@@ -34,6 +71,8 @@ import { mapState } from 'vuex';
 import ImageCarousel from './image-carousel.vue';
 import MapView from './park-view-map.vue';
 import CampgroundOptions from './campground-options.vue';
+import ReportForm from './report-form.vue';
+import ReportView from './report-view.vue';
 
 export default {
   name: 'ParkView',
@@ -41,9 +80,19 @@ export default {
     ImageCarousel,
     MapView,
     CampgroundOptions,
+    ReportForm,
+    ReportView,
+  },
+  data() {
+    return {
+      reportView: false,
+    }
   },
   computed: mapState({
+    loggedIn: state => state.authModule.loggedIn,
     computedPark: state => state.parkModule.singlePark,
+    computedProfile: state => state.profileModule.profile,
+    computedReports: state => state.reportModule.singleParkReports,
   }),
   methods: {
     getCampgrounds: function() {
@@ -52,7 +101,42 @@ export default {
         .then(() => {
           this.$router.push(`/park/${parkCode}/campgrounds`);
         });
-    }
+    },
+    submitReport(event, a) {
+      const { parkCode, pKeyCode } = this.computedPark;
+      return this.$store.dispatch('postReportReq', event)
+        .then(() => {
+          return this.$store.dispatch('getSinglePark', pKeyCode)
+            .then(() => {
+              return this.$router.push(`/park/${parkCode}`);
+            })
+        });
+    },
+    getReports(event, a) {
+      const { parkCode, pKeyCode } = this.computedPark;
+      return this.$store.dispatch('fetchReportReq', pKeyCode)
+        .then(() => {
+          this.reportView = !this.reportView;
+          return this.$router.push(`/park/${parkCode}`)
+        })
+    },
+    createReportLinePark(reports, name) {
+      return reports > 1 ? `${reports} submitted for ${name}` : `${reports} submitted for ${name}`;
+    },
+    createReportLineParkTable(reports) {
+      const unique = new Map();
+      reports.filter((report) => {
+        if (!unique[report.profileId]) unique.set(report.profileId, 1);
+      })
+      let userFormat, reportFormat;
+      unique.size > 1 ? userFormat = 'users' : userFormat = 'user';
+      reports.length > 1 ? reportFormat = 'reports have' : reportFormat = 'report has';
+      return `Report Summary: ${reports.length} ${reportFormat} been submitted by ${unique.size} ${userFormat}.`
+    },
+    createDate(date) {
+      const dateReadable = new Date(date);
+      return `${dateReadable.toLocaleString()}`;
+    },
   }
 }
 </script>
@@ -84,6 +168,26 @@ export default {
     span:hover {
       cursor: pointer;
       color: #00CB94;
+    }
+  }
+  .report-box {
+    .report-buttons {
+      a, p {
+        background-color: #96AFA7;
+        border-radius: 5px;
+        border: 2px solid #4A8571;
+        padding: 0% 1.5%;
+        text-decoration: none;
+        color: black;
+        display: inline-block;
+      }
+      p:hover {
+        cursor: pointer;
+        border: 2px solid #E7CF03;
+      }
+      a:hover {
+        border: 2px solid #E7CF03;
+      }
     }
   }
 }

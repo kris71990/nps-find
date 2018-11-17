@@ -7,8 +7,13 @@ const Profile = (sequelize, DataTypes) => sequelize.define('profile', {
   },
   age: {
     type: DataTypes.INTEGER,
+    allowNull: false,
   },
   homeState: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  interests: {
     type: DataTypes.STRING,
   },
   residentialLocaleType: {

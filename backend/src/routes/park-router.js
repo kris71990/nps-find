@@ -93,6 +93,7 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
       }
 
       const { parkTypes, camping } = request.body;
+      /* camping interest of false still returns parks that have camping, as there is much more to do besides camp. Camping interest of true only returns parks with camping options. camping = false merely implies a lack of interest, not a park requirement */
       
       if (parkTypes.length > 0 && !camping) {
         const desigParams = parkTypes.map(() => '?');
@@ -142,6 +143,24 @@ parkRouter.put('/parks/:state', jsonParser, (request, response, next) => {
           });
       }
       return null;
+    })
+    .catch(next);
+});
+
+// get a single park, join with report to update park view immediately
+parkRouter.get('/park/:parkId', (request, response, next) => {
+  logger.log(logger.INFO, `Processing a get on /park/${request.params.parkId}`);
+
+  return models.sequelize.query(
+    'SELECT parks.*, "reports" FROM parks LEFT JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" WHERE "pKeyCode"=?;',
+    {
+      replacements: [request.params.parkId],
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((singlePark) => {
+      logger.log(logger.INFO, `Returning ${singlePark[0].fullName}`);
+      return response.json(singlePark[0]);
     })
     .catch(next);
 });
