@@ -103,10 +103,13 @@ export default {
         });
     },
     submitReport(event, a) {
-      const { parkCode } = this.computedPark;
+      const { parkCode, pKeyCode } = this.computedPark;
       return this.$store.dispatch('postReportReq', event)
         .then(() => {
-          return this.$router.push(`/park/${parkCode}`);
+          return this.$store.dispatch('getSinglePark', pKeyCode)
+            .then(() => {
+              return this.$router.push(`/park/${parkCode}`);
+            })
         });
     },
     getReports(event, a) {

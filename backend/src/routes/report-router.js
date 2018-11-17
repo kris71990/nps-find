@@ -26,7 +26,7 @@ reportRouter.post('/report', bearerAuthMiddleware, jsonParser, (request, respons
 });
 
 reportRouter.get('/report/profile/:profileId', bearerAuthMiddleware, (request, response, next) => {
-  logger.log(logger.INFO, 'Processing a GET on /report/:profileId');
+  logger.log(logger.INFO, `Processing a GET on /report/${request.params.profileId}`);
 
   return models.report.findAll({
     where: {
@@ -42,7 +42,7 @@ reportRouter.get('/report/profile/:profileId', bearerAuthMiddleware, (request, r
 });
 
 reportRouter.get('/report/park/:parkId', (request, response, next) => {
-  logger.log(logger.INFO, 'Processing a GET on /report/:parkId');
+  logger.log(logger.INFO, `Processing a GET on /report/${request.params.parkId}`);
 
   return models.report.findAll({
     where: {
