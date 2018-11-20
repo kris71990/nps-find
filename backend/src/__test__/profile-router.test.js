@@ -22,6 +22,10 @@ PUT /profile/:id - 400 - fails if profile id is incorrect, missing, or if requir
 GET /profile/me - 200 - success
 GET /profile/me - 401 - fails if missing account authenticatio token
 
+DELETE /profile/:id - 200 - success
+DELETE /profile/:id - 401 fails if missing account auth token
+DELETE /profile/:id - 404 fails if incorrect id
+
 */
 
 describe('/profile', () => {
@@ -70,6 +74,20 @@ describe('/profile', () => {
 
     test('POST /profile without token returns 401', () => {
       return superagent.post(`${API_URL}/profile`)
+        .send({
+          firstName: 'kris',
+          age: 28,
+          homeState: 'WA',
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(401);
+          expect(response.body).toBeFalsy();
+        });
+    });
+
+    test('POST /profile with malformed token returns 401', () => {
+      return superagent.post(`${API_URL}/profile`)
+        .set('Authorization', 'Bearer ')
         .send({
           firstName: 'kris',
           age: 28,
@@ -139,6 +157,18 @@ describe('/profile', () => {
           expect(response.status).toEqual(401);
         });
     });
+
+    test('GET /profile/me when no profile exists returns null (200)', () => {
+      return createAccountMock()
+        .then((accountMock) => {
+          return superagent.get(`${API_URL}/profile/me`)
+            .set('Authorization', `Bearer ${accountMock.token}`);
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body).toBeNull();
+        });
+    });
   });
 
   describe('PUT /profile/:id', () => {
@@ -150,7 +180,7 @@ describe('/profile', () => {
           return superagent.put(`${API_URL}/profile/${profileMock.profile.accountId}`)
             .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`)
             .send({
-              age: 30,
+              age: '30',
               homeState: 'CA',
             });
         })
@@ -222,6 +252,40 @@ describe('/profile', () => {
         })
         .catch((response) => {
           expect(response.status).toEqual(400);
+        });
+    });
+  });
+
+  describe('DELETE /profile/:id', () => {
+    test('DELETE /profile/:id with id removes profile', () => {
+      return createProfileMock()
+        .then((profileMock) => {
+          return superagent.delete(`${API_URL}/profile/${profileMock.profile.id}`)
+            .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`);
+        })
+        .then((response) => {
+          expect(response.status).toEqual(204);
+        });
+    });
+
+    test('DELETE /profile/:id with wrong id returns 404', () => {
+      return createProfileMock()
+        .then((profileMock) => {
+          return superagent.delete(`${API_URL}/profile/1234`)
+            .set('Authorization', `Bearer ${profileMock.accountSetMock.token}`);
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(404);
+        });
+    });
+
+    test('DELETE /profile/:id without token returns 401', () => {
+      return createProfileMock()
+        .then((profileMock) => {
+          return superagent.delete(`${API_URL}/profile/${profileMock.profile.id}`);
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(401);
         });
     });
   });
