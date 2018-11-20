@@ -40,14 +40,30 @@ From the root of the backend directory, start the server with `npm run start`.
 
 **Database Models**
 
-There are three models used to structure data for the application.
+Several models are used to structure data for the application.
 
-`State` --> `Park` --> `Campground`
+`Account` -- (1:1) --> `Profile` -- (1:many) --> `Report`
 
-Models hold important relationships with eachother, which makes a relational database ideal for managing the storage and use of such data. The top level model is `State`. One state has a one-to-many relationship with a series of parks, and a single `Park` has a one-to-many relationship with some number of `Campgrounds`.
+`State` -- (1:many) --> `Park` -- (1:many) --> `Campground`
+
+Models hold important relationships with eachother, which makes a relational database ideal for managing the storage and use of such data. 
+
+Two main model branches are used. The `Account`, `Profile`, and `Report` models govern user interaction with the application. However, a user is not required to be logged in to access basic functionality. The second model branch exists to serve base functionality - this includes the `State`, `Park`, and `Campground` models.
 
 
 **Routing and Functionality**
+
+*Account Router*
+
+The account router handles account creation and login. All account and profile data are secured through the use of encrypted access tokens (see [JWT](https://jwt.io/)). 
+
+*Profile Router*
+
+The profile router handles all profile related functions. The data that users supply in their profiles is used to reccommend parks, both to the root user and potentially to other non-logged-in users. Profile data of course, is completely secure to each individual user.
+
+*Report Router*
+
+The report router is where logged-in users can contribute to the functionality of the rest of the app. User reports are an important way not only to inform other users of personal experiences, but also to enhance the performance of the app itself and the decisions that it makes. 
 
 *State Router*
 
@@ -106,6 +122,7 @@ The campground router deals with the retrieval of campground information. Campgr
 
 *Unit Testing*
 
-All functionality is tested using the Jest library. 
+All functionality is tested using the Jest library.
 
-To run unit tests: `npm run test`
+1. Create a `.env` file in `src/__test__/lib` that contains all variables found in the main `.env` file (NPS API KEY required)
+2. To run unit tests: `npm run test`
