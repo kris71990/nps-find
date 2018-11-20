@@ -12,7 +12,6 @@ const profileRouter = new Router();
 const Op = models.Sequelize.Op;
 
 profileRouter.post('/profile', bearerAuthMiddleware, jsonParser, (request, response, next) => {
-  if (!request.account) next(new HttpError(400, 'AUTH - invalid request'));
   logger.log(logger.INFO, 'Processing POST on /profile');
 
   return models.profile.create({
@@ -69,10 +68,6 @@ profileRouter.put('/profile/:id', bearerAuthMiddleware, jsonParser, (request, re
 
 profileRouter.delete('/profile/:id', bearerAuthMiddleware, (request, response, next) => {
   logger.log(logger.INFO, 'Processing DELETE on /profile/:id');
-
-  if (!request.params.id) { 
-    return next(new HttpError(404, 'Profile not found'));
-  }
 
   return models.profile.destroy({ where: { id: { [Op.eq]: request.params.id } } })
     .then((profile) => {

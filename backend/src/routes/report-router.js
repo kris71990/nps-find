@@ -2,7 +2,7 @@
 
 import { Router } from 'express';
 import { json } from 'body-parser';
-// import HttpError from 'http-errors';
+import HttpError from 'http-errors';
 
 import logger from '../lib/logger';
 import models from '../models/index';
@@ -55,6 +55,17 @@ reportRouter.get('/report/park/:parkId', (request, response, next) => {
       return response.json(reports);
     })
     .catch(next);
+});
+
+reportRouter.delete('/report/:id', bearerAuthMiddleware, (request, response, next) => {
+  logger.log(logger.INFO, `Processing a DELETE on /report/${request.params.id}`);
+
+  return models.report.destroy({ where: { id: { [Op.eq]: request.params.id } } })
+    .then((report) => {
+      if (!report) next(new HttpError(404, 'report not found'));
+      logger.log(logger.INFO, 'Report deleted');
+      return response.sendStatus(204);
+    });
 });
 
 export default reportRouter;
