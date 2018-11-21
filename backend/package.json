@@ -6,6 +6,7 @@
   "scripts": {
     "test": "eslint . && jest --coverage --runInBand --forceExit",
     "test-nolint": "jest --coverage --runInBand",
+    "test-noexit": "eslint . && jest --coverage --runInBand",
     "build": "babel src -d build",
     "start": "node index.js"
   },

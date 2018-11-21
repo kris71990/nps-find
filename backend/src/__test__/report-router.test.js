@@ -193,4 +193,38 @@ describe('Report Router', () => {
         });
     });
   });
+
+  describe('DELETE /report/:id', () => {
+    test('DELETE /report/:id with id removes profile', () => {
+      return createReports(3)
+        .then((reportMock) => {
+          return superagent.delete(`${API_URL}/report/${reportMock.reports[0].id}`)
+            .set('Authorization', `Bearer ${reportMock.profile.accountSetMock.token}`);
+        })
+        .then((response) => {
+          expect(response.status).toEqual(204);
+        });
+    });
+
+    test('DELETE /report/:id with wrong id returns 404', () => {
+      return createReports(3)
+        .then((reportMock) => {
+          return superagent.delete(`${API_URL}/report/1234`)
+            .set('Authorization', `Bearer ${reportMock.profile.accountSetMock.token}`);
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(404);
+        });
+    });
+
+    test('DELETE /report/:id without token returns 401', () => {
+      return createReports(2)
+        .then((reportMock) => {
+          return superagent.delete(`${API_URL}/report/${reportMock.reports[0].id}`);
+        })
+        .catch((response) => {
+          expect(response.status).toEqual(401);
+        });
+    });
+  });
 });

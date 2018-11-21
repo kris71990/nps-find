@@ -17,6 +17,7 @@ const createReports = (total) => {
           const arr = [];
           for (let i = 0; i < total; i++) {
             arr.push({
+              id: faker.random.number(),
               parkId: parks[0].pKeyCode,
               profileId: profileMock.profile.id,
               parkName: parks[0].fullName,

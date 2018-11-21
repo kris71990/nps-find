@@ -2,6 +2,7 @@
 
 import faker from 'faker';
 import models from '../../models/index';
+import { mockState } from './state-mock';
 
 // creates state and random number of parks per state
 const mockParks = (stateCode, total) => {
@@ -11,10 +12,7 @@ const mockParks = (stateCode, total) => {
     'Other',
     'Other',
   ];
-  return models.state.create({
-    stateId: stateCode,
-    total,
-  })
+  return mockState(stateCode, total)
     .then(() => {
       const arr = [];
       for (let i = 0; i < total; i++) {
