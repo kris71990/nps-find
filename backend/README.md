@@ -10,7 +10,7 @@
 
 The backend is built with **Node** and **Express**, and uses a **SQL** relational database managed by **PostgreSQL**. It also utilizes the **Sequelize** library, which allows seamless integration with the REST API. 
 
-When necessary, the API retrieves data from the National Park Service API(https://www.nps.gov/subjects/developer/index.htm).
+When necessary, the API utilizes data from the National Park Service API(https://www.nps.gov/subjects/developer/index.htm).
 
 ## Getting Started
 
@@ -57,17 +57,75 @@ Two main model branches are used. The `Account`, `Profile`, and `Report` models 
 
 The account router handles account creation and login. All account and profile data are secured through the use of encrypted access tokens (see [JWT](https://jwt.io/)). 
 
+1. POST /signup
+  - Creates a user account
+  - Request requires a username, password, and email
+
+A valid signup request will hash the password and store this hash for login purposes. It will then generate a token seed and sign this seed with a secret key to generate an authentication token, which is then sent back to the user in the form of a cookie.
+
+1. GET /login
+  - Logs in a user account
+  - Request requires username and password
+
+A valid login request will hash the password and compare this hash with the stored password hash, logging in the user with a fresh authentication token if the password is correct.
+
+
 *Profile Router*
 
-The profile router handles all profile related functions. The data that users supply in their profiles is used to reccommend parks, both to the root user and potentially to other non-logged-in users. Profile data of course, is completely secure to each individual user.
+The profile router handles all profile related functions. The data that users supply in their profiles is used to reccommend parks, both to the root user and potentially to other non-logged-in users. Profile data, of course, is completely secure to each individual user.
+
+1. POST /profile
+  - Creates a profile
+  - Fields
+    - Name (required)
+    - Age (required)
+    - Home State (required, in the form of an abbreviation, e.g. 'WA')
+    - Interests
+    - Residential Locale Type
+    - Favored Climate
+    - Favored Landscape 
+
+A valid request will create a profile for the user.
+
+2. GET /profile/me
+  - Returns a user's profile, if it exists
+  - Also returns all reports the user has submitted
+
+3. PUT /profile/:id
+  - Allows the user to update any of the fields on their profile and returns the updated profile
+
+4. DELETE /profile/:id
+  - Allows the user to delete their profile
+
 
 *Report Router*
 
 The report router is where logged-in users can contribute to the functionality of the rest of the app. User reports are an important way not only to inform other users of personal experiences, but also to enhance the performance of the app itself and the decisions that it makes. 
 
+1. POST /report
+  - Submits a report for a specific user for a specific park
+  - Fields
+    - Park Name (required)
+    - Rating (required - how was your experience? (1-5 system, 5 is best))
+    - Length of Stay (required - how long did you stay in the park (in hours)?)
+    - Activities (required - what did you do while in the park?)
+    - Wildlife (not required - what wildlife did you see during your stay?)
+
+A submitted report will hold a reference to the user's profile and to the park for which it was submitted. Only users with an account can submit a report.
+
+2. GET /report/profile/:profileId
+  - Retrieves all reports submitted by the specified profile
+
+3. GET /report/park/:parkId
+  - Retrieves all reports submitted for the specified park
+
+4. DELETE /report/:id
+  - Allows a user to delete a specific report
+
+
 *State Router*
 
-The state router handles two routes that respond with data necessary to render a series of charts to the user, giving a visual representation of state and park statistics.
+The state router handles two routes that respond with data necessary to render a series of charts to the user, giving a visual representation of state and park statistics. All routes public.
 
 1. GET /states
   - Returns an array of objects, each object representing a state 
@@ -90,7 +148,7 @@ This route is primarily used for chart rendering on the front-end. For specific 
 
 *Park Router*
 
-The park router deals with the primary functionality of the app, as it relates to the user's ability to discover parks of interest. 
+The park router deals with the primary functionality of the app, as it relates to the user's ability to discover parks of interest. All routes public.
 
 1. GET /parks/:state
   - Takes in a query object of user preferences for specific or nonspecific types of parks in a particular state. If the data needed does not exist in the database, it is fetched from the external API and saved to the database to minimize dependence on external data and maximize performance. 
@@ -102,12 +160,17 @@ The park router deals with the primary functionality of the app, as it relates t
 2. PUT /parks/:state
   - All functionality could be handled in the above endpoint, but a user request also triggers an update request to data in the `Park` table to improve handling of camping related requests. 
   - This route accepts the user query object returned from the above route and, after all data is updated, returns an array of parks to satisfy the user's preferences.
+  - Each park in the response also includes a quick reference to the number of user reports associated with it, via a join with the `Report` table
   - Data returned depends entirely on the user query object
+
+3. GET /park/:parkId
+  - Retrieves a single existing park from the database
+  - As above, this response also includes a quick reference to the number of user reports associated with it, via a join with the `Report` table
 
 
 *Campground Router*
 
-The campground router deals with the retrieval of campground information. Campground data is procured and handled in the user query process detailed above in the *Park Router*.
+The campground router deals with the retrieval of campground information. Campground data is procured and handled in the user query process detailed above in the *Park Router*. All routes public.
 
 1. GET /campgrounds/parks/:parkKey
   - Returns an array of campgrounds for a specific park
