@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Landing from '../components/landing.vue';
+import CommonReturn from '../components/common-return.vue';
 import Dashboard from '../components/dashboard.vue';
 import StateRankings from '../components/state-rankings.vue';
 import ParkView from '../components/park-view.vue';
@@ -30,6 +31,11 @@ export default new Router({
       path: '/profile',
       name: 'ProfileView',
       component: ProfileView,
+    },
+    {
+      path: '/search',
+      name: 'CommonReturn',
+      component: CommonReturn,
     },
     {
       path: '/dashboard',

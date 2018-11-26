@@ -46,7 +46,7 @@ export default {
       return this.$store.dispatch('loginReq', event)
         .then(() => {
           this.$store.dispatch('fetchProfileReq');
-          return this.$router.push('/');
+          return this.$router.push('/dashboard');
         })
     },
     handleSignup(event) {
@@ -61,7 +61,7 @@ export default {
       this.interests = event.interests;
       return this.$store.dispatch('foundParks', { state: this.state, stateFull: this.stateFull, interests: this.interests })
         .then(() => {
-          this.$router.push('/dashboard');
+          this.$router.push('/');
         });
     },
     getStateList(event, a, b) {
