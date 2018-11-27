@@ -6,7 +6,7 @@
         <ul>
           <li v-for="(state, index) in computedStateList" :key="state.stateId">
             {{ index + 1 }}.
-            {{ fullStateNames[state.stateId] }} - 
+            {{ fullStateNames[state.stateId].fullName }} - 
             {{ state.total }}
           </li>
         </ul>
@@ -33,7 +33,7 @@
 import { mapState } from 'vuex';
 import StateChart from './state-chart.vue';
 import StateMap from './state-map.vue';
-import { stateAbbreviations } from '../utils/states';
+import { stateData } from '../utils/states';
 
 export default {
   name: 'StateRankings',
@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-      fullStateNames: stateAbbreviations,
+      fullStateNames: stateData,
       chartRendered: false,
       mapRendered: false,
     }

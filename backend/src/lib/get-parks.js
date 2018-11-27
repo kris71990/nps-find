@@ -6,7 +6,7 @@ import logger from './logger';
 import models from '../models';
 import getCampgrounds from './get-campgrounds';
 
-const getParks = (stateSelected) => {
+const getParks = (stateSelected, stateRegion) => {
   logger.log(logger.INFO, `Retrieving new data from API for ${stateSelected}`);
   
   const url = `https://api.nps.gov/api/v1/parks?stateCode=${stateSelected}&fields=images`;
@@ -22,6 +22,7 @@ const getParks = (stateSelected) => {
       return models.state.create({
         stateId: stateSelected,
         total: total.length,
+        region: stateRegion,
       })
         .then((state) => {
           logger.log(logger.INFO, `Inserting parks in ${state.stateId} into database`);

@@ -1,13 +1,18 @@
 <template>
   <div>
-    <h1>Search by...</h1>
-    <div class="search-buttons">
-      <p>Geographic Region</p>
-      <p v-if="computedProfile.favoredClimate">Climate</p>
-      <p v-if="computedProfile.residentialLocaleType">Environment</p>
-      <p v-if="computedProfile.favoredLandscape">Landscape</p>
-      <p v-if="computedProfile.interests">Interests</p>
-    </div>  
+    <div v-if="computedProfile">
+      <h1>Search by...</h1>
+      <div class="search-buttons">
+        <p>Geographic Region</p>
+        <p v-if="computedProfile.favoredClimate">Climate</p>
+        <p v-if="computedProfile.residentialLocaleType">Environment</p>
+        <p v-if="computedProfile.favoredLandscape">Landscape</p>
+        <p v-if="computedProfile.interests">Interests</p>
+      </div>  
+    </div>
+    <div v-else>
+      <router-link to="/profile">Create a profile</router-link>
+    </div>
   </div>
 </template>
 

@@ -6,7 +6,7 @@ import HttpError from 'http-errors';
 import logger from '../lib/logger';
 import models from '../models';
 
-import { stateAbbreviations } from '../lib/states';
+import { stateData } from '../lib/states';
 import getData from '../lib/get-parks';
 import customizeParks from '../lib/customize-parks';
 
@@ -16,7 +16,7 @@ const Op = models.Sequelize.Op;
 
 // retrieve initial data, either from database or API
 parkRouter.get('/parks/:state', (request, response, next) => {
-  if (!stateAbbreviations[request.params.state]) return next(new HttpError(400, 'Bad request'));
+  if (!stateData[request.params.state]) return next(new HttpError(400, 'Bad request'));
   logger.log(logger.INFO, `Processing a get for /parks/${request.params.state}...`);
 
   let parkTypes = null;
@@ -37,7 +37,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
       }
 
       // if it doesn't, call this function to get data from the api, then return status
-      return getData(request.params.state)
+      return getData(request.params.state, stateData[request.params.state].region)
         .then(() => {
           return response.json(parkTypes);
         })
