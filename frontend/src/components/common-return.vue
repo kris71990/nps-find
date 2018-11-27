@@ -1,7 +1,7 @@
 <template>
   <div id="search-results" >
     <h1>{{ computedState }}</h1>
-    <div v-if="computedInterests.length > 0">
+    <div v-if="loggedIn || computedInterests.length > 0">
       <ParkPanel :parks="computedParks" :interests="computedInterests" :total="computedTotal" :state="computedStateAbbrev"/>
     </div>
     <div v-else id="all-parks">
@@ -38,6 +38,7 @@ export default {
   },
   computed:
     mapState({
+      loggedIn: state => state.authModule.loggedIn,
       computedParks: state => state.parkModule.parks,
       computedState: state => state.parkModule.stateFull,
       computedStateAbbrev: state => state.parkModule.stateAbbrev,

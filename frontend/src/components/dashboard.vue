@@ -3,7 +3,7 @@
     <div v-if="computedProfile">
       <h1>Search by...</h1>
       <div class="search-buttons">
-        <p>Geographic Region</p>
+        <p v-on:click="handleSearch">Geographic Region</p>
         <p v-if="computedProfile.favoredClimate">Climate</p>
         <p v-if="computedProfile.residentialLocaleType">Environment</p>
         <p v-if="computedProfile.favoredLandscape">Landscape</p>
@@ -18,12 +18,34 @@
 
 <script>
 import { mapState } from 'vuex';
+import { stateData } from '../utils/states';
 
 export default {
   name: 'Dashboard',
   computed: mapState({
     computedProfile: state => state.profileModule.profile,
   }),
+  methods: {
+    handleSearch(event, a) {
+      const region = stateData[this.computedProfile.homeState].region;
+      switch (event.target.textContent) {
+        case 'Geographic Region':
+          return this.$store.dispatch('getParksRegion', { 
+            region, 
+            state: this.computedProfile.homeState,
+          })
+            .then(() => {
+              return this.$router.push(`/search/geographicregion`);
+            });
+        default:
+          return this.$router.push('/dashboard');
+      }
+      // return this.$store.dispatch('foundParks', { state: this.state, stateFull: this.stateFull, interests: this.interests })
+      //   .then(() => {
+      //     this.$router.push(`/search?state=${this.state}&interests=${this.interests}`);
+      //   });
+    },
+  }
 }
 </script>
 

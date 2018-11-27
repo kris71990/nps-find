@@ -165,4 +165,22 @@ parkRouter.get('/park/:parkId', (request, response, next) => {
     .catch(next);
 });
 
+// get all parks in a geographic region
+parkRouter.get('/parks/region/:regionId', (request, response, next) => {
+  logger.log(logger.INFO, `Processing a get on /park/region/${request.params.regionId}`);
+
+  return models.sequelize.query(
+    'SELECT parks.*, states.region FROM parks LEFT JOIN states ON "stateCode"="stateId" WHERE states.region=?',
+    {
+      replacements: [request.params.regionId],
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((parks) => {
+      logger.log(logger.INFO, `Returning ${parks.length} in ${request.params.regionId}`);
+      return response.json(parks);
+    })
+    .catch(next);
+});
+
 export default parkRouter;

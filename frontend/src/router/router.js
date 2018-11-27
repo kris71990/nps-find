@@ -33,7 +33,7 @@ export default new Router({
       component: ProfileView,
     },
     {
-      path: '/search',
+      path: '/search/geographicregion',
       name: 'CommonReturn',
       component: CommonReturn,
     },
