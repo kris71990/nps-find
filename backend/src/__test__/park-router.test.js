@@ -24,7 +24,7 @@ describe('Park Router', () => {
 
   describe('GET /parks/:stateId', () => {
     test('GET from /parks/:stateId should return preferences object and enter state and park data in to db', () => {
-      return mockParks('NH', 5)
+      return mockParks('NH', 5, 'NE')
         .then(() => {
           return superagent.get(`${API_URL}/parks/NH`)
             .query({ interests: ['hiking', 'camping'] })
@@ -39,7 +39,7 @@ describe('Park Router', () => {
     });
   
     test('GET from /parks/:stateId should return null if no preferences', () => {
-      return mockParks('NH', 2)
+      return mockParks('NH', 2, 'NE')
         .then(() => {
           return superagent.get(`${API_URL}/parks/NH`)
             .then((response) => {

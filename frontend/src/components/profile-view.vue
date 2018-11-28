@@ -6,9 +6,9 @@
         v-bind:handleClose="handleClose"/>
       </div>
       <div v-else>
-        <h2>
-          {{ profile.firstName }} --- {{ profile.age }} --- 
-          <span>{{ states[profile.homeState] }}</span>
+        <h1>Welcome {{ profile.firstName }}.</h1>
+        <h2>{{ profile.age }}, 
+          <span>{{ states[profile.homeState].fullName }} ({{ states[profile.homeState].region }})</span>
         </h2>
         <div 
           v-if="profile.interests || 
@@ -50,7 +50,7 @@
 import { mapState } from 'vuex';
 import ProfileForm from './profile-form.vue';
 import ReportView from './report-view.vue';
-import { stateAbbreviations } from '../utils/states';
+import { stateData } from '../utils/states';
 
 export default {
   name: 'ProfileView',
@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       editing: false,
-      states: stateAbbreviations,
+      states: stateData,
     }
   },
   computed: mapState({

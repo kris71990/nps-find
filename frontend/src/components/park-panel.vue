@@ -1,6 +1,6 @@
 <template>
   <div class="park-panel">
-    <div class="interests">
+    <div v-if="interests.length > 0" class="interests">
       <h4>You are interested in...</h4>
       <ul>
         <li v-for="interest in interests" :key="interest">
@@ -17,10 +17,10 @@
       Or see all campgrounds in the state.
       </p>
       <ul>
-        <li v-for="park in parks" :key="park.parkCode">
+        <li v-for="park in parks" :key="park.pKeyCode">
           <div v-on:click="renderPark(park)" class="park-card">
             <p><a>{{ park.fullName }}</a></p>
-            <img v-bind:src="randomizedImage(park)"/>
+            <img v-if="park.imageUrl" v-bind:src="randomizedImage(park)"/>
           </div>
           <p v-bind:class="park.reports ? 'yes' : 'no'" v-on:click="renderParkReport(park)">
             - {{ createReportBlurb(park.reports) }} -

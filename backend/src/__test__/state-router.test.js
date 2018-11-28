@@ -22,8 +22,8 @@ describe('State Router - /states', () => {
   // for park list view
   describe('/states', () => {
     test('GET /states should return object of states in descending order of total parks, with types object', () => {
-      return mockParks('MI', 4)
-        .then(() => mockParks('NM', 2))
+      return mockParks('MI', 4, 'N')
+        .then(() => mockParks('NM', 2, 'W'))
         .then(() => {
           return superagent.get(`${API_URL}/states`)
             .then((response) => {
@@ -52,8 +52,8 @@ describe('State Router - /states', () => {
   // for array of all park types
   describe('/states/types', () => {
     test('GET /states/types should return array of all park types', () => {
-      return mockParks('MI', 4)
-        .then(() => mockParks('UT', 2))
+      return mockParks('MI', 4, 'N')
+        .then(() => mockParks('UT', 2, 'W'))
         .then(() => {
           return superagent.get(`${API_URL}/states/types`)
             .then((response) => {

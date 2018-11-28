@@ -5,14 +5,14 @@ import models from '../../models/index';
 import { mockState } from './state-mock';
 
 // creates state and random number of parks per state
-const mockParks = (stateCode, total) => {
+const mockParks = (stateCode, total, region) => {
   const designationTypes = [
     'National Monument', 
     'National Park', 
     'Other',
     'Other',
   ];
-  return mockState(stateCode, total)
+  return mockState(stateCode, total, region)
     .then(() => {
       const arr = [];
       for (let i = 0; i < total; i++) {
