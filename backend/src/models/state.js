@@ -11,6 +11,10 @@ const State = (sequelize, DataTypes) => sequelize.define('state', {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
+  region: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 export default State;

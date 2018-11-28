@@ -9,7 +9,12 @@
       <router-link to="/"><h1 v-on:click='resetDefault'>Explore American Public Lands</h1></router-link>
       <nav>
         <ul>
-          <router-link to="/"><li v-on:click='resetDefault'>Home</li></router-link>
+          <router-link to="/">
+            <li v-on:click='resetDefault'>Home</li>
+          </router-link>
+          <router-link v-if="this.loggedIn" to="/dashboard">
+            <li>Dashboard</li>
+          </router-link>
           <router-link v-if="this.loggedIn" to="/profile">
             <li>Profile</li>
           </router-link>

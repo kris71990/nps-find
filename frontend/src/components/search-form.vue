@@ -11,8 +11,8 @@
               value=stateSelection
             >
               <option value="empty">Select State</option>
-              <option v-for="state in Object.keys(stateAbbreviations)" v-bind:key=state v-bind:value=state>
-                {{ stateAbbreviations[state] }}
+              <option v-for="state in Object.keys(stateData)" v-bind:key=state v-bind:value=state>
+                {{ stateData[state].fullName }}
               </option>
             </select>
           </div>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { stateAbbreviations } from '../utils/states';
+import { stateData } from '../utils/states';
 
 export default {
   name: 'SearchForm',
@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      stateAbbreviations,
+      stateData,
       stateSelection: null,
       interests: [],
     }
@@ -65,7 +65,7 @@ export default {
     handleSubmit(e) {
       e.preventDefault();
       return this.handleSearch({ 
-        state: this.stateSelection, stateFull: stateAbbreviations[this.stateSelection], interests: this.interests })
+        state: this.stateSelection, stateFull: stateData[this.stateSelection].fullName, interests: this.interests })
         .then(() => this.stateSelection = null);
     },
   }

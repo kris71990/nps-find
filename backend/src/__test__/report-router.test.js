@@ -25,13 +25,13 @@ GET /report/:parkId - 200 - returns all reports for specific park, if any exist
 
 describe('Report Router', () => {
   beforeAll(startServer);
-  afterAll(stopServer);
   afterEach(removeMocks);
   afterEach(removeProfileMock);
+  afterAll(stopServer);
 
   describe('POST /report', () => {
     test('POST /report should post and return a park report', () => {
-      return mockParks('AZ', 3)
+      return mockParks('AZ', 3, 'W')
         .then((parks) => {
           return createProfileMock()
             .then((profileMock) => {
@@ -75,7 +75,7 @@ describe('Report Router', () => {
     });
 
     test('POST /report with missing profileId will return bad request', () => {
-      return mockParks('AZ', 3)
+      return mockParks('AZ', 3, 'W')
         .then((parks) => {
           return createProfileMock()
             .then((profileMock) => {
@@ -96,7 +96,7 @@ describe('Report Router', () => {
     });
 
     test('POST /report with missing required data returns bad request', () => {
-      return mockParks('AZ', 3)
+      return mockParks('AZ', 3, 'W')
         .then((parks) => {
           return createProfileMock()
             .then((profileMock) => {
@@ -117,7 +117,7 @@ describe('Report Router', () => {
     });
 
     test('POST /report with missing token returns unauthorized', () => {
-      return mockParks('AK', 2)
+      return mockParks('AK', 2, 'NW')
         .then((parks) => {
           return createProfileMock()
             .then((profileMock) => {

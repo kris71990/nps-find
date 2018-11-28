@@ -6,7 +6,7 @@ import HttpError from 'http-errors';
 import logger from '../lib/logger';
 import models from '../models';
 
-import { stateAbbreviations } from '../lib/states';
+import { stateData } from '../lib/states';
 import getData from '../lib/get-parks';
 import customizeParks from '../lib/customize-parks';
 
@@ -16,7 +16,7 @@ const Op = models.Sequelize.Op;
 
 // retrieve initial data, either from database or API
 parkRouter.get('/parks/:state', (request, response, next) => {
-  if (!stateAbbreviations[request.params.state]) return next(new HttpError(400, 'Bad request'));
+  if (!stateData[request.params.state]) return next(new HttpError(400, 'Bad request'));
   logger.log(logger.INFO, `Processing a get for /parks/${request.params.state}...`);
 
   let parkTypes = null;
@@ -37,7 +37,7 @@ parkRouter.get('/parks/:state', (request, response, next) => {
       }
 
       // if it doesn't, call this function to get data from the api, then return status
-      return getData(request.params.state)
+      return getData(request.params.state, stateData[request.params.state].region)
         .then(() => {
           return response.json(parkTypes);
         })
@@ -161,6 +161,24 @@ parkRouter.get('/park/:parkId', (request, response, next) => {
     .then((singlePark) => {
       logger.log(logger.INFO, `Returning ${singlePark[0].fullName}`);
       return response.json(singlePark[0]);
+    })
+    .catch(next);
+});
+
+// get all parks in a geographic region
+parkRouter.get('/parks/region/:regionId', (request, response, next) => {
+  logger.log(logger.INFO, `Processing a get on /park/region/${request.params.regionId}`);
+
+  return models.sequelize.query(
+    'SELECT parks.*, states.region FROM parks LEFT JOIN states ON "stateCode"="stateId" WHERE states.region=?',
+    {
+      replacements: [request.params.regionId],
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((parks) => {
+      logger.log(logger.INFO, `Returning ${parks.length} in ${request.params.regionId}`);
+      return response.json(parks);
     })
     .catch(next);
 });
