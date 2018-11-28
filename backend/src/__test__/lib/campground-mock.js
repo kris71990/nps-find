@@ -5,7 +5,7 @@ import models from '../../models/index';
 import mockParks from './park-mock';
 
 const mockCampgrounds = (stateCode, total) => {
-  return mockParks(stateCode, 3)
+  return mockParks(stateCode, 3, 'W')
     .then((mockParksCreated) => {
       const campgrounds = [];
       for (let i = 0; i < total; i++) {

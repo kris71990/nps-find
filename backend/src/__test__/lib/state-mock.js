@@ -2,9 +2,9 @@
 
 import models from '../../models/index';
 
-const mockState = (stateId, total) => {
+const mockState = (stateId, total, region) => {
   return models.state.create({
-    stateId, total,
+    stateId, total, region,
   });
 };
 

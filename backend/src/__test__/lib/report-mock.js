@@ -8,7 +8,7 @@ import mockParks from './park-mock';
 
 const createReports = (total) => {
   const mockResponse = {};
-  return mockParks('UT', 2)
+  return mockParks('UT', 2, 'W')
     .then((parks) => {
       mockResponse.parks = parks;
       return createProfileMock()
