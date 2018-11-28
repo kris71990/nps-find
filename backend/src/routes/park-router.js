@@ -167,7 +167,7 @@ parkRouter.get('/park/:parkId', (request, response, next) => {
 
 // get all parks in a geographic region
 parkRouter.get('/parks/region/:regionId', (request, response, next) => {
-  logger.log(logger.INFO, `Processing a get on /park/region/${request.params.regionId}`);
+  logger.log(logger.INFO, `Processing a get on /parks/region/${request.params.regionId}`);
 
   return models.sequelize.query(
     'SELECT parks.*, states.region FROM parks LEFT JOIN states ON "stateCode"="stateId" WHERE states.region=?',
@@ -178,6 +178,21 @@ parkRouter.get('/parks/region/:regionId', (request, response, next) => {
   )
     .then((parks) => {
       logger.log(logger.INFO, `Returning ${parks.length} in ${request.params.regionId}`);
+      return response.json(parks);
+    })
+    .catch(next);
+});
+
+parkRouter.get('/parks/weather/:weather', (request, response, next) => {
+  logger.log(logger.INFO, `Processing a get on /parks/weather/${request.params.weather}`);
+
+  return models.park.findAll({
+    where: {
+      weatherInfo: { [Op.iRegexp]: request.params.weather },
+    },
+  })
+    .then((parks) => {
+      logger.log(logger.INFO, `Returning ${parks.length} with ${request.params.weather} weather`);
       return response.json(parks);
     })
     .catch(next);

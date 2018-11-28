@@ -69,6 +69,16 @@ const parkModule = {
         });
     },
 
+    getParksClimate: (context, query) => {
+      const { commit } = context;
+      return superagent.get(`${API_URL}/parks/weather/${query.climate}`)
+        .then((response) => {
+          commit('foundParks', response.body);
+          commit('setTotal', response.body.length);
+          commit('changeState', { state: query.state, stateFull: query.state, interests: [] });
+        });
+    },
+
     getSinglePark: (context, pKeyCode) => {
       const { commit } = context;
       return superagent.get(`${API_URL}/park/${pKeyCode}`)
