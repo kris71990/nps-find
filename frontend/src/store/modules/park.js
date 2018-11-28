@@ -2,6 +2,8 @@ import superagent from 'superagent';
 
 const parkModule = {
   state: {
+    searchParam: null,
+    type: null,
     stateAbbrev: null,
     stateFull: null,
     interests: null,
@@ -15,6 +17,13 @@ const parkModule = {
       state.stateAbbrev = selection.state;
       state.stateFull = selection.stateFull;
       state.interests = selection.interests;
+      if (selection.state) {
+        state.searchParam = selection.state;
+        state.type = 'state';
+      } else {
+        state.searchParam = selection.searchParam;
+        state.type = selection.type;
+      }
       return state;
     }, 
     
@@ -65,7 +74,11 @@ const parkModule = {
         .then((response) => {
           commit('foundParks', response.body);
           commit('setTotal', response.body.length);
-          commit('changeState', { state: query.region, stateFull: query.region, interests: [] });
+          commit('changeState', { 
+            searchParam: query.region, 
+            type: 'region', 
+            interests: [],
+          });
         });
     },
 
@@ -75,7 +88,11 @@ const parkModule = {
         .then((response) => {
           commit('foundParks', response.body);
           commit('setTotal', response.body.length);
-          commit('changeState', { state: query.state, stateFull: query.state, interests: [] });
+          commit('changeState', { 
+            searchParam: query.climate, 
+            type: 'climate',
+            interests: [],
+          });
         });
     },
 

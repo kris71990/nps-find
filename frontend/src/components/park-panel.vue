@@ -1,5 +1,6 @@
 <template>
   <div class="park-panel">
+    <h1>{{ createHeader() }}</h1>
     <div v-if="interests.length > 0" class="interests">
       <h4>You are interested in...</h4>
       <ul>
@@ -12,7 +13,7 @@
       <h4>{{ total }} locations found.</h4>
       <p id="campground-button"
         v-if="interests.includes('camping') && parks.length > 0"
-        v-on:click="renderCampgrounds(state)"
+        v-on:click="renderCampgrounds(searchParam)"
       >
       Or see all campgrounds in the state.
       </p>
@@ -38,9 +39,23 @@ export default {
     parks: Array,
     interests: Array,
     total: Number,
-    state: String,
+    stateFull: String,
+    searchParam: String,
+    type: String,
   },
   methods: {
+    createHeader: function() {
+      switch (this.type) {
+        case 'state':
+          return `${this.stateFull}`;
+        case 'region':
+          return `In your region (${this.searchParam})...`;
+        case 'climate': 
+          return `If you like ${this.searchParam}...`
+        default:
+          return `${searchParam}`;
+      }
+    },
     randomizedImage: function (park) {
       const arr = park.imageUrl.split('\n');
       arr.pop();

@@ -33,7 +33,7 @@ export default new Router({
       component: ProfileView,
     },
     {
-      path: '/search/:search',
+      path: '/search*',
       name: 'CommonReturn',
       component: CommonReturn,
     },

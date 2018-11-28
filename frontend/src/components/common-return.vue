@@ -1,8 +1,14 @@
 <template>
   <div id="search-results" >
-    <h1>{{ computedState }}</h1>
     <div v-if="loggedIn || computedInterests.length > 0">
-      <ParkPanel :parks="computedParks" :interests="computedInterests" :total="computedTotal" :state="computedStateAbbrev"/>
+      <ParkPanel 
+        :parks="computedParks" 
+        :interests="computedInterests" 
+        :total="computedTotal" 
+        :searchParam="computedSearchParam" 
+        :stateFull="computedState || null"
+        :type="computedSearchType"
+      />
     </div>
     <div v-else id="all-parks">
       <h3>National Parks in {{ computedState }} ({{ computedTotal }})</h3>
@@ -18,7 +24,11 @@
               <p class="no-image">- {{ createReportBlurb(item.reports) }} -</p>
             </div>
           </div> 
-          <ImageCarousel v-if="item.imageUrl" v-bind:parkImages="item.imageUrl.split('\n')" v-bind:imageCaptions="item.imageCaptions.split('\n')"/>
+          <ImageCarousel 
+            v-if="item.imageUrl" 
+            :parkImages="item.imageUrl.split('\n')" 
+            :imageCaptions="item.imageCaptions.split('\n')"
+          />
         </li>
       </ul> 
     </div>
@@ -42,6 +52,8 @@ export default {
       computedParks: state => state.parkModule.parks,
       computedState: state => state.parkModule.stateFull,
       computedStateAbbrev: state => state.parkModule.stateAbbrev,
+      computedSearchParam: state => state.parkModule.searchParam,
+      computedSearchType: state => state.parkModule.type,
       computedTotal: state => state.parkModule.parksTotal,
       computedInterests: state => state.parkModule.interests,
     }),

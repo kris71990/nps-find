@@ -2,12 +2,12 @@
   <div>
     <div v-if="computedProfile">
       <h1>Search by...</h1>
-      <div class="search-buttons">
-        <p v-on:click="handleSearch" >Geographic Region</p>
-        <p v-if="computedProfile.favoredClimate" v-on:click="handleSearch">Climate</p>
-        <p v-if="computedProfile.residentialLocaleType" v-on:click="handleSearch">Environment</p>
-        <p v-if="computedProfile.favoredLandscape" v-on:click="handleSearch">Landscape</p>
-        <p v-if="computedProfile.interests" v-on:click="handleSearch">Interests</p>
+      <div v-on:click="handleSearch" class="search-buttons">
+        <p>Geographic Region</p>
+        <p v-if="computedProfile.favoredClimate">Climate</p>
+        <p v-if="computedProfile.residentialLocaleType">Environment</p>
+        <p v-if="computedProfile.favoredLandscape">Landscape</p>
+        <p v-if="computedProfile.interests">Interests</p>
       </div>  
     </div>
     <div v-else>
@@ -27,13 +27,12 @@ export default {
   }),
   methods: {
     handleSearch(event, a) {
-      console.log(event.target.textContent);
+      if (event.target.localName === 'div') return;
       switch (event.target.textContent) {
         case 'Geographic Region':
           const region = stateData[this.computedProfile.homeState].region;
           return this.$store.dispatch('getParksRegion', { 
-            region, 
-            state: this.computedProfile.homeState,
+            region,
           })
             .then(() => {
               return this.$router.push(`/search/geographicregion`);
@@ -42,7 +41,6 @@ export default {
           const climate = this.computedProfile.favoredClimate;
           return this.$store.dispatch('getParksClimate', {
             climate,
-            state: this.computedProfile.homeState,
           })
             .then(() => {
               return this.$router.push(`/search/climate`);

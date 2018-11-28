@@ -61,7 +61,10 @@ export default {
       this.interests = event.interests;
       return this.$store.dispatch('foundParks', { state: this.state, stateFull: this.stateFull, interests: this.interests })
         .then(() => {
-          this.$router.push(`/search?state=${this.state}&interests=${this.interests}`);
+          this.$router.push({ 
+            path: 'search', 
+            query: { state: this.state, interests: this.interests }
+          });
         });
     },
     getStateList(event, a, b) {
