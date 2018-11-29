@@ -12,6 +12,7 @@ const mockParks = (stateCode, total, region) => {
     'Other',
     'Other',
   ];
+  const weather = ['hot', 'warm', 'cold', 'snow', 'rain'];
   return mockState(stateCode, total, region)
     .then(() => {
       const arr = [];
@@ -23,6 +24,7 @@ const mockParks = (stateCode, total, region) => {
           fullName: faker.lorem.words(),
           description: faker.lorem.words(),
           designation: designationTypes[Math.floor(Math.random() * 3)],
+          weatherInfo: weather[i] ? weather[i] : 'snow',
           camping: false,
         });
       }

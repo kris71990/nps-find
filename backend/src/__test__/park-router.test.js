@@ -69,7 +69,54 @@ describe('Park Router', () => {
     });
   });
 
-  // describe('GET /parks/')
+  describe('GET /parks/:', () => {
+    test('GET /parks/region/:regionId should return all parks in region', () => {
+      return mockParks('NH', 3, 'NE')
+        .then(() => {
+          return mockParks('ME', 2, 'NE')
+            .then(() => {
+              return mockParks('TX', 1, 'S')
+                .then(() => {
+                  return superagent.get(`${API_URL}/parks/region/NE`)
+                    .then((response) => {
+                      expect(response.status).toEqual(200);
+                      expect(response.body).toHaveLength(5);
+                      response.body.forEach((park) => {
+                        expect(park.stateCode).not.toEqual('TX');
+                      });
+                    });
+                });
+            });
+        });
+    });
+
+    test('GET /parks/weather/all should return all parks matching weather preferences', () => {
+      const weatherPrefs = 'snow, rain';
+      const rx = /(snow)|(rain)/;
+      return mockParks('WA', 10, 'NW')
+        .then(() => {
+          return superagent.get(`${API_URL}/parks/weather/all`)
+            .query({ climate: weatherPrefs })
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(response.body).toHaveLength(7);
+              response.body.forEach((park) => {
+                expect(park.weatherInfo).toMatch(rx);
+              });
+            });
+        });
+    });
+
+    test('GET /parks/weather/all without prefs returns 400', () => {
+      return mockParks('WA', 3, 'NW')
+        .then(() => {
+          return superagent.get(`${API_URL}/parks/weather/all`)
+            .catch((response) => {
+              expect(response.status).toEqual(400);
+            });
+        });
+    });
+  });
 
   describe('PUT /parks/:stateId', () => {
     test('PUT should update and return parks for one state (with camping and interests)', () => {
