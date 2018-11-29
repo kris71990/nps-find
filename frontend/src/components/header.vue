@@ -67,6 +67,9 @@ header {
     }
   }
   #header-nav {
+    .icon-menu {
+      visibility: hidden;
+    }
     width: 88%;
     h1 {
       width: 42%;

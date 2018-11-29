@@ -75,7 +75,7 @@ export default {
 <style lang="scss">
 .search-form {
   form {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     fieldset {
       background-color: #E8EAEB;

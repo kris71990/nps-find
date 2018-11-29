@@ -111,7 +111,6 @@ export default {
 }
 .panel {
   width: 100%;
-  margin-bottom: 5%;
   #campground-button {
     width: 20%;
     margin: 0 auto;
@@ -124,11 +123,12 @@ export default {
   }
   ul {
     padding-left: 0;
-    display: inline-flex;
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    margin-bottom: 5em;
     li {
-      margin: 3% 1%;
+      margin: 2em;
       width: 25%;
       list-style-type: none;
       .park-card {
@@ -159,6 +159,47 @@ export default {
       cursor: pointer;
       color: #00CB94;
     } 
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .interests {
+    width: 40%;
+    ul {
+      width: 40%;
+    }
+  }
+  .panel {
+    #campground-button {
+      width: 50%;
+    }
+    ul {
+      li {
+        width: 40%;
+        margin: 2em 1.5em;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .interests {
+    width: 60%;
+    ul {
+      width: 60%;
+    }
+  }
+  .panel {
+    #campground-button {
+      width: 75%;
+    }
+    ul {
+      display: block;
+      li {
+        width: 75%;
+        margin: 0 auto;
+      }
+    }
   }
 }
 </style>

@@ -104,4 +104,25 @@ export default {
     cursor: pointer;
   }
 }
+
+@media only screen and (max-width: 900px) {
+  #home {
+    width: 60%;
+    margin: 5% auto 12%;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #home {
+    width: 75%;
+    margin: 5% auto 15%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  #home {
+    width: 90%;
+    margin: 5% auto 18%;
+  }
+}
 </style>
