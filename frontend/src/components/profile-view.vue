@@ -2,8 +2,11 @@
   <div id="profile-view">
     <div>
       <div v-if="!profile">
-        <ProfileForm v-bind:onComplete="handleCreate" v-bind:editing="false"
-        v-bind:handleClose="handleClose"/>
+        <ProfileForm 
+          :onComplete="handleCreate" 
+          :editing="false"
+          :handleClose="handleClose"
+        />
       </div>
       <div v-else>
         <h1>Welcome {{ profile.firstName }}.</h1>
@@ -40,7 +43,12 @@
         </div>
       </div>
       <div v-if="profile && editing">
-        <ProfileForm :onComplete="handleUpdate" :editing="true" :profile="profile" v-bind:handleClose="handleClose"/>
+        <ProfileForm 
+          :onComplete="handleUpdate" 
+          :editing="true" 
+          :profile="profile" 
+          :handleClose="handleClose"
+        />
       </div>
     </div>
   </div>

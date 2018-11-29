@@ -183,16 +183,25 @@ parkRouter.get('/parks/region/:regionId', (request, response, next) => {
     .catch(next);
 });
 
-parkRouter.get('/parks/weather/:weather', (request, response, next) => {
-  logger.log(logger.INFO, `Processing a get on /parks/weather/${request.params.weather}`);
+parkRouter.get('/parks/weather/all', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /parks/weather/all');
+
+  if (!request.query.climate) return next(new HttpError(400, 'Bad Request'));
+
+  const weatherPrefs = request.query.climate.split(',');
+  let rx = '';
+  weatherPrefs.forEach((pref, i) => {
+    rx += `(${pref.trim()})`; 
+    if (i !== weatherPrefs.length - 1) rx += '|';
+  });
 
   return models.park.findAll({
     where: {
-      weatherInfo: { [Op.iRegexp]: request.params.weather },
+      weatherInfo: { [Op.iRegexp]: rx },
     },
   })
     .then((parks) => {
-      logger.log(logger.INFO, `Returning ${parks.length} with ${request.params.weather} weather`);
+      logger.log(logger.INFO, `Returning ${parks.length} with ${request.query.climate} weather`);
       return response.json(parks);
     })
     .catch(next);

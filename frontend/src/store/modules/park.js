@@ -68,28 +68,30 @@ const parkModule = {
         });
     },
 
-    getParksRegion: (context, query) => {
+    getParksRegion: (context, region) => {
       const { commit } = context;
-      return superagent.get(`${API_URL}/parks/region/${query.region}`)
+      return superagent.get(`${API_URL}/parks/region/${region}`)
         .then((response) => {
           commit('foundParks', response.body);
           commit('setTotal', response.body.length);
           commit('changeState', { 
-            searchParam: query.region, 
+            searchParam: region, 
             type: 'region', 
             interests: [],
           });
         });
     },
 
-    getParksClimate: (context, query) => {
+    getParksClimate: (context, climate) => {
       const { commit } = context;
-      return superagent.get(`${API_URL}/parks/weather/${query.climate}`)
+      console.log(climate);
+      return superagent.get(`${API_URL}/parks/weather/all`)
+        .query({ climate })
         .then((response) => {
           commit('foundParks', response.body);
           commit('setTotal', response.body.length);
           commit('changeState', { 
-            searchParam: query.climate, 
+            searchParam: climate, 
             type: 'climate',
             interests: [],
           });

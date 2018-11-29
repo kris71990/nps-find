@@ -69,6 +69,8 @@ describe('Park Router', () => {
     });
   });
 
+  // describe('GET /parks/')
+
   describe('PUT /parks/:stateId', () => {
     test('PUT should update and return parks for one state (with camping and interests)', () => {
       const userQueryObj = {

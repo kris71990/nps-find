@@ -31,27 +31,19 @@ export default {
       switch (event.target.textContent) {
         case 'Geographic Region':
           const region = stateData[this.computedProfile.homeState].region;
-          return this.$store.dispatch('getParksRegion', { 
-            region,
-          })
+          return this.$store.dispatch('getParksRegion', region)
             .then(() => {
               return this.$router.push(`/search/geographicregion`);
             });
         case 'Climate':
           const climate = this.computedProfile.favoredClimate;
-          return this.$store.dispatch('getParksClimate', {
-            climate,
-          })
+          return this.$store.dispatch('getParksClimate', climate)
             .then(() => {
               return this.$router.push(`/search/climate`);
             })
         default:
           return this.$router.push('/dashboard');
       }
-      // return this.$store.dispatch('foundParks', { state: this.state, stateFull: this.stateFull, interests: this.interests })
-      //   .then(() => {
-      //     this.$router.push(`/search?state=${this.state}&interests=${this.interests}`);
-      //   });
     },
   }
 }
