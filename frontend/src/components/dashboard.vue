@@ -53,7 +53,7 @@ export default {
 .search-buttons {
   p {
     min-width: 10%;
-    margin: 3%;
+    margin: 2%;
     padding: 0.6% 1%;
     background-color: #96AFA7;
     border-radius: 5px;
@@ -66,6 +66,16 @@ export default {
   p:hover {
     background-color: #336E55;
     color: #F1E3CB;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .search-buttons {
+    p {
+      width: 60%;
+      display: block;
+      margin: 5% auto;
+    }
   }
 }
 </style>

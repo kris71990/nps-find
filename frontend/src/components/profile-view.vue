@@ -113,7 +113,7 @@ export default {
 
 <style lang="scss">
 #profile-view {
-  width: 50%;
+  width: 80%;
   margin: 0 auto;
   margin-bottom: 5%;
   span {
@@ -129,6 +129,14 @@ export default {
     border-radius: 5px;
     cursor: pointer;
     color: black;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #profile-view {
+    #update-button {
+      width: 50%;
+    }
   }
 }
 </style>

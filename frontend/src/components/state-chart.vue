@@ -85,6 +85,6 @@ export default {
 #chart-container {
   position: relative;
   margin: 5% auto;
-  width: 80%;
+  width: 90%;
 }
 </style>

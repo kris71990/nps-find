@@ -58,7 +58,7 @@ export default {
 <style lang="scss">
 #state-rankings {
   width: 95%;
-  margin: 0 auto;
+  margin: 0% auto;
   ul {
     padding-left: 0px;
     li {
@@ -75,13 +75,31 @@ export default {
     }
   }
   .links {
-    margin: 5%;
+    height: 100px;
+    margin: 5% auto;
     a {
       border: 2px solid black;
       border-radius: 10px;
       background-color: #336E55;
       padding: 10px;
       margin: 25px;
+    }
+    a:hover {
+      color: #F1E3CB;
+      cursor: pointer;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  #state-rankings {
+    .links {
+      height: 200px;
+      a { 
+        margin: 5% auto;
+        width: 50%;
+        display: block;
+      }
     }
   }
 }
