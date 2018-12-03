@@ -31,10 +31,15 @@ export default {
       stateArr.unshift(['State', 'Total Parks']);
       let data = google.visualization.arrayToDataTable(stateArr);
       let options = {
+        width: '100%',
         region: 'US',
         displayMode: 'regions',
         resolution: 'provinces',
-        backgroundColor: '#8EC9EB',
+        backgroundColor: {
+          fill: '#8EC9EB',
+          stroke: '#336E55',
+          strokeWidth: 15,
+        },
         datalessRegionColor: '#D2D3D3',
         colorAxis: {
           colors: [
@@ -54,7 +59,8 @@ export default {
 <style lang="scss">
 #map-container {
   margin: 5% auto;
+  margin-bottom: 100px;
   width: 80%;
-  border: 10px ridge #336E55;
+  overflow: auto;
 }
 </style>

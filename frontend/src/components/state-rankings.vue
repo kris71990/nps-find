@@ -3,27 +3,43 @@
     <h2>National Parks by State</h2>
     <div class="list">
       <div v-if="chartRendered === false && mapRendered === false">
-        <ul>
-          <li v-for="(state, index) in computedStateList" :key="state.stateId">
-            {{ index + 1 }}.
-            {{ fullStateNames[state.stateId].fullName }} - 
-            {{ state.total }}
-          </li>
-        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>State</th>
+              <th>Total Parks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(state, index) in computedStateList" 
+                :key="state.stateId" 
+            >
+              <td>{{ index + 1 }}</td>
+              <td>{{ fullStateNames[state.stateId].fullName }}</td>
+              <td>{{ state.total }}</td>
+            </tr>
+          </tbody>
+        </table>
         <div class="links">
-          <a v-on:click="chartRendered = !chartRendered">Click for chart</a>
-          <a v-on:click="mapRendered = !mapRendered">Click for map</a>
+          <a v-on:click="chartRendered = !chartRendered">See chart</a>
+          <a v-on:click="mapRendered = !mapRendered">See map</a>
         </div>
       </div>
     </div>
     <div class="charts">
       <div v-if="chartRendered === true">
         <a v-on:click="chartRendered = !chartRendered">Back</a>
-        <StateChart v-bind:stateList="computedStateList" v-bind:typeList="computedTypesArr"/>
+
+        <StateChart 
+          v-bind:stateList="computedStateList" v-bind:typeList="computedTypesArr"
+        />
       </div>
       <div v-if="mapRendered === true">
         <a v-on:click="mapRendered = !mapRendered">Back</a>
-        <StateMap v-bind:stateList="computedStateList" v-bind:typeList="computedTypesArr"/>
+        <StateMap 
+          v-bind:stateList="computedStateList" v-bind:typeList="computedTypesArr"
+        />
       </div>
     </div>
   </div>
@@ -58,12 +74,29 @@ export default {
 <style lang="scss">
 #state-rankings {
   width: 95%;
-  margin: 0% auto;
-  ul {
-    padding-left: 0px;
-    li {
-      margin: 1%;
-      list-style-type: none;
+  margin: 0 auto;
+  .list {
+    width: 100%;
+    table {
+      margin: 0 auto;
+      padding-left: 0;
+      border: 3px solid black;
+      border-collapse: collapse;
+      thead {
+        background-color: #658E5C;
+        border-bottom: 2px solid black;
+        th {
+          padding: 1em;
+          border: 1px solid black;
+        }
+      }
+      tbody {
+        background: linear-gradient(#036910, #CEDDD0);
+        td {
+          border: 1px solid black;
+          padding: 1em 3em;
+        }
+      }
     }
   }
   .charts {
