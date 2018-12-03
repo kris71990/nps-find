@@ -72,6 +72,7 @@ export default {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    margin-bottom: 0.5em;
     .slide {
       margin-top: 1%;
       transition: transform 0.3s ease-in-out;
@@ -98,6 +99,32 @@ export default {
   }
   button:focus {
     outline: none;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .carousel-view {
+    .carousel {
+      margin-bottom: 1em;
+      .slide {
+        img {
+          width: 60%;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .carousel-view {
+    .carousel {
+      margin-bottom: 1em;
+      .slide {
+        img {
+          width: 80%;
+        }
+      }
+    }
   }
 }
 </style>

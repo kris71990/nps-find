@@ -138,27 +138,27 @@ export default {
         border: 8px double #0870B8;
         background-color: #ECF2FF;
       }
+      .yes {
+        font-weight: bold;
+      }
+      .no {
+        color: grey;
+        font-weight: bold;
+      }
+      .park-card:hover {
+        border: 8px solid #930000;
+        transform: scale(1.01,1.01);
+        cursor: pointer;
+      }
+      .no:hover {
+        cursor: pointer;
+        color: #00CB94;
+      } 
       img {
         max-width: 100%;
         max-height: 100%;
       }
     }
-    .park-card:hover {
-      border: 8px solid #930000;
-      transform: scale(1.01,1.01);
-      cursor: pointer;
-    }
-    .yes {
-      font-weight: bold;
-    }
-    .no {
-      color: grey;
-      font-weight: bold;
-    }
-    .no:hover {
-      cursor: pointer;
-      color: #00CB94;
-    } 
   }
 }
 
@@ -177,6 +177,9 @@ export default {
       li {
         width: 40%;
         margin: 2em 1.5em;
+        .yes, .no {
+          padding-bottom: 1.2em;
+        }
       }
     }
   }
@@ -197,7 +200,11 @@ export default {
       display: block;
       li {
         width: 75%;
-        margin: 0 auto;
+        margin: 0% auto;
+        .yes, .no {
+          border-bottom: 2px dashed black;
+          padding-bottom: 1em;
+        }
       }
     }
   }

@@ -78,6 +78,7 @@ export default {
       .report-blurb {
         width: 30%;
         margin: 0 auto;
+        color: grey;
         .with-image {
           display: flex;
           flex-direction: row;
@@ -95,11 +96,34 @@ export default {
           }
         }
       }
-      P {
+      .report-blurb:hover {
+        cursor: pointer;
+        color: #00CB94;
+      } 
+      p {
         margin-bottom: 0;
       }
       span {
         font-weight: bold;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #all-parks {
+    h3 {
+      text-decoration: underline;
+    }
+    #park-list {
+      li {
+        margin-top: 10%;
+        margin-bottom: 10%;
+        border-bottom: 2px dashed black;
+        .report-blurb {
+          margin: 2% auto;
+          width: 60%;
+        }
       }
     }
   }
