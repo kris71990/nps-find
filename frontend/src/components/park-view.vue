@@ -175,9 +175,11 @@ export default {
       color: grey;
       font-weight: bold;
     }
-    span:hover {
-      cursor: pointer;
-      color: #00CB94;
+    p {
+      span:hover {
+        cursor: pointer;
+        color: #00CB94;
+      }
     }
   }
   .report-box {
