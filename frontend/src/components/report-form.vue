@@ -148,12 +148,12 @@ export default {
         profileId: this.profile.id,
         parkName: this.park.fullName,
         parkEnvironment: this.environment,
-        parkLandscape: this.landscape,
+        parkLandscape: this.landscape.join(','),
         rating: parseInt(this.rating, 10), 
         lengthOfStay: parseInt(this.lengthOfStay, 10), 
         activities: this.activities, 
         wildlife: this.wildlife,
-        weather: this.weather,
+        weather: this.weather.join(','),
         temperature: this.temperature,
       })
         .then(() => {

@@ -69,10 +69,12 @@ export default {
         })
     },
     renderParkReport: function(park) {
+      if (park.reports) {
+        return this.$store.dispatch('renderPark', park)
+          .then(() => this.$router.push(`/park/${park.parkCode}`));
+      }
       return this.$store.dispatch('renderPark', park)
-        .then(() => {
-          this.$router.push(`/park/${park.parkCode}/report`);
-        });
+        .then(() => this.$router.push(`/park/${park.parkCode}/report`));
     },
     renderCampgrounds: function (state) {
       return this.$store.dispatch('renderCampgroundsState', state)
@@ -149,6 +151,10 @@ export default {
         border: 8px solid #930000;
         transform: scale(1.01,1.01);
         cursor: pointer;
+      }
+      .yes:hover {
+        cursor: pointer;
+        color: #13742F;
       }
       .no:hover {
         cursor: pointer;

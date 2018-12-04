@@ -195,14 +195,21 @@ parkRouter.get('/parks/weather/all', (request, response, next) => {
     if (i !== weatherPrefs.length - 1) rx += '|';
   });
 
-  return models.park.findAll({
-    where: {
-      weatherInfo: { [Op.iRegexp]: rx },
+  return models.sequelize.query(
+    'SELECT * FROM parks LEFT JOIN (SELECT "weather", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "weather") AS weatherReport ON "pKeyCode"="parkId" WHERE "weatherInfo" ~* ? OR "weather" ~* ?;',
+    {
+      replacements: [rx, rx],
+      type: models.sequelize.QueryTypes.SELECT,
     },
-  })
+  )
     .then((parks) => {
-      logger.log(logger.INFO, `Returning ${parks.length} with ${request.query.climate} weather`);
-      return response.json(parks);
+      const filtered = {};
+      parks.forEach((park) => {
+        if (!filtered[park.pKeyCode]) filtered[park.pKeyCode] = park;
+      });
+      const filteredParks = Object.values(filtered);
+      logger.log(logger.INFO, `Returning ${filteredParks.length} with ${request.query.climate} weather`);
+      return response.json(filteredParks);
     })
     .catch(next);
 });
