@@ -51,6 +51,7 @@ export default {
       },
     validateIndexHigh: 
       function() {
+        console.log(this);
         if (this.index === this.parkImages.length - 2) {
           this.index = 0
           return this.index;
@@ -75,7 +76,8 @@ export default {
     margin-bottom: 0.5em;
     .slide {
       margin-top: 1%;
-      transition: transform 0.3s ease-in-out;
+      opacity: 1;
+      transition: opacity 0.2s ease-in;
       img {
         width: 40%;
         height: auto;
