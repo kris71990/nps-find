@@ -14,15 +14,17 @@
       <h3>National Parks in {{ computedState }} ({{ computedTotal }})</h3>
       <ul id="park-list">
         <li v-for="item in computedParks" :key="item.id">
-          <p><span>{{ item.fullName }}</span></p>
+          <p v-on:click="renderPark(item)"><span>{{ item.fullName }}</span></p>
           <div class="report-blurb">
-            <div v-if="item.reports" class="with-image">
-              <img src="../utils/bison-avatar.png"/>
-              <p>- {{ createReportBlurb(item.reports) }} -</p>
-            </div>
-            <div v-else>
-              <p class="no-image">- {{ createReportBlurb(item.reports) }} -</p>
-            </div>
+            <router-link to="/">
+              <div v-if="item.reports" class="with-image">
+                <img src="../utils/bison-avatar.png"/>
+                <p>- {{ createReportBlurb(item.reports) }} -</p>
+              </div>
+              <div v-else>
+                <p class="no-image">- {{ createReportBlurb(item.reports) }} -</p>
+              </div>
+            </router-link>
           </div> 
           <ImageCarousel 
             v-if="item.imageUrl" 
@@ -59,8 +61,14 @@ export default {
     }),
   methods: {
     createReportBlurb: function(reports) {
-      return reports ? reports > 1 ? `${reports} reports` : `${reports} report` : 'No reports - submit the first!';
-    }
+      return reports ? reports > 1 ? `${reports} reports` : `${reports} report` : 'No reports - Login to submit the first!';
+    },
+    renderPark: function (park) {
+      return this.$store.dispatch('renderPark', park)
+        .then(() => {
+          this.$router.push(`/park/${park.parkCode}`);
+        })
+    },
   },
 }
 </script>
@@ -79,6 +87,10 @@ export default {
         width: 30%;
         margin: 0 auto;
         color: grey;
+        a {
+          text-decoration: none;
+          color: black;
+        }
         .with-image {
           display: flex;
           flex-direction: row;
@@ -96,12 +108,15 @@ export default {
           }
         }
       }
-      .report-blurb:hover {
+      .report-blurb a:hover {
         cursor: pointer;
         color: #00CB94;
       } 
       p {
         margin-bottom: 0;
+      }
+      p:hover {
+        cursor: pointer;
       }
       span {
         font-weight: bold;

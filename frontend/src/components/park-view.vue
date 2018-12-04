@@ -3,11 +3,12 @@
     <h1>{{ computedPark.fullName }}</h1>
     <div class="image-box">
       <MapView
-      v-bind:coordinates="computedPark.latLong"
-      v-bind:parkName="computedPark.name"
+        v-bind:coordinates="computedPark.latLong"
+        v-bind:parkName="computedPark.name"
       />
-      <ImageCarousel v-if="computedPark.imageUrl"
-      v-bind:parkImages="computedPark.imageUrl.split('\n')" v-bind:imageCaptions="computedPark.imageCaptions.split('\n')"
+      <ImageCarousel 
+        v-if="computedPark.imageUrl"
+        v-bind:parkImages="computedPark.imageUrl.split('\n')" v-bind:imageCaptions="computedPark.imageCaptions.split('\n')"
       />
     </div>
     <div class="info-box">
@@ -51,7 +52,16 @@
           </div>
         </div>
         <div v-else>
-          <p @click="$router.push(`/park/${computedPark.parkCode}/report`)">No user reports - <span>Submit the first!</span></p>
+          <p>No user reports - 
+            <router-link 
+              v-if="loggedIn" 
+              :to="{ path: `/park/${computedPark.parkCode}/report` }"
+            ><span>Submit the first!</span>
+            </router-link>
+            <router-link 
+              v-else to="/"><span>Login/signup to contribute</span>
+            </router-link>
+          </p>
           <ReportForm 
             v-if="this.$route.path === `/park/${computedPark.parkCode}/report`"
             v-bind:onComplete="submitReport" 
@@ -171,6 +181,9 @@ export default {
     }
   }
   .report-box {
+    a {
+      text-decoration: none;
+    }
     .report-buttons {
       a, p {
         background-color: #96AFA7;
