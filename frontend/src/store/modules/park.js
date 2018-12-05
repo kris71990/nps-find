@@ -84,7 +84,6 @@ const parkModule = {
 
     getParksClimate: (context, climate) => {
       const { commit } = context;
-      console.log(climate);
       return superagent.get(`${API_URL}/parks/weather/all`)
         .query({ climate })
         .then((response) => {
@@ -93,6 +92,21 @@ const parkModule = {
           commit('changeState', { 
             searchParam: climate, 
             type: 'climate',
+            interests: [],
+          });
+        });
+    },
+
+    getParksEnvironment: (context, environment) => {
+      const { commit } = context;
+      return superagent.get(`${API_URL}/parks/environment/all`)
+        .query({ environment })
+        .then((response) => {
+          commit('foundParks', response.body);
+          commit('setTotal', response.body.length);
+          commit('changeState', {
+            searchParam: environment,
+            type: 'environment',
             interests: [],
           });
         });

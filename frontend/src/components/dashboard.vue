@@ -41,6 +41,12 @@ export default {
             .then(() => {
               return this.$router.push(`/search/climate`);
             })
+        case 'Environment':
+          const environment = this.computedProfile.residentialLocaleType;
+          return this.$store.dispatch('getParksEnvironment', environment)
+            .then(() => {
+              return this.$router.push('/search/environment');
+            })
         default:
           return this.$router.push('/dashboard');
       }

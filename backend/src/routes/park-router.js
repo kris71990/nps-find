@@ -214,4 +214,25 @@ parkRouter.get('/parks/weather/all', (request, response, next) => {
     .catch(next);
 });
 
+parkRouter.get('/parks/environment/all', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /parks/environment');
+
+  const environments = ['urban', 'suburban', 'rural'];
+  environments.splice(environments.indexOf(request.query.environment), 1);
+  const rx = `(${environments[0]})|(${environments[1]})`;
+
+  return models.sequelize.query(
+    'SELECT * FROM parks INNER JOIN (SELECT "parkEnvironment", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "parkEnvironment") AS environment ON "pKeyCode"="parkId" WHERE "parkEnvironment" ~* ?;',
+    {
+      replacements: [rx],
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((parks) => {
+      logger.log(logger.INFO, `Returning ${parks.length} in ${environments.join(' and ')} locales`);
+      return response.json(parks);
+    })
+    .catch(next);
+});
+
 export default parkRouter;
