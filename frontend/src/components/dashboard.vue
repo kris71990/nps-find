@@ -47,6 +47,12 @@ export default {
             .then(() => {
               return this.$router.push('/search/environment');
             })
+        case 'Landscape':
+          const landscape = this.computedProfile.favoredLandscape;
+          return this.$store.dispatch('getParksLandscape', landscape)
+            .then(() => {
+              return this.$router.push('/search/landscape');
+            })
         default:
           return this.$router.push('/dashboard');
       }

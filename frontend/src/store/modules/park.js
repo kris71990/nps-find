@@ -112,6 +112,21 @@ const parkModule = {
         });
     },
 
+    getParksLandscape: (context, landscape) => {
+      const { commit } = context;
+      return superagent.get(`${API_URL}/parks/landscape/all`)
+        .query({ landscape })
+        .then((response) => {
+          commit('foundParks', response.body);
+          commit('setTotal', response.body.length);
+          commit('changeState', {
+            searchParam: landscape,
+            type: 'landscape',
+            interests: [],
+          });
+        });
+    },
+
     getSinglePark: (context, pKeyCode) => {
       const { commit } = context;
       return superagent.get(`${API_URL}/park/${pKeyCode}`)

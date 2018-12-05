@@ -111,7 +111,7 @@ export default {
         homeState: this.profile.homeState,
         interests: this.profile.interests,
         weather: this.profile.favoredClimate,
-        landscape: this.profile.residentialLocaleType,
+        landscape: this.profile.favoredLandscape,
         residentialLocaleType: this.profile.residentialLocaleType,
       }
     }

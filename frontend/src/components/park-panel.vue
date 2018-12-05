@@ -51,9 +51,11 @@ export default {
         case 'region':
           return `<h1>In your region (${this.searchParam})...</h1>`;
         case 'climate': 
-          return `<h1>If you like ${this.searchParam}...</h1>`
+          return `<h1>If you like ${this.searchParam}...</h1>`;
         case 'environment':
-          return `<h1>You live in an ${this.searchParam} environment.</h1><h2>Explore somewhere different...</h2>`
+          return `<h1>You live in an ${this.searchParam} environment.</h1><h2>Explore somewhere different...</h2>`;
+        case 'landscape':
+          return `<h1>If you like ${this.searchParam}...</h1>`;
         default:
           return `<h1>${searchParam}</h1>`;
       }
