@@ -219,7 +219,7 @@ parkRouter.get('/parks/environment/all', (request, response, next) => {
 
   const environments = ['urban', 'suburban', 'rural'];
   environments.splice(environments.indexOf(request.query.environment), 1);
-  const rx = `(${environments[0]})|(${environments[1]})`;
+  const rx = `(\\m${environments[0]})|(\\m${environments[1]})`;
 
   return models.sequelize.query(
     'SELECT * FROM parks INNER JOIN (SELECT "parkEnvironment", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "parkEnvironment") AS environment ON "pKeyCode"="parkId" WHERE "parkEnvironment" ~* ?;',
@@ -230,6 +230,30 @@ parkRouter.get('/parks/environment/all', (request, response, next) => {
   )
     .then((parks) => {
       logger.log(logger.INFO, `Returning ${parks.length} in ${environments.join(' and ')} locales`);
+      return response.json(parks);
+    })
+    .catch(next);
+});
+
+parkRouter.get('/parks/landscape/all', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /parks/landscape');
+
+  const landscapes = request.query.landscape.split(',');
+  let rx = '';
+  landscapes.forEach((pref, i) => {
+    rx += `(${pref.trim()})`; 
+    if (i !== landscapes.length - 1) rx += '|';
+  });
+
+  return models.sequelize.query(
+    'SELECT * FROM parks INNER JOIN (SELECT "parkLandscape", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "parkLandscape") AS landscape ON "pKeyCode"="parkId" WHERE "parkLandscape" ~* ?;',
+    {
+      replacements: [rx],
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((parks) => {
+      logger.log(logger.INFO, `Returning ${parks.length} in ${request.query.landscape}`);
       return response.json(parks);
     })
     .catch(next);
