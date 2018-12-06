@@ -9,6 +9,7 @@ import models from '../models';
 import { stateData } from '../lib/states';
 import getData from '../lib/get-parks';
 import customizeParks from '../lib/customize-parks';
+import { filterUserParks, generateUserSQLQuery } from '../lib/user-park-filter';
 
 const jsonParser = json();
 const parkRouter = new Router();
@@ -185,6 +186,7 @@ parkRouter.get('/parks/region/:regionId', (request, response, next) => {
 
 parkRouter.get('/parks/weather/all', (request, response, next) => {
   logger.log(logger.INFO, 'Processing a get on /parks/weather/all');
+  console.log(request.query);
 
   if (!request.query.climate) return next(new HttpError(400, 'Bad Request'));
 
@@ -203,17 +205,7 @@ parkRouter.get('/parks/weather/all', (request, response, next) => {
     },
   )
     .then((parks) => {
-      const filtered = {};
-      parks.forEach((park) => {
-        if (!filtered[park.pKeyCode]) {
-          filtered[park.pKeyCode] = park;
-        } else {
-          filtered[park.pKeyCode].weather += `,${park.weather}`;
-          const reportNumber = Number(filtered[park.pKeyCode].reports);
-          filtered[park.pKeyCode].reports = reportNumber + Number(park.reports);
-        }
-      });
-      const filteredParks = Object.values(filtered);
+      const filteredParks = filterUserParks(parks, 'weather');
       logger.log(logger.INFO, `Returning ${filteredParks.length} with ${request.query.climate} weather`);
       return response.json(filteredParks);
     })
@@ -227,25 +219,16 @@ parkRouter.get('/parks/environment/all', (request, response, next) => {
   environments.splice(environments.indexOf(request.query.environment), 1);
   const rx = `(\\m${environments[0]})|(\\m${environments[1]})`;
 
-  return models.sequelize.query(
-    'SELECT * FROM parks INNER JOIN (SELECT "parkEnvironment", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "parkEnvironment") AS environment ON "pKeyCode"="parkId" WHERE "parkEnvironment" ~* ?;',
-    {
-      replacements: [rx],
-      type: models.sequelize.QueryTypes.SELECT,
-    },
-  )
+  const sqlQuery = generateUserSQLQuery('inner', 'parkEnvironment', 'environment', rx);
+  /* Returned query
+  'SELECT * FROM parks INNER JOIN (SELECT "parkEnvironment", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "parkEnvironment") AS environment ON "pKeyCode"="parkId" WHERE "parkEnvironment" ~* ?;'
+  */
+
+  return models.sequelize.query(sqlQuery, {
+    type: models.sequelize.QueryTypes.SELECT,
+  })
     .then((parks) => {
-      const filtered = {};
-      parks.forEach((park) => {
-        if (!filtered[park.pKeyCode]) {
-          filtered[park.pKeyCode] = park;
-        } else {
-          filtered[park.pKeyCode].parkEnvironment += `,${park.parkEnvironment}`;
-          const reportNumber = Number(filtered[park.pKeyCode].reports);
-          filtered[park.pKeyCode].reports = reportNumber + Number(park.reports);
-        }
-      });
-      const filteredParks = Object.values(filtered);
+      const filteredParks = filterUserParks(parks, 'parkEnvironment');
       logger.log(logger.INFO, `Returning ${parks.length} in ${environments.join(' and ')} locales`);
       return response.json(filteredParks);
     })
@@ -262,25 +245,16 @@ parkRouter.get('/parks/landscape/all', (request, response, next) => {
     if (i !== landscapes.length - 1) rx += '|';
   });
 
-  return models.sequelize.query(
-    'SELECT * FROM parks INNER JOIN (SELECT "parkLandscape", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "parkLandscape") AS landscape ON "pKeyCode"="parkId" WHERE "parkLandscape" ~* ?;',
-    {
-      replacements: [rx],
-      type: models.sequelize.QueryTypes.SELECT,
-    },
-  )
+  const sqlQuery = generateUserSQLQuery('inner', 'parkLandscape', 'landscape', rx);
+  /* Returned query
+  'SELECT * FROM parks INNER JOIN (SELECT "parkLandscape", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "parkLandscape") AS landscape ON "pKeyCode"="parkId" WHERE "parkLandscape" ~* ?;',
+  */
+
+  return models.sequelize.query(sqlQuery, {
+    type: models.sequelize.QueryTypes.SELECT,
+  })
     .then((parks) => {
-      const filtered = {};
-      parks.forEach((park) => {
-        if (!filtered[park.pKeyCode]) {
-          filtered[park.pKeyCode] = park;
-        } else {
-          filtered[park.pKeyCode].parkLandscape += `,${park.parkLandscape}`;
-          const reportNumber = Number(filtered[park.pKeyCode].reports);
-          filtered[park.pKeyCode].reports = reportNumber + Number(park.reports);
-        }
-      });
-      const filteredParks = Object.values(filtered);
+      const filteredParks = filterUserParks(parks, 'parkLandscape');
       logger.log(logger.INFO, `Returning ${filteredParks.length} in ${request.query.landscape}`);
       return response.json(filteredParks);
     })
