@@ -57,7 +57,7 @@ export default {
         case 'landscape':
           return `<h1>If you like ${this.searchParam}...</h1>`;
         default:
-          return `<h1>${searchParam}</h1>`;
+          return `<h1>${this.searchParam}</h1>`;
       }
     },
     randomizedImage: function (park) {

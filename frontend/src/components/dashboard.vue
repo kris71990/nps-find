@@ -53,6 +53,21 @@ export default {
             .then(() => {
               return this.$router.push('/search/landscape');
             })
+        case 'Interests':
+          const interests = this.computedProfile.interests;
+          const stateProfile = this.computedProfile.homeState;
+          const interestsArr = this.computedProfile.interests.split(',');
+          return this.$store.dispatch('getParksInterest', {
+            state: stateProfile, 
+            stateFull: stateData[this.computedProfile.homeState].fullName, 
+            interests: this.computedProfile.interests.split(','), 
+          })
+            .then(() => {
+              return this.$router.push({
+                path: 'search', 
+                query: { state: stateProfile, interests: interestsArr }
+              })
+            })
         default:
           return this.$router.push('/dashboard');
       }

@@ -205,7 +205,13 @@ parkRouter.get('/parks/weather/all', (request, response, next) => {
     .then((parks) => {
       const filtered = {};
       parks.forEach((park) => {
-        if (!filtered[park.pKeyCode]) filtered[park.pKeyCode] = park;
+        if (!filtered[park.pKeyCode]) {
+          filtered[park.pKeyCode] = park;
+        } else {
+          filtered[park.pKeyCode].weather += `,${park.weather}`;
+          const reportNumber = Number(filtered[park.pKeyCode].reports);
+          filtered[park.pKeyCode].reports = reportNumber + Number(park.reports);
+        }
       });
       const filteredParks = Object.values(filtered);
       logger.log(logger.INFO, `Returning ${filteredParks.length} with ${request.query.climate} weather`);
@@ -229,8 +235,19 @@ parkRouter.get('/parks/environment/all', (request, response, next) => {
     },
   )
     .then((parks) => {
+      const filtered = {};
+      parks.forEach((park) => {
+        if (!filtered[park.pKeyCode]) {
+          filtered[park.pKeyCode] = park;
+        } else {
+          filtered[park.pKeyCode].parkEnvironment += `,${park.parkEnvironment}`;
+          const reportNumber = Number(filtered[park.pKeyCode].reports);
+          filtered[park.pKeyCode].reports = reportNumber + Number(park.reports);
+        }
+      });
+      const filteredParks = Object.values(filtered);
       logger.log(logger.INFO, `Returning ${parks.length} in ${environments.join(' and ')} locales`);
-      return response.json(parks);
+      return response.json(filteredParks);
     })
     .catch(next);
 });
@@ -253,8 +270,19 @@ parkRouter.get('/parks/landscape/all', (request, response, next) => {
     },
   )
     .then((parks) => {
-      logger.log(logger.INFO, `Returning ${parks.length} in ${request.query.landscape}`);
-      return response.json(parks);
+      const filtered = {};
+      parks.forEach((park) => {
+        if (!filtered[park.pKeyCode]) {
+          filtered[park.pKeyCode] = park;
+        } else {
+          filtered[park.pKeyCode].parkLandscape += `,${park.parkLandscape}`;
+          const reportNumber = Number(filtered[park.pKeyCode].reports);
+          filtered[park.pKeyCode].reports = reportNumber + Number(park.reports);
+        }
+      });
+      const filteredParks = Object.values(filtered);
+      logger.log(logger.INFO, `Returning ${filteredParks.length} in ${request.query.landscape}`);
+      return response.json(filteredParks);
     })
     .catch(next);
 });

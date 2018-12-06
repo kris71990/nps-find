@@ -44,7 +44,7 @@ const parkModule = {
     },
   },
   actions: {
-    foundParks: (context, selections) => {
+    getParksInterest: (context, selections) => {
       const { commit } = context;
       const { state, stateFull, interests } = selections;
       let parks;
@@ -61,9 +61,14 @@ const parkModule = {
               parksNumber = updatedResponse.body.length;
             })
             .then(() => {
-              commit('changeState', { state, stateFull, interests });
               commit('foundParks', parks);
               commit('setTotal', parksNumber);
+              commit('changeState', { 
+                searchParam: state, // stateFull, interests });
+                stateFull,
+                type: 'state',
+                interests,
+              });
             });
         });
     },
