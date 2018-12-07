@@ -73,6 +73,34 @@ const parkModule = {
         });
     },
 
+    getTopParks: (context, order) => {
+      const { commit } = context;
+      return superagent.get(`${API_URL}/parks/all/top`)
+        .then((response) => {
+          commit('foundParks', response.body);
+          commit('setTotal', response.body.length);
+          commit('changeState', { 
+            searchParam: order, 
+            type: 'top', 
+            interests: [],
+          });
+        });
+    },
+
+    getRandomParks: (context, order) => {
+      const { commit } = context;
+      return superagent.get(`${API_URL}/parks/all/random`)
+        .then((response) => {
+          commit('foundParks', response.body);
+          commit('setTotal', response.body.length);
+          commit('changeState', { 
+            searchParam: order, 
+            type: 'random', 
+            interests: [],
+          });
+        });
+    },
+
     getParksRegion: (context, region) => {
       const { commit, rootState } = context;
       return superagent.get(`${API_URL}/parks/region/${region}`)

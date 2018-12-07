@@ -56,6 +56,10 @@ export default {
           return `<h1>You live in an ${this.searchParam} environment.</h1><h2>Explore somewhere different...</h2>`;
         case 'landscape':
           return `<h1>If you like ${this.searchParam}...</h1>`;
+        case 'top':
+          return `<h1>Most Popular</h1`;
+        case 'random':
+          return `<h1>Discover New</h1>`;
         default:
           return `<h1>${this.searchParam}</h1>`;
       }

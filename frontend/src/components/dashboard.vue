@@ -8,6 +8,8 @@
         <p v-if="computedProfile.residentialLocaleType">Environment</p>
         <p v-if="computedProfile.favoredLandscape">Landscape</p>
         <p v-if="computedProfile.interests">Interests</p>
+        <p>Most Popular</p>
+        <p>Discover</p>
       </div>  
     </div>
     <div v-else>
@@ -76,6 +78,16 @@ export default {
                 path: 'search', 
                 query: { state: stateProfile, interests: interestsArr }
               })
+            })
+        case 'Most Popular':
+          return this.$store.dispatch('getTopParks', 'top')
+            .then(() => {
+              return this.$router.push('/search/popular');
+            })
+        case 'Discover':
+          return this.$store.dispatch('getRandomParks', 'random')
+            .then(() => {
+              return this.$router.push('/search/random');
             })
         default:
           return this.$router.push('/dashboard');

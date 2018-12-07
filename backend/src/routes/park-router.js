@@ -167,6 +167,38 @@ parkRouter.get('/park/:parkId', (request, response, next) => {
     .catch(next);
 });
 
+parkRouter.get('/parks/all/top', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /park/all/top');
+
+  return models.sequelize.query(
+    'SELECT parks.*, "reports" FROM parks INNER JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" ORDER BY reports DESC;',
+    {
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((parks) => {
+      logger.log(logger.INFO, `Returning top ${parks.length} parks with most reviews`);
+      return response.json(parks);
+    })
+    .catch(next);
+});
+
+parkRouter.get('/parks/all/random', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /park/all/random');
+
+  return models.sequelize.query(
+    'SELECT parks.*, "reports" FROM parks LEFT JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" WHERE reports IS NULL ORDER BY RANDOM() LIMIT 15;',
+    {
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((parks) => {
+      logger.log(logger.INFO, `Returning 15 random ${parks.length} parks`);
+      return response.json(parks);
+    })
+    .catch(next);
+});
+
 // get all parks in a geographic region
 parkRouter.get('/parks/region/:regionId', bearerAuthMiddleware, (request, response, next) => {
   logger.log(logger.INFO, `Processing a get on /parks/region/${request.params.regionId}`);
