@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <div>
+    <div id="auth-box">
       <div class="login-signup" v-if="!loggedIn">
         <router-link to="/login">Login</router-link> 
         or 
@@ -16,9 +16,17 @@
         />
       </div>
     </div>
-    <h3>Choose a state to find National Parks near you...</h3>
-    <h4>Or see an <a v-on:click="getStateList">overview</a> of all parks</h4>
-    <SearchForm :handleSearch="handleSearch"/>
+    <div id="selections-box">
+      <div id="landing-form">
+        <h3>Choose a state to find National Parks near you...</h3>
+        <SearchForm :handleSearch="handleSearch"/>
+      </div>
+      <div v-on:click="handleQuickSearch" id="home-extras">
+        <p>See an overview</p>
+        <p>Most Popular</p>
+        <p>Discover</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -49,12 +57,14 @@ export default {
           return this.$router.push('/dashboard');
         })
     },
+
     handleSignup(event) {
       return this.$store.dispatch('signupReq', event)
         .then(() => {
           return this.$router.push('/');
         })
     },
+
     handleSearch(event, a, b, c) {
       this.state = event.state;
       this.stateFull = event.stateFull;
@@ -71,6 +81,31 @@ export default {
           });
         });
     },
+
+    handleQuickSearch(event, a) {
+      console.log(event.target);
+      if (event.target.localName === 'div') return;
+      switch (event.target.textContent) {
+        case 'Most Popular':
+          return this.$store.dispatch('getTopParks', 'top')
+            .then(() => {
+              return this.$router.push('/search/popular');
+            })
+        case 'Discover':
+          return this.$store.dispatch('getRandomParks', 'random')
+            .then(() => {
+              return this.$router.push('/search/random');
+            })
+        case 'See an overview':
+          return this.$store.dispatch('stateChart')
+            .then(() => {
+              this.$router.push('/states');
+            })
+        default:
+          return this.$router.push('/');
+      }
+    },
+
     getStateList(event, a, b) {
       return this.$store.dispatch('stateChart')
         .then(() => {
@@ -90,15 +125,7 @@ export default {
 
 <style lang="scss">
 #home {
-  width: 40%;
-  margin: 5% auto;
-  .login-signup {
-    width: 60%;
-    margin: 0 auto;
-    padding: 2%;
-    background-color: #D0D2D3;
-    border: 1px solid black;
-  }
+  width: 100%;
   a {
     color: #336E55;
   }
@@ -106,6 +133,43 @@ export default {
     color: #11C68A;
     text-decoration: underline;
     cursor: pointer;
+  }
+  #auth-box {
+    .login-signup {
+      width: 30%;
+      margin: 2% auto;
+      padding: 1%;
+      background-color: #D0D2D3;
+      border: 1px solid black;
+    }
+  }
+  #selections-box {
+    #landing-form {
+      width: 40%;
+      float: left;
+      margin: 5%
+    }
+    #home-extras {
+      width: 40%;
+      float: left;
+      margin: 5%;
+      p {
+        min-width: 10%;
+        margin: 2%;
+        padding: 0.6% 1%;
+        background-color: #96AFA7;
+        border-radius: 5px;
+        border: 2px solid #4A8571;
+        cursor: pointer;
+        text-decoration: none;
+        color: black;
+        display: block;
+      }
+      p:hover {
+        background-color: #336E55;
+        color: #F1E3CB;
+      }
+    }
   }
 }
 

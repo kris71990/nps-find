@@ -11,10 +11,14 @@
       />
     </div>
     <div v-else id="all-parks">
-      <h3>National Parks in {{ computedState }} ({{ computedTotal }})</h3>
+      <div id="title">
+        <h3 v-if="computedState">National Parks in {{ computedState }} ({{ computedTotal }})</h3>
+        <span v-else v-html="createHeader()"></span>
+      </div>
       <ul id="park-list">
         <li v-for="item in computedParks" :key="item.id">
-          <p v-on:click="renderPark(item)"><span>{{ item.fullName }}</span></p>
+          <h4 v-on:click="renderPark(item)">{{ item.fullName }}</h4>
+          <span v-if="!computedState">{{ item.stateCode }}</span>
           <div class="report-blurb">
             <router-link to="/">
               <div v-if="item.reports" class="with-image">
@@ -62,6 +66,16 @@ export default {
   methods: {
     createReportBlurb: function(reports) {
       return reports ? reports > 1 ? `${reports} reports` : `${reports} report` : 'No reports - Login to submit the first!';
+    },
+    createHeader: function() {
+      switch (this.computedSearchType) {
+        case 'top':
+          return `<h1>Most Popular</h1`;
+        case 'random':
+          return `<h1>Discover New</h1>`;
+        default:
+          return `<h1>${this.computedSearchParam}</h1>`;
+      }
     },
     renderPark: function (park) {
       return this.$store.dispatch('renderPark', park)
@@ -113,13 +127,13 @@ export default {
         color: #00CB94;
       } 
       p {
-        margin-bottom: 0;
+        margin-bottom: 10px;
       }
       p:hover {
         cursor: pointer;
       }
       span {
-        font-weight: bold;
+        margin: 50px;
       }
     }
   }
