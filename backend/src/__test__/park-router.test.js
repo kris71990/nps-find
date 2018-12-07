@@ -6,6 +6,7 @@ import { removeMocks } from './lib/state-mock';
 import mockParks from './lib/park-mock';
 import mockCampgrounds from './lib/campground-mock';
 import { removeProfileMock, createProfileMock } from './lib/profile-mock';
+import createReports from './lib/report-mock';
 
 const API_URL = `http://localhost:${process.env.PORT}`;
 
@@ -13,9 +14,17 @@ const API_URL = `http://localhost:${process.env.PORT}`;
 
 GET /parks/:stateId - 200 - success, returns park types associated with interests, returns null if no interests
 GET /parks/:stateId - 400 - fails if stateId is anything but an existing state
+GET /park/:parkId - 200 - returns single park
+
+GET /parks/region - 200 - returns all parks within a geographic region
+GET /parks/userprefs/all - 200 - return parks by user preference (weather, landscape, environment)
+GET /parks/userprefs/all - 401 - fails if unuauthorized
+GET /parks/userprefs/all - 401 - fails if no user prefs
+
+GET /parks/all/top - 200 - returns parks in order of total reports
+GET /parks/all/random - 200 - returns random selection of parks
 
 PUT /parks/:stateId - 200 - returns all updated parks depending on user query object
-
 */
 
 describe('Park Router', () => {
@@ -62,6 +71,18 @@ describe('Park Router', () => {
           expect(response.body.camping).toEqual(true);
         });
     });
+
+    test('GET from /park/:parkId should return a single park', () => {
+      return mockParks('WV', 2, 'E')
+        .then((parks) => {
+          return superagent.get(`${API_URL}/park/${parks[0].pKeyCode}`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(response.body).toBeInstanceOf(Object);
+              expect(response.body.pKeyCode).toEqual(parks[0].pKeyCode);
+            });
+        });
+    });
   
     test('GET from /parks/:stateId should return bad request for non-existant state', () => {
       return superagent.get(`${API_URL}/parks/KM`)
@@ -99,7 +120,7 @@ describe('Park Router', () => {
     test('GET /parks/userprefs/all should return all parks matching weather preferences', () => {
       const weatherPrefs = 'snow,rain';
       const rx = /(snow)|(rain)/;
-      return mockParks('WA', 10, 'NW')
+      return createReports(10)
         .then(() => {
           return createProfileMock()
             .then((profile) => {
@@ -108,25 +129,95 @@ describe('Park Router', () => {
                 .query({ climate: weatherPrefs })
                 .then((response) => {
                   expect(response.status).toEqual(200);
-                  expect(response.body).toHaveLength(7);
+                  expect(response.body).toHaveLength(1);
                   response.body.forEach((park) => {
-                    expect(park.weatherInfo).toMatch(rx);
+                    expect(park.weather).toMatch(rx);
+                    expect(park.reports).toEqual(4);
                   });
                 });
             });
         });
     });
 
-    test('GET /parks/userprefs/all without prefs returns 400', () => {
-      return mockParks('WA', 3, 'NW')
+    test('GET /parks/userprefs/all should return all parks matching landscape', () => {
+      const landscapePrefs = 'mountains,ocean';
+      const rx = /(\bmountains)|\b(ocean)/;
+      return createReports(10)
         .then(() => {
           return createProfileMock()
             .then((profile) => {
               return superagent.get(`${API_URL}/parks/userprefs/all`)
                 .set('Authorization', `Bearer ${profile.accountSetMock.token}`)
-                .catch((response) => {
-                  expect(response.status).toEqual(400);
+                .query({ landscape: landscapePrefs })
+                .then((response) => {
+                  expect(response.status).toEqual(200);
+                  expect(response.body).toHaveLength(1);
+                  response.body.forEach((park) => {
+                    expect(park.parkLandscape).toMatch(rx);
+                    // expect(park.reports).toEqual(7);
+                  });
                 });
+            });
+        });
+    });
+
+    test('GET /parks/userprefs/all should return all parks matching environment', () => {
+      const environmentPrefs = 'suburban';
+      const rx = /(\burban)|(\brural)/;
+      return createReports(10)
+        .then(() => {
+          return createProfileMock()
+            .then((profile) => {
+              return superagent.get(`${API_URL}/parks/userprefs/all`)
+                .set('Authorization', `Bearer ${profile.accountSetMock.token}`)
+                .query({ environment: environmentPrefs })
+                .then((response) => {
+                  expect(response.status).toEqual(200);
+                  expect(response.body).toHaveLength(1);
+                  response.body.forEach((park) => {
+                    expect(park.parkEnvironment).toMatch(rx);
+                    // expect(park.reports).toEqual(7);
+                  });
+                });
+            });
+        });
+    });
+
+    test('GET /parks/userprefs/all without token returns 401', () => {
+      return superagent.get(`${API_URL}/parks/userprefs/all`)
+        .catch((response) => {
+          expect(response.status).toEqual(401);
+        });
+    });
+
+    test('GET /parks/userprefs/all without prefs returns 400', () => {
+      return createProfileMock()
+        .then((profile) => {
+          return superagent.get(`${API_URL}/parks/userprefs/all`)
+            .set('Authorization', `Bearer ${profile.accountSetMock.token}`)
+            .catch((response) => {
+              expect(response.status).toEqual(400);
+            });
+        });
+    });
+
+    test('GET /parks/all/top', () => {
+      return createReports(7)
+        .then(() => {
+          return superagent.get(`${API_URL}/parks/all/top`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(response.body[0].reports).toEqual('7');
+            });
+        });
+    });
+
+    test('GET /parks/all/random', () => {
+      return mockParks('CA', 4, 'W')
+        .then(() => {
+          return superagent.get(`${API_URL}/parks/all/random`)
+            .then((response) => {
+              expect(response.status).toEqual(200);
             });
         });
     });

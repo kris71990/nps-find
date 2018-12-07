@@ -220,6 +220,8 @@ parkRouter.get('/parks/region/:regionId', bearerAuthMiddleware, (request, respon
 parkRouter.get('/parks/userprefs/all', bearerAuthMiddleware, (request, response, next) => {
   logger.log(logger.INFO, 'Processing a get on /parks/userprefs/all');
 
+  console.log(request.query);
+
   const searchTypeData = {};
   if (request.query.climate) {
     searchTypeData.searchType = 'weather';

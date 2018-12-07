@@ -29,9 +29,9 @@ const createReports = (total) => {
               activities: faker.lorem.words(),
               lengthOfStay: faker.random.number(),
               rating: faker.random.number(),
-              parkEnvironment: environment[i] ? environment[i] : 'rural',
-              parkLandscape: landscape[i] ? landscape[i] : 'desert',
-              weather: weather[i] ? weather[i] : 'snow',
+              parkEnvironment: environment[i % 3],
+              parkLandscape: landscape[i % 4],
+              weather: weather[i % 5],
             });
           }
           return models.report.bulkCreate(arr)
