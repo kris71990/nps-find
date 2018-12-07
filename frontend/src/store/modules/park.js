@@ -64,7 +64,7 @@ const parkModule = {
               commit('foundParks', parks);
               commit('setTotal', parksNumber);
               commit('changeState', { 
-                searchParam: state, // stateFull, interests });
+                searchParam: state,
                 stateFull,
                 type: 'state',
                 interests,
@@ -74,8 +74,9 @@ const parkModule = {
     },
 
     getParksRegion: (context, region) => {
-      const { commit } = context;
+      const { commit, rootState } = context;
       return superagent.get(`${API_URL}/parks/region/${region}`)
+        .set('Authorization', `Bearer ${rootState.authModule.token}`)
         .then((response) => {
           commit('foundParks', response.body);
           commit('setTotal', response.body.length);
@@ -87,46 +88,18 @@ const parkModule = {
         });
     },
 
-    getParksClimate: (context, climate) => {
-      const { commit } = context;
-      return superagent.get(`${API_URL}/parks/weather/all`)
-        .query({ climate })
+    getParksUserPrefs: (context, userPrefs) => {
+      const { commit, rootState } = context;
+      const { prefs, type } = userPrefs;
+      return superagent.get(`${API_URL}/parks/userprefs/all`)
+        .set('Authorization', `Bearer ${rootState.authModule.token}`)
+        .query({ [type]: prefs })
         .then((response) => {
           commit('foundParks', response.body);
           commit('setTotal', response.body.length);
           commit('changeState', { 
-            searchParam: climate, 
-            type: 'climate',
-            interests: [],
-          });
-        });
-    },
-
-    getParksEnvironment: (context, environment) => {
-      const { commit } = context;
-      return superagent.get(`${API_URL}/parks/environment/all`)
-        .query({ environment })
-        .then((response) => {
-          commit('foundParks', response.body);
-          commit('setTotal', response.body.length);
-          commit('changeState', {
-            searchParam: environment,
-            type: 'environment',
-            interests: [],
-          });
-        });
-    },
-
-    getParksLandscape: (context, landscape) => {
-      const { commit } = context;
-      return superagent.get(`${API_URL}/parks/landscape/all`)
-        .query({ landscape })
-        .then((response) => {
-          commit('foundParks', response.body);
-          commit('setTotal', response.body.length);
-          commit('changeState', {
-            searchParam: landscape,
-            type: 'landscape',
+            searchParam: prefs, 
+            type,
             interests: [],
           });
         });

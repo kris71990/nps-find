@@ -5,11 +5,12 @@ import { json } from 'body-parser';
 import HttpError from 'http-errors';
 import logger from '../lib/logger';
 import models from '../models';
+import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 
 import { stateData } from '../lib/states';
 import getData from '../lib/get-parks';
 import customizeParks from '../lib/customize-parks';
-import { filterUserParks, generateUserSQLQuery } from '../lib/user-park-filter';
+import { filterUserParks, generateRx, generateUserSQLQuery } from '../lib/filter-userprefs';
 
 const jsonParser = json();
 const parkRouter = new Router();
@@ -167,7 +168,7 @@ parkRouter.get('/park/:parkId', (request, response, next) => {
 });
 
 // get all parks in a geographic region
-parkRouter.get('/parks/region/:regionId', (request, response, next) => {
+parkRouter.get('/parks/region/:regionId', bearerAuthMiddleware, (request, response, next) => {
   logger.log(logger.INFO, `Processing a get on /parks/region/${request.params.regionId}`);
 
   return models.sequelize.query(
@@ -184,78 +185,53 @@ parkRouter.get('/parks/region/:regionId', (request, response, next) => {
     .catch(next);
 });
 
-parkRouter.get('/parks/weather/all', (request, response, next) => {
-  logger.log(logger.INFO, 'Processing a get on /parks/weather/all');
-  console.log(request.query);
+parkRouter.get('/parks/userprefs/all', bearerAuthMiddleware, (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /parks/userprefs/all');
 
-  if (!request.query.climate) return next(new HttpError(400, 'Bad Request'));
+  const searchTypeData = {};
+  if (request.query.climate) {
+    searchTypeData.searchType = 'weather';
+    searchTypeData.userPrefs = request.query.climate.split(',');
+    searchTypeData.joinType = 'left';
+    searchTypeData.joinAs = 'weatherReport';
+  } else if (request.query.environment) {
+    const environments = ['urban', 'suburban', 'rural'];
+    environments.splice(environments.indexOf(request.query.environment), 1);
+    searchTypeData.searchType = 'parkEnvironment';
+    searchTypeData.userPrefs = environments;
+    searchTypeData.joinType = 'inner';
+    searchTypeData.joinAs = 'environment';
+  } else if (request.query.landscape) {
+    searchTypeData.searchType = 'parkLandscape';
+    searchTypeData.userPrefs = request.query.landscape.split(',');
+    searchTypeData.joinType = 'inner';
+    searchTypeData.joinAs = 'landscape';
+  }
 
-  const weatherPrefs = request.query.climate.split(',');
-  let rx = '';
-  weatherPrefs.forEach((pref, i) => {
-    rx += `(${pref.trim()})`; 
-    if (i !== weatherPrefs.length - 1) rx += '|';
-  });
+  if (!searchTypeData.searchType) return next(new HttpError(400, 'Bad Request'));
 
-  return models.sequelize.query(
-    'SELECT * FROM parks LEFT JOIN (SELECT "weather", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "weather") AS weatherReport ON "pKeyCode"="parkId" WHERE "weatherInfo" ~* ? OR "weather" ~* ?;',
-    {
-      replacements: [rx, rx],
-      type: models.sequelize.QueryTypes.SELECT,
-    },
-  )
-    .then((parks) => {
-      const filteredParks = filterUserParks(parks, 'weather');
-      logger.log(logger.INFO, `Returning ${filteredParks.length} with ${request.query.climate} weather`);
-      return response.json(filteredParks);
-    })
-    .catch(next);
-});
-
-parkRouter.get('/parks/environment/all', (request, response, next) => {
-  logger.log(logger.INFO, 'Processing a get on /parks/environment');
-
-  const environments = ['urban', 'suburban', 'rural'];
-  environments.splice(environments.indexOf(request.query.environment), 1);
-  const rx = `(\\m${environments[0]})|(\\m${environments[1]})`;
-
-  const sqlQuery = generateUserSQLQuery('inner', 'parkEnvironment', 'environment', rx);
-  /* Returned query
-  'SELECT * FROM parks INNER JOIN (SELECT "parkEnvironment", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "parkEnvironment") AS environment ON "pKeyCode"="parkId" WHERE "parkEnvironment" ~* ?;'
-  */
+  const rx = generateRx(searchTypeData.searchType, searchTypeData.userPrefs);
+  const sqlQuery = generateUserSQLQuery(searchTypeData.joinType, searchTypeData.searchType, searchTypeData.joinAs, rx);
+ 
 
   return models.sequelize.query(sqlQuery, {
     type: models.sequelize.QueryTypes.SELECT,
   })
     .then((parks) => {
-      const filteredParks = filterUserParks(parks, 'parkEnvironment');
-      logger.log(logger.INFO, `Returning ${parks.length} in ${environments.join(' and ')} locales`);
-      return response.json(filteredParks);
-    })
-    .catch(next);
-});
-
-parkRouter.get('/parks/landscape/all', (request, response, next) => {
-  logger.log(logger.INFO, 'Processing a get on /parks/landscape');
-
-  const landscapes = request.query.landscape.split(',');
-  let rx = '';
-  landscapes.forEach((pref, i) => {
-    rx += `(${pref.trim()})`; 
-    if (i !== landscapes.length - 1) rx += '|';
-  });
-
-  const sqlQuery = generateUserSQLQuery('inner', 'parkLandscape', 'landscape', rx);
-  /* Returned query
-  'SELECT * FROM parks INNER JOIN (SELECT "parkLandscape", "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId", "parkLandscape") AS landscape ON "pKeyCode"="parkId" WHERE "parkLandscape" ~* ?;',
-  */
-
-  return models.sequelize.query(sqlQuery, {
-    type: models.sequelize.QueryTypes.SELECT,
-  })
-    .then((parks) => {
-      const filteredParks = filterUserParks(parks, 'parkLandscape');
-      logger.log(logger.INFO, `Returning ${filteredParks.length} in ${request.query.landscape}`);
+      const filteredParks = filterUserParks(parks, searchTypeData.searchType, rx);
+      switch (searchTypeData.searchType) {
+        case 'weather':
+          logger.log(logger.INFO, `Returning ${filteredParks.length} parks with ${request.query.climate} weather`);
+          break;
+        case 'parkEnvironment':
+          logger.log(logger.INFO, `Returning ${filteredParks.length} parks in ${searchTypeData.userPrefs.join(' or ')} locales`);
+          break;
+        case 'parkLandscape':
+          logger.log(logger.INFO, `Returning ${filteredParks.length} in ${request.query.landscape}`);
+          break;
+        default: 
+          logger.log(logger.INFO, `Returning ${filteredParks.length} - unknown search parameters`);
+      }
       return response.json(filteredParks);
     })
     .catch(next);

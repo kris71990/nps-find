@@ -37,19 +37,28 @@ export default {
             });
         case 'Climate':
           const climate = this.computedProfile.favoredClimate;
-          return this.$store.dispatch('getParksClimate', climate)
+          return this.$store.dispatch('getParksUserPrefs', {
+            prefs: climate,
+            type: 'climate',
+          })
             .then(() => {
               return this.$router.push(`/search/climate`);
             })
         case 'Environment':
           const environment = this.computedProfile.residentialLocaleType;
-          return this.$store.dispatch('getParksEnvironment', environment)
+          return this.$store.dispatch('getParksUserPrefs', {
+            prefs: environment,
+            type: 'environment',
+          })
             .then(() => {
               return this.$router.push('/search/environment');
             })
         case 'Landscape':
           const landscape = this.computedProfile.favoredLandscape;
-          return this.$store.dispatch('getParksLandscape', landscape)
+          return this.$store.dispatch('getParksUserPrefs', {
+            prefs: landscape,
+            type: 'landscape',
+          })
             .then(() => {
               return this.$router.push('/search/landscape');
             })
