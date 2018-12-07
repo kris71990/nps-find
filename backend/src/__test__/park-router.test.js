@@ -5,6 +5,7 @@ import { startServer, stopServer } from '../lib/server';
 import { removeMocks } from './lib/state-mock';
 import mockParks from './lib/park-mock';
 import mockCampgrounds from './lib/campground-mock';
+import { removeProfileMock, createProfileMock } from './lib/profile-mock';
 
 const API_URL = `http://localhost:${process.env.PORT}`;
 
@@ -20,6 +21,7 @@ PUT /parks/:stateId - 200 - returns all updated parks depending on user query ob
 describe('Park Router', () => {
   beforeAll(startServer);
   afterEach(removeMocks);
+  afterEach(removeProfileMock);
   afterAll(stopServer);
 
   describe('GET /parks/:stateId', () => {
@@ -77,42 +79,54 @@ describe('Park Router', () => {
             .then(() => {
               return mockParks('TX', 1, 'S')
                 .then(() => {
-                  return superagent.get(`${API_URL}/parks/region/NE`)
-                    .then((response) => {
-                      expect(response.status).toEqual(200);
-                      expect(response.body).toHaveLength(5);
-                      response.body.forEach((park) => {
-                        expect(park.stateCode).not.toEqual('TX');
-                      });
+                  return createProfileMock()
+                    .then((profile) => {
+                      return superagent.get(`${API_URL}/parks/region/NE`)
+                        .set('Authorization', `Bearer ${profile.accountSetMock.token}`)
+                        .then((response) => {
+                          expect(response.status).toEqual(200);
+                          expect(response.body).toHaveLength(5);
+                          response.body.forEach((park) => {
+                            expect(park.stateCode).not.toEqual('TX');
+                          });
+                        });
                     });
                 });
             });
         });
     });
 
-    test('GET /parks/weather/all should return all parks matching weather preferences', () => {
-      const weatherPrefs = 'snow, rain';
+    test('GET /parks/userprefs/all should return all parks matching weather preferences', () => {
+      const weatherPrefs = 'snow,rain';
       const rx = /(snow)|(rain)/;
       return mockParks('WA', 10, 'NW')
         .then(() => {
-          return superagent.get(`${API_URL}/parks/weather/all`)
-            .query({ climate: weatherPrefs })
-            .then((response) => {
-              expect(response.status).toEqual(200);
-              expect(response.body).toHaveLength(7);
-              response.body.forEach((park) => {
-                expect(park.weatherInfo).toMatch(rx);
-              });
+          return createProfileMock()
+            .then((profile) => {
+              return superagent.get(`${API_URL}/parks/userprefs/all`)
+                .set('Authorization', `Bearer ${profile.accountSetMock.token}`)
+                .query({ climate: weatherPrefs })
+                .then((response) => {
+                  expect(response.status).toEqual(200);
+                  expect(response.body).toHaveLength(7);
+                  response.body.forEach((park) => {
+                    expect(park.weatherInfo).toMatch(rx);
+                  });
+                });
             });
         });
     });
 
-    test('GET /parks/weather/all without prefs returns 400', () => {
+    test('GET /parks/userprefs/all without prefs returns 400', () => {
       return mockParks('WA', 3, 'NW')
         .then(() => {
-          return superagent.get(`${API_URL}/parks/weather/all`)
-            .catch((response) => {
-              expect(response.status).toEqual(400);
+          return createProfileMock()
+            .then((profile) => {
+              return superagent.get(`${API_URL}/parks/userprefs/all`)
+                .set('Authorization', `Bearer ${profile.accountSetMock.token}`)
+                .catch((response) => {
+                  expect(response.status).toEqual(400);
+                });
             });
         });
     });

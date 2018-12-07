@@ -15,6 +15,11 @@ const createReports = (total) => {
         .then((profileMock) => {
           mockResponse.profile = profileMock;
           const arr = [];
+
+          const weather = ['hot', 'warm', 'cold', 'snow', 'rain'];
+          const environment = ['urban', 'suburban', 'rural'];
+          const landscape = ['mountains', 'forest', 'plains', 'ocean'];
+
           for (let i = 0; i < total; i++) {
             arr.push({
               id: faker.random.number(),
@@ -24,6 +29,9 @@ const createReports = (total) => {
               activities: faker.lorem.words(),
               lengthOfStay: faker.random.number(),
               rating: faker.random.number(),
+              parkEnvironment: environment[i] ? environment[i] : 'rural',
+              parkLandscape: landscape[i] ? landscape[i] : 'desert',
+              weather: weather[i] ? weather[i] : 'snow',
             });
           }
           return models.report.bulkCreate(arr)

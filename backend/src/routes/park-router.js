@@ -244,7 +244,6 @@ parkRouter.get('/parks/userprefs/all', bearerAuthMiddleware, (request, response,
 
   const rx = generateRx(searchTypeData.searchType, searchTypeData.userPrefs);
   const sqlQuery = generateUserSQLQuery(searchTypeData.joinType, searchTypeData.searchType, searchTypeData.joinAs, rx);
- 
 
   return models.sequelize.query(sqlQuery, {
     type: models.sequelize.QueryTypes.SELECT,
