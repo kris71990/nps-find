@@ -3,13 +3,18 @@
     <div v-if="computedProfile">
       <h1>Search by...</h1>
       <div v-on:click="handleSearch" class="search-buttons">
-        <p>Geographic Region</p>
-        <p v-if="computedProfile.favoredClimate">Climate</p>
-        <p v-if="computedProfile.residentialLocaleType">Environment</p>
-        <p v-if="computedProfile.favoredLandscape">Landscape</p>
-        <p v-if="computedProfile.interests">Interests</p>
-        <p>Most Popular</p>
-        <p>Discover</p>
+        <div class="user-buttons">
+          <p>Geographic Region</p>
+          <p v-if="computedProfile.favoredClimate">Climate</p>
+          <p v-if="computedProfile.residentialLocaleType">Environment</p>
+          <p v-if="computedProfile.favoredLandscape">Landscape</p>
+          <p v-if="computedProfile.interests">Interests</p>
+        </div>
+        <div class="common-buttons">
+          <p>Overview</p>
+          <p>Most Popular</p>
+          <p>Discover</p>
+        </div>
       </div>  
     </div>
     <div v-else>
@@ -101,28 +106,60 @@ export default {
 .search-buttons {
   p {
     min-width: 10%;
-    margin: 2%;
+    margin: 3%;
     padding: 0.6% 1%;
-    background-color: #96AFA7;
-    border-radius: 5px;
-    border: 2px solid #4A8571;
     cursor: pointer;
-    text-decoration: none;
-    color: black;
     display: inline-block;
   }
-  p:hover {
-    background-color: #336E55;
-    color: #F1E3CB;
+  .common-buttons {
+    p {
+      border-radius: 2px;
+      background-color: #82BAA7;
+      border: 2px solid #269693;
+      margin-bottom: 5%;
+    }
+    p:hover {
+      background-color: #00716F;
+      color: #F1E3CB;
+    }
+  }
+  .user-buttons {
+    p {
+      background-color: #96AFA7;
+      border-radius: 5px;
+      border: 2px solid #4A8571;
+    }
+    p:hover {
+      background-color: #336E55;
+      color: #F1E3CB;
+    }
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .search-buttons {
+    width: 90%;
+    margin: 0 auto;
+    p {
+      width: 30%;
+      margin: 4% auto;
+      padding: 1%;
+    }
   }
 }
 
 @media only screen and (max-width: 600px) {
   .search-buttons {
+    width: 90%;
+    margin: 5% auto 20%;
     p {
       width: 60%;
       display: block;
-      margin: 5% auto;
+      margin: 8% auto;
+      padding: 2%;
+    }
+    .common-buttons {
+      border-top: 2px dashed black;
     }
   }
 }

@@ -22,6 +22,7 @@
         <SearchForm :handleSearch="handleSearch"/>
       </div>
       <div v-on:click="handleQuickSearch" id="home-extras">
+        <h3>... or select an option</h3>
         <p>See an overview</p>
         <p>Most Popular</p>
         <p>Discover</p>
@@ -126,6 +127,7 @@ export default {
 <style lang="scss">
 #home {
   width: 100%;
+  margin: 2% auto 5%;
   a {
     color: #336E55;
   }
@@ -144,18 +146,31 @@ export default {
     }
   }
   #selections-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     #landing-form {
-      width: 40%;
-      float: left;
-      margin: 5%
+      width: 45%;
+      margin: 2% auto;
     }
     #home-extras {
-      width: 40%;
-      float: left;
-      margin: 5%;
+      width: 45%;
+      margin: 2% auto;
+      :nth-child(2) {
+        border-radius: 2px;
+        background-color: #82BAA7;
+        border: 2px solid #269693;
+        margin-bottom: 5%;
+      }
+      :nth-child(2):hover {
+        background-color: #00716F;
+      }
+      h3 {
+        margin-bottom: 10%;
+      }
       p {
-        min-width: 10%;
-        margin: 2%;
+        width: 50%;
+        margin: 2% auto;
         padding: 0.6% 1%;
         background-color: #96AFA7;
         border-radius: 5px;
@@ -175,22 +190,57 @@ export default {
 
 @media only screen and (max-width: 900px) {
   #home {
-    width: 60%;
     margin: 5% auto 12%;
+    #auth-box {
+      .login-signup {
+        width: 50%;
+        padding: 2%
+      }
+    }
   }
 }
 
 @media only screen and (max-width: 700px) {
   #home {
-    width: 75%;
     margin: 5% auto 15%;
+    #auth-box {
+      .login-signup {
+        width: 60%;
+        padding: 3%;
+      }
+    }
+    #selections-box {
+      display: block;
+      #landing-form {
+        width: 60%;
+      }
+      #home-extras {
+        width: 60%;
+        border-top: 2px dashed black;
+      }
+    }
   }
 }
 
 @media only screen and (max-width: 500px) {
   #home {
-    width: 90%;
     margin: 5% auto 18%;
+    #auth-box {
+      .login-signup {
+        width: 70%;
+        padding: 4%;
+      }
+    }
+    #selections-box {
+      display: block;
+      #landing-form {
+        width: 80%;
+      }
+      #home-extras {
+        width: 80%;
+        border-top: 2px dashed black;
+      }
+    }
   }
 }
 </style>
