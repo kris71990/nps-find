@@ -115,7 +115,7 @@ export default {
 #profile-view {
   width: 80%;
   margin: 0 auto;
-  margin-bottom: 5%;
+  margin-bottom: 10%;
   span {
     font-weight: bold;
     font-style: oblique;
@@ -132,8 +132,16 @@ export default {
   }
 }
 
+@media only screen and (max-width: 1100px) {
+  #profile-view {
+    margin-bottom: 15%;
+  }
+}
+
 @media only screen and (max-width: 700px) {
   #profile-view {
+    width: 90%;
+    margin-bottom: 20%;
     #update-button {
       width: 50%;
     }

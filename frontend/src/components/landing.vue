@@ -18,14 +18,16 @@
     </div>
     <div id="selections-box">
       <div id="landing-form">
-        <h3>Choose a state to find National Parks near you...</h3>
+        <h3>Start a search...</h3>
         <SearchForm :handleSearch="handleSearch"/>
       </div>
       <div v-on:click="handleQuickSearch" id="home-extras">
         <h3>... or select an option</h3>
-        <p>See an overview</p>
-        <p>Most Popular</p>
-        <p>Discover</p>
+        <div id="common-buttons">
+          <p>See an overview</p>
+          <p>Most Popular</p>
+          <p>Discover</p>
+        </div>
       </div>
     </div>
   </div>
@@ -152,37 +154,45 @@ export default {
     #landing-form {
       width: 45%;
       margin: 2% auto;
+      h3 {
+        margin-bottom: 5%;
+      }
     }
     #home-extras {
       width: 45%;
       margin: 2% auto;
-      :nth-child(2) {
-        border-radius: 2px;
-        background-color: #82BAA7;
-        border: 2px solid #269693;
-        margin-bottom: 5%;
-      }
-      :nth-child(2):hover {
-        background-color: #00716F;
-      }
       h3 {
-        margin-bottom: 10%;
+        margin-bottom: 9%;
       }
-      p {
-        width: 50%;
-        margin: 2% auto;
-        padding: 0.6% 1%;
-        background-color: #96AFA7;
-        border-radius: 5px;
-        border: 2px solid #4A8571;
-        cursor: pointer;
-        text-decoration: none;
-        color: black;
-        display: block;
-      }
-      p:hover {
-        background-color: #336E55;
-        color: #F1E3CB;
+      #common-buttons {
+        background-color: #C5D6DA;
+        border: 3px solid grey;
+        padding: 5%;
+        :nth-child(1) {
+          border-radius: 2px;
+          background-color: #82BAA7;
+          border: 2px solid #269693;
+          margin-bottom: 5%;
+        }
+        :nth-child(1):hover {
+          background-color: #00716F;
+        }
+        p {
+          width: 50%;
+          margin: 2% auto;
+          padding: 0.6% 1%;
+          background-color: #96AFA7;
+          border-radius: 5px;
+          border: 2px solid #4A8571;
+          cursor: pointer;
+          text-decoration: none;
+          color: black;
+          display: block;
+        }
+        p:hover {
+          background-color: #336E55;
+          color: #F1E3CB;
+        }
       }
     }
   }

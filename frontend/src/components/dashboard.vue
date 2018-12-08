@@ -104,10 +104,14 @@ export default {
 
 <style lang="scss">
 .search-buttons {
+  background-color: #C5D6DA;
+  border: 3px solid grey;
+  width: 80%;
+  margin: 0 auto 5%;
   p {
     min-width: 10%;
-    margin: 3%;
-    padding: 0.6% 1%;
+    margin: 3% 1%;
+    padding: 0.6% 3%;
     cursor: pointer;
     display: inline-block;
   }
@@ -139,11 +143,11 @@ export default {
 @media only screen and (max-width: 900px) {
   .search-buttons {
     width: 90%;
-    margin: 0 auto;
+    margin: 0 auto 10%;
     p {
       width: 30%;
       margin: 4% auto;
-      padding: 1%;
+      padding: 1.5% 2%;
     }
   }
 }
@@ -156,7 +160,7 @@ export default {
       width: 60%;
       display: block;
       margin: 8% auto;
-      padding: 2%;
+      padding: 2% 1%;
     }
     .common-buttons {
       border-top: 2px dashed black;

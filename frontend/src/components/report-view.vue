@@ -49,21 +49,22 @@ export default {
     td {
       padding: 1em;
       border: 1px solid black;
+      color: black;
     }
     .star1 {
-      background-color: #D12727;
+      background-color: #A8081E;
     }
     .star2 {
-      background-color: #B95B0D;
+      background-color: #B55809;
     }
     .star3 {
-      background-color: #BDBA5E;
+      background-color: #4E9A90;
     }
     .star4 {
-      background-color: #30B08D;
+      background-color: #36774E;
     }
     .star5 {
-      background-color: #1B9399;
+      background-color: #097611;
     }
   }
 }

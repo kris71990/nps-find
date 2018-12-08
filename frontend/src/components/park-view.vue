@@ -206,4 +206,22 @@ export default {
     }
   }
 }
+
+@media only screen and (max-width: 1000px) {
+  .single-park {
+    .info-box {
+      width: 80%;
+      margin-bottom: 10%;
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .single-park {
+    .info-box {
+      width: 90%;
+      margin-bottom: 15%;
+    }
+  }
+}
 </style>

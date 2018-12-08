@@ -85,13 +85,15 @@ export default {
       background-color: white;
       padding: 2%;
     }
-    .interest-checkboxes div {
-      width: 30%;
-      margin: 2% auto;
-      padding: 2%;
-      text-align: left;
-      label {
-        margin-left: 10%;
+    .interest-checkboxes {
+      div {
+        width: 30%;
+        margin: 2% auto;
+        padding: 2%;
+        text-align: left;
+        label {
+          margin-left: 10%;
+        }
       }
     }
     .button {
@@ -106,6 +108,18 @@ export default {
       button:hover {
         background-color: #336E55;
         color: #F1E3CB;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .search-form {
+    form {
+      .interest-checkboxes {
+        div {
+          width: 40%;
+        }
       }
     }
   }

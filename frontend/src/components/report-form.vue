@@ -33,7 +33,7 @@
               <option value="48">48-72 (2-3 days)</option>
               <option value="72">72-120 (3-5 days)</option>
               <option value="120">120-168 (5-7 days)</option>
-              <option value="168">> 168 (more than one week)</option>
+              <option value="168">> 168 (> one week)</option>
             </select>
           </div>
           <div class="select">
@@ -42,7 +42,7 @@
               v-model="environment"
               value=environment
             >
-              <option value="empty">Select location type</option>
+              <option value="empty">Select type</option>
               <option value="urban">Urban/City</option>
               <option value="suburban">Suburban</option>
               <option value="rural">Rural</option>
@@ -65,11 +65,15 @@
           <div class="checkbox">
             <p>What type of weather?<span> *</span></p>
             <input type="checkbox" v-model="weather" value="sun">
-            <label for="landscape">Sun</label>
+            <label for="landscape">Sunny</label>
             <input type="checkbox" v-model="weather" value="rain">
+            <label for="landscape">Cloudy</label>
+            <input type="checkbox" v-model="weather" value="cloud">
             <label for="landscape">Rain</label>
             <input type="checkbox" v-model="weather" value="snow">
             <label for="landscape">Snow</label>
+            <input type="checkbox" v-model="weather" value="thunderstorm">
+            <label for="landscape">Thunderstorm</label>
             <input type="checkbox" v-model="weather" value="wind">
             <label for="landscape">Wind</label>
           </div>
@@ -87,6 +91,8 @@
             <label for="landscape">Ocean</label>
             <input type="checkbox" v-model="landscape" value="river">
             <label for="landscape">River</label>
+            <input type="checkbox" v-model="landscape" value="city">
+            <label for="landscape">City</label>
           </div>
         </div>
         <div class="textbox">
@@ -94,7 +100,7 @@
             <label>What did you do during your stay?</label><span> *</span>
             <textarea
               name="activities"
-              placeholder="I went hiking on several trails, enjoyed some fishing..."
+              placeholder="hiking, fishing, camping..."
               value=activities
               v-model="activities"
             ></textarea>
@@ -105,7 +111,7 @@
             <label>What wildlife did you see?</label>
             <textarea
               name="wildlife"
-              placeholder="One grizzly bear, a bald eagle, and some marmots..."
+              placeholder="bear, elk..."
               value=wildlife
               v-model="wildlife"
             ></textarea>
@@ -180,6 +186,7 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
   form {
     position: relative;
     height: 100%;
@@ -211,7 +218,6 @@ export default {
         }
         label {
           font-style: italic;
-          font-weight: bold;
           display: inline-block;
         }
         textarea {
@@ -241,6 +247,7 @@ export default {
           text-decoration: none;
           color: black;
           display: inline-block;
+          text-align: center;
         }
       }
     }
@@ -248,6 +255,57 @@ export default {
       border: 1px solid black;
       background-color: white;
       padding: 2%;
+    }
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .report-add {
+    form {
+      fieldset {
+        width: 90%;
+        height: 85%;
+        float: none;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .report-add {
+    form {
+      fieldset { 
+        .input {
+          width: 100%;
+          height: auto;
+          .checkbox {
+            p {
+              margin: 0;
+            }
+            label {
+              padding-right: 2%;
+            }
+          }
+          div {
+            padding: 0;
+          }
+        }
+        .textbox {
+          width: 100%;
+          height: auto;
+          textarea {
+            height: 1.5em;
+          }
+        }
+        #modal-buttons {
+          * {
+            width: 40%;
+          }
+          a {
+            line-height: 1.5em;
+          }
+        }
+      }
     }
   }
 }
