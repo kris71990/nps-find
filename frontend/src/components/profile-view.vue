@@ -2,8 +2,11 @@
   <div id="profile-view">
     <div>
       <div v-if="!profile">
-        <ProfileForm v-bind:onComplete="handleCreate" v-bind:editing="false"
-        v-bind:handleClose="handleClose"/>
+        <ProfileForm 
+          :onComplete="handleCreate" 
+          :editing="false"
+          :handleClose="handleClose"
+        />
       </div>
       <div v-else>
         <h1>Welcome {{ profile.firstName }}.</h1>
@@ -40,7 +43,12 @@
         </div>
       </div>
       <div v-if="profile && editing">
-        <ProfileForm :onComplete="handleUpdate" :editing="true" :profile="profile" v-bind:handleClose="handleClose"/>
+        <ProfileForm 
+          :onComplete="handleUpdate" 
+          :editing="true" 
+          :profile="profile" 
+          :handleClose="handleClose"
+        />
       </div>
     </div>
   </div>
@@ -105,9 +113,9 @@ export default {
 
 <style lang="scss">
 #profile-view {
-  width: 50%;
+  width: 80%;
   margin: 0 auto;
-  margin-bottom: 5%;
+  margin-bottom: 10%;
   span {
     font-weight: bold;
     font-style: oblique;
@@ -121,6 +129,22 @@ export default {
     border-radius: 5px;
     cursor: pointer;
     color: black;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  #profile-view {
+    margin-bottom: 15%;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #profile-view {
+    width: 90%;
+    margin-bottom: 20%;
+    #update-button {
+      width: 50%;
+    }
   }
 }
 </style>

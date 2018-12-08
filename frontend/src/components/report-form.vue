@@ -4,8 +4,8 @@
       <fieldset>
         <legend>Submit a report for {{ this.park.fullName }}</legend>
         <div class="input">
-          <div>
-            <label>Overall Score (1-5, 5 is best)</label>
+          <div class="select">
+            <label>Overall Score (1-5, 5 is best)</label><span> *</span>
             <select 
               v-model="rating"
               value=rating
@@ -16,10 +16,10 @@
               <option value="3">3</option>
               <option value="2">2</option>
               <option value="1">1</option>
-            </select><span> *</span>
+            </select>
           </div>
-          <div>
-            <label>How long was your visit?</label>
+          <div class="select">
+            <label>How long was your visit?</label><span> *</span>
             <select 
               v-model="lengthOfStay"
               value=lengthOfStay
@@ -33,8 +33,66 @@
               <option value="48">48-72 (2-3 days)</option>
               <option value="72">72-120 (3-5 days)</option>
               <option value="120">120-168 (5-7 days)</option>
-              <option value="168">> 168 (more than one week)</option>
+              <option value="168">> 168 (> one week)</option>
+            </select>
+          </div>
+          <div class="select">
+            <label>What area is the park located?</label><span> *</span>
+            <select 
+              v-model="environment"
+              value=environment
+            >
+              <option value="empty">Select type</option>
+              <option value="urban">Urban/City</option>
+              <option value="suburban">Suburban</option>
+              <option value="rural">Rural</option>
+            </select>
+          </div>
+          <div class="select">
+            <label>How would you describe the temperature?</label><span> *</span>
+            <select 
+              v-model="temperature"
+              value=temperature
+            >
+              <option value="empty">Select location type</option>
+              <option value="hot">Hot</option>
+              <option value="warm">Warm</option>
+              <option value="temperate">Temperate</option>
+              <option value="cool">Cool</option>
+              <option value="cold">Cold</option>
             </select><span> *</span>
+          </div>
+          <div class="checkbox">
+            <p>What type of weather?<span> *</span></p>
+            <input type="checkbox" v-model="weather" value="sun">
+            <label for="landscape">Sunny</label>
+            <input type="checkbox" v-model="weather" value="rain">
+            <label for="landscape">Cloudy</label>
+            <input type="checkbox" v-model="weather" value="cloud">
+            <label for="landscape">Rain</label>
+            <input type="checkbox" v-model="weather" value="snow">
+            <label for="landscape">Snow</label>
+            <input type="checkbox" v-model="weather" value="thunderstorm">
+            <label for="landscape">Thunderstorm</label>
+            <input type="checkbox" v-model="weather" value="wind">
+            <label for="landscape">Wind</label>
+          </div>
+          <div class="checkbox">
+            <p>What type of scenery?<span> *</span></p>
+            <input type="checkbox" v-model="landscape" value="mountains">
+            <label for="landscape">Mountains</label>
+            <input type="checkbox" v-model="landscape" value="forest">
+            <label for="landscape">Forest</label>
+            <input type="checkbox" v-model="landscape" value="desert">
+            <label for="landscape">Desert</label>
+            <input type="checkbox" v-model="landscape" value="plains">
+            <label for="landscape">Plains</label>
+            <input type="checkbox" v-model="landscape" value="ocean">
+            <label for="landscape">Ocean</label>
+            <input type="checkbox" v-model="landscape" value="river">
+            <label for="landscape">River</label>
+            <input type="checkbox" v-model="landscape" value="city">
+            <label for="landscape">City</label>
           </div>
         </div>
         <div class="textbox">
@@ -42,7 +100,7 @@
             <label>What did you do during your stay?</label><span> *</span>
             <textarea
               name="activities"
-              placeholder="I went hiking on several trails, enjoyed some fishing..."
+              placeholder="hiking, fishing, camping..."
               value=activities
               v-model="activities"
             ></textarea>
@@ -53,7 +111,7 @@
             <label>What wildlife did you see?</label>
             <textarea
               name="wildlife"
-              placeholder="One grizzly bear, a bald eagle, and some marmots..."
+              placeholder="bear, elk..."
               value=wildlife
               v-model="wildlife"
             ></textarea>
@@ -82,6 +140,10 @@ export default {
       lengthOfStay: '',
       activities: '',
       wildlife: '',
+      environment: '',
+      landscape: [],
+      weather: [],
+      temperature: '',
     }
   },
   methods: {
@@ -91,16 +153,24 @@ export default {
         parkId: this.park.pKeyCode,
         profileId: this.profile.id,
         parkName: this.park.fullName,
+        parkEnvironment: this.environment,
+        parkLandscape: this.landscape.join(','),
         rating: parseInt(this.rating, 10), 
         lengthOfStay: parseInt(this.lengthOfStay, 10), 
         activities: this.activities, 
         wildlife: this.wildlife,
+        weather: this.weather.join(','),
+        temperature: this.temperature,
       })
         .then(() => {
           this.rating = '';
           this.lengthOfStay = '';
           this.activities = '';
           this.wildlife = '';
+          this.landscape = [];
+          this.environment = '';
+          this.weather = [];
+          this.temperature = '';
           return;
         })
     }
@@ -116,6 +186,7 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
   form {
     position: relative;
     height: 100%;
@@ -125,10 +196,14 @@ export default {
       margin: 3% auto;
       background-color: #E8EAEB;
       .input {
-        width: 100%;
-        margin: 5% auto;
+        float: left;
+        width: 50%;
+        height: 100%;
+        .select label, .checkbox p {
+          font-style: italic;
+        }
         div {
-          display: inline;
+          display: inline-block;
           padding: 1%;
           span {
             color: red;
@@ -136,12 +211,13 @@ export default {
         }
       }
       .textbox {
-        width: 40%;
-        display: inline-block;
+        width: 50%;
+        float: left;
         span {
           color: red;
         }
         label {
+          font-style: italic;
           display: inline-block;
         }
         textarea {
@@ -171,6 +247,7 @@ export default {
           text-decoration: none;
           color: black;
           display: inline-block;
+          text-align: center;
         }
       }
     }
@@ -178,6 +255,57 @@ export default {
       border: 1px solid black;
       background-color: white;
       padding: 2%;
+    }
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .report-add {
+    form {
+      fieldset {
+        width: 90%;
+        height: 85%;
+        float: none;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .report-add {
+    form {
+      fieldset { 
+        .input {
+          width: 100%;
+          height: auto;
+          .checkbox {
+            p {
+              margin: 0;
+            }
+            label {
+              padding-right: 2%;
+            }
+          }
+          div {
+            padding: 0;
+          }
+        }
+        .textbox {
+          width: 100%;
+          height: auto;
+          textarea {
+            height: 1.5em;
+          }
+        }
+        #modal-buttons {
+          * {
+            width: 40%;
+          }
+          a {
+            line-height: 1.5em;
+          }
+        }
+      }
     }
   }
 }

@@ -90,7 +90,7 @@ export default {
     position: relative;
     height: 100%;
     fieldset {
-      width: 30%;
+      width: 40%;
       position: absolute;
       top: 25%;
       left: 50%;
@@ -133,6 +133,26 @@ export default {
     }
     button {
       display: inline-block;
+    }
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .auth {
+    form {
+      fieldset {
+        width: 55%;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .auth {
+    form {
+      fieldset {
+        width: 70%;
+      }
     }
   }
 }

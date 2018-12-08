@@ -2,6 +2,8 @@ import superagent from 'superagent';
 
 const parkModule = {
   state: {
+    searchParam: null,
+    type: null,
     stateAbbrev: null,
     stateFull: null,
     interests: null,
@@ -15,6 +17,13 @@ const parkModule = {
       state.stateAbbrev = selection.state;
       state.stateFull = selection.stateFull;
       state.interests = selection.interests;
+      if (selection.state) {
+        state.searchParam = selection.state;
+        state.type = 'state';
+      } else {
+        state.searchParam = selection.searchParam;
+        state.type = selection.type;
+      }
       return state;
     }, 
     
@@ -35,7 +44,7 @@ const parkModule = {
     },
   },
   actions: {
-    foundParks: (context, selections) => {
+    getParksInterest: (context, selections) => {
       const { commit } = context;
       const { state, stateFull, interests } = selections;
       let parks;
@@ -52,20 +61,75 @@ const parkModule = {
               parksNumber = updatedResponse.body.length;
             })
             .then(() => {
-              commit('changeState', { state, stateFull, interests });
               commit('foundParks', parks);
               commit('setTotal', parksNumber);
+              commit('changeState', { 
+                searchParam: state,
+                stateFull,
+                type: 'state',
+                interests,
+              });
             });
         });
     },
 
-    getParksRegion: (context, query) => {
+    getTopParks: (context, order) => {
       const { commit } = context;
-      return superagent.get(`${API_URL}/parks/region/${query.region}`)
+      return superagent.get(`${API_URL}/parks/all/top`)
         .then((response) => {
           commit('foundParks', response.body);
           commit('setTotal', response.body.length);
-          commit('changeState', { state: query.region, stateFull: query.region, interests: [] });
+          commit('changeState', { 
+            searchParam: order, 
+            type: 'top', 
+            interests: [],
+          });
+        });
+    },
+
+    getRandomParks: (context, order) => {
+      const { commit } = context;
+      return superagent.get(`${API_URL}/parks/all/random`)
+        .then((response) => {
+          commit('foundParks', response.body);
+          commit('setTotal', response.body.length);
+          commit('changeState', { 
+            searchParam: order, 
+            type: 'random', 
+            interests: [],
+          });
+        });
+    },
+
+    getParksRegion: (context, region) => {
+      const { commit, rootState } = context;
+      return superagent.get(`${API_URL}/parks/region/${region}`)
+        .set('Authorization', `Bearer ${rootState.authModule.token}`)
+        .then((response) => {
+          commit('foundParks', response.body);
+          commit('setTotal', response.body.length);
+          commit('changeState', { 
+            searchParam: region, 
+            type: 'region', 
+            interests: [],
+          });
+        });
+    },
+
+    getParksUserPrefs: (context, userPrefs) => {
+      const { commit, rootState } = context;
+      const { prefs, type } = userPrefs;
+      return superagent.get(`${API_URL}/parks/userprefs/all`)
+        .set('Authorization', `Bearer ${rootState.authModule.token}`)
+        .query({ [type]: prefs })
+        .then((response) => {
+          commit('foundParks', response.body);
+          commit('setTotal', response.body.length);
+          commit('changeState', { 
+            searchParam: prefs, 
+            type,
+            interests: [],
+          });
         });
     },
 

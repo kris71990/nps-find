@@ -1,6 +1,7 @@
 <template>
   <div id="chart-container">
     <canvas id="state-chart"></canvas>
+    <div class="empty"></div>
   </div>
 </template>
 
@@ -54,24 +55,27 @@ export default {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: true,
-          maxBarThickness: 0.2,
+          maintainAspectRatio: false,
           animation: {
             easing: 'linear',
             duration: 1000,
           },
           legend: {
-            position: 'right',
+            position: 'bottom',
             labels: {
               boxWidth: 15,
+              padding: 15,
             }
           },
           scales: {
             xAxes: [{
-              stacked: true
+              stacked: true,
+              gridLines: {
+                display: false,
+              }
             }],
             yAxes: [{
-              stacked: true
+              stacked: true,
             }]
           }
         }
@@ -85,6 +89,17 @@ export default {
 #chart-container {
   position: relative;
   margin: 5% auto;
-  width: 80%;
+  height: 80vh;
+  width: 80vw;
+  .empty {
+    height: 100px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #chart-container {
+    height: 110vh;
+    width: 90vw;
+  }
 }
 </style>

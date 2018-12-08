@@ -5,10 +5,12 @@ import { json } from 'body-parser';
 import HttpError from 'http-errors';
 import logger from '../lib/logger';
 import models from '../models';
+import bearerAuthMiddleware from '../lib/bearer-auth-middleware';
 
 import { stateData } from '../lib/states';
 import getData from '../lib/get-parks';
 import customizeParks from '../lib/customize-parks';
+import { filterUserParks, generateRx, generateUserSQLQuery } from '../lib/filter-userprefs';
 
 const jsonParser = json();
 const parkRouter = new Router();
@@ -165,9 +167,41 @@ parkRouter.get('/park/:parkId', (request, response, next) => {
     .catch(next);
 });
 
+parkRouter.get('/parks/all/top', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /park/all/top');
+
+  return models.sequelize.query(
+    'SELECT parks.*, "reports" FROM parks INNER JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" ORDER BY reports DESC;',
+    {
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((parks) => {
+      logger.log(logger.INFO, `Returning top ${parks.length} parks with most reviews`);
+      return response.json(parks);
+    })
+    .catch(next);
+});
+
+parkRouter.get('/parks/all/random', (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /park/all/random');
+
+  return models.sequelize.query(
+    'SELECT parks.*, "reports" FROM parks LEFT JOIN (SELECT "parkId", COUNT(*) as "reports" FROM reports GROUP BY "parkId") AS reports ON "pKeyCode"="parkId" WHERE reports IS NULL ORDER BY RANDOM() LIMIT 15;',
+    {
+      type: models.sequelize.QueryTypes.SELECT,
+    },
+  )
+    .then((parks) => {
+      logger.log(logger.INFO, `Returning 15 random ${parks.length} parks`);
+      return response.json(parks);
+    })
+    .catch(next);
+});
+
 // get all parks in a geographic region
-parkRouter.get('/parks/region/:regionId', (request, response, next) => {
-  logger.log(logger.INFO, `Processing a get on /park/region/${request.params.regionId}`);
+parkRouter.get('/parks/region/:regionId', bearerAuthMiddleware, (request, response, next) => {
+  logger.log(logger.INFO, `Processing a get on /parks/region/${request.params.regionId}`);
 
   return models.sequelize.query(
     'SELECT parks.*, states.region FROM parks LEFT JOIN states ON "stateCode"="stateId" WHERE states.region=?',
@@ -179,6 +213,59 @@ parkRouter.get('/parks/region/:regionId', (request, response, next) => {
     .then((parks) => {
       logger.log(logger.INFO, `Returning ${parks.length} in ${request.params.regionId}`);
       return response.json(parks);
+    })
+    .catch(next);
+});
+
+parkRouter.get('/parks/userprefs/all', bearerAuthMiddleware, (request, response, next) => {
+  logger.log(logger.INFO, 'Processing a get on /parks/userprefs/all');
+
+  console.log(request.query);
+
+  const searchTypeData = {};
+  if (request.query.climate) {
+    searchTypeData.searchType = 'weather';
+    searchTypeData.userPrefs = request.query.climate.split(',');
+    searchTypeData.joinType = 'left';
+    searchTypeData.joinAs = 'weatherReport';
+  } else if (request.query.environment) {
+    const environments = ['urban', 'suburban', 'rural'];
+    environments.splice(environments.indexOf(request.query.environment), 1);
+    searchTypeData.searchType = 'parkEnvironment';
+    searchTypeData.userPrefs = environments;
+    searchTypeData.joinType = 'inner';
+    searchTypeData.joinAs = 'environment';
+  } else if (request.query.landscape) {
+    searchTypeData.searchType = 'parkLandscape';
+    searchTypeData.userPrefs = request.query.landscape.split(',');
+    searchTypeData.joinType = 'inner';
+    searchTypeData.joinAs = 'landscape';
+  }
+
+  if (!searchTypeData.searchType) return next(new HttpError(400, 'Bad Request'));
+
+  const rx = generateRx(searchTypeData.searchType, searchTypeData.userPrefs);
+  const sqlQuery = generateUserSQLQuery(searchTypeData.joinType, searchTypeData.searchType, searchTypeData.joinAs, rx);
+
+  return models.sequelize.query(sqlQuery, {
+    type: models.sequelize.QueryTypes.SELECT,
+  })
+    .then((parks) => {
+      const filteredParks = filterUserParks(parks, searchTypeData.searchType, rx);
+      switch (searchTypeData.searchType) {
+        case 'weather':
+          logger.log(logger.INFO, `Returning ${filteredParks.length} parks with ${request.query.climate} weather`);
+          break;
+        case 'parkEnvironment':
+          logger.log(logger.INFO, `Returning ${filteredParks.length} parks in ${searchTypeData.userPrefs.join(' or ')} locales`);
+          break;
+        case 'parkLandscape':
+          logger.log(logger.INFO, `Returning ${filteredParks.length} in ${request.query.landscape}`);
+          break;
+        default: 
+          logger.log(logger.INFO, `Returning ${filteredParks.length} - unknown search parameters`);
+      }
+      return response.json(filteredParks);
     })
     .catch(next);
 });

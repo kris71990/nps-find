@@ -91,21 +91,31 @@ export default {
     onComplete: Function,
     handleClose: Function,
     editing: Boolean,
+    profile: Object,
   },
   data() {
-    return {
-      firstName: '',
-      age: 0,
-      homeState: '',
-      interests: '',
-      weather: '',
-      landscape: '',
-      residentialLocaleType: '',
+    if (!this.editing) {
+      return {
+        firstName: '',
+        age: 0,
+        homeState: '',
+        interests: '',
+        weather: '',
+        landscape: '',
+        residentialLocaleType: '',
+      }
+    } else {
+      return {
+        firstName: this.profile.firstName,
+        age: this.profile.age,
+        homeState: this.profile.homeState,
+        interests: this.profile.interests,
+        weather: this.profile.favoredClimate,
+        landscape: this.profile.favoredLandscape,
+        residentialLocaleType: this.profile.residentialLocaleType,
+      }
     }
   },
-  computed: mapState({
-      profile: state => state.profileModule.profile
-    }),
   methods: {
     handleCreate(e) {
       e.preventDefault();
