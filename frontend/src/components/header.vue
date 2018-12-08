@@ -59,7 +59,7 @@ header {
   flex-direction: row;
   align-items: center;
   #header-img {
-    width: 10%;
+    width: 5em;
     padding: 5px 20px 0px 20px;
     img {
       width: 100%;
@@ -67,9 +67,9 @@ header {
     }
   }
   #header-nav {
-    width: 88%;
+    width: 100%;
     h1 {
-      width: 42%;
+      width: 40%;
       height: 100%;
       float: left;
       text-align: left;
@@ -88,7 +88,7 @@ header {
         padding-left: 0px;
         padding-top: 10%;
         li {
-          display: inline;
+          display: inline-block;
           margin: 2%;
           list-style-type: none;
         }
@@ -100,6 +100,19 @@ header {
         a:hover {
           color: #F1E3CB;
         }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #header-nav {
+    h1 {
+      font-size: 1.5em;
+    }
+    nav {
+      ul * {
+        display: block;
       }
     }
   }

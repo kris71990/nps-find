@@ -141,4 +141,12 @@ export default {
     animation-fill-mode: both;
   }
 }
+
+@media only screen and (max-width: 800px) {
+  .campground {
+    .list {
+      width: 60%;
+    }
+  }
+}
 </style>

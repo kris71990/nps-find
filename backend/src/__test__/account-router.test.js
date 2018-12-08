@@ -101,5 +101,20 @@ describe('User Authentication - Account router', () => {
           expect(response.body).toBeFalsy();
         });
     });
+
+    test('GET with missing credentials returns 400', () => {
+      return superagent.get(`${API_URL}/login`)
+        .catch((response) => {
+          expect(response.status).toEqual(400);
+        });
+    });
+
+    test('GET with malformed credentials returns 400', () => {
+      return superagent.get(`${API_URL}/login`)
+        .auth('sdfdsfsdfsdfs')
+        .catch((response) => {
+          expect(response.status).toEqual(400);
+        });
+    });
   });
 });

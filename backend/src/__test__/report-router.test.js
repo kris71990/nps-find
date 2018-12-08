@@ -44,6 +44,9 @@ describe('Report Router', () => {
                   rating: 5,
                   lengthOfStay: 72,
                   activities: 'hiking, fishing, photography',
+                  parkEnvironment: 'rural',
+                  parkLandscape: 'mountains',
+                  weather: 'sunny',
                 })
                 .then((response) => {
                   expect(response.status).toEqual(200);
@@ -52,6 +55,9 @@ describe('Report Router', () => {
                   expect(response.body.rating).toEqual(5);
                   expect(response.body.lengthOfStay).toEqual(72);
                   expect(response.body.activities).toEqual('hiking, fishing, photography');
+                  expect(response.body.parkEnvironment).toEqual('rural');
+                  expect(response.body.parkLandscape).toEqual('mountains');
+                  expect(response.body.weather).toEqual('sunny');
                 });
             });
         });

@@ -13,6 +13,18 @@ const Report = (sequelize, DataTypes) => sequelize.define('report', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  parkEnvironment: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  parkLandscape: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  weather: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   rating: {
     type: DataTypes.INTEGER,
     allowNull: false,
