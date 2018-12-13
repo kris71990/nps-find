@@ -1,0 +1,22 @@
+## Account Creation
+
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 10
+      arrivalRate: 50
+    - duration: 30
+      arrivalRate: 20
+    - duration: 10
+      arrivalRate: 50
+  processor: "./create-accounts.js"
+scenarios:
+  - name: "Create Accounts"
+    flow:
+      - function: "create"
+      - post:
+          url: "/signup"
+          json: 
+            username: "{{ username }}"
+            email: "{{ email }}"
+            password: "{{ password }}"
