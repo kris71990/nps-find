@@ -19,7 +19,7 @@ profileRouter.post('/profile', bearerAuthMiddleware, jsonParser, (request, respo
     accountId: request.account.id,
   })
     .then((profile) => {
-      logger.log(logger.INFO, 'Returning new profile');
+      logger.log(logger.INFO, `Returning new profile for ${request.body.firstName}`);
       return response.json(profile);
     })
     .catch(next);
