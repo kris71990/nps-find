@@ -37,8 +37,15 @@ From the root of the frontend directory, start the webpack dev server with `npm 
 App
 |_ Header
 |_ Landing
+  |_ AuthForm
+  |_ ProfileView
+    |_ ProfileForm
+    |_ ReportView
+  |_ Dashboard
+    |_ CommonReturn
+      |_ ...
   |_ SearchForm
-    |_ Dashboard
+    |_ CommonReturn
       |_ ImageCarousel
       |_ ParkPanel
         |_ CampgroundOptions
@@ -47,6 +54,8 @@ App
         |_ ParkView
           |_ ParkViewMap
           |_ ImageCarousel
+          |_ ReportView
+          |_ ReportForm
           |_ CampgroundOptions
             |_ CampgroundView
             |_ CampgroundViewMap
@@ -71,7 +80,37 @@ App
 + `Landing`
   - User entry point to the application
   - Renders a `SearchForm` that allows the user to search for any public lands, subject to whatever preferences the user supplies.
-  - Also provides a link that renders the `StateRankings` component.
+  - Provides a link to render the `StateRankings` component, as well as common parks searches (popular, discover etc.)
+
++ `AuthForm`
+  - Renders a modal that allows a user to login or signup with an account
+  - Required fields for signup
+    - `Username`, `Email`, `Password`
+  - Consult backend readme for more information on account security
+
++ `ProfileView`
+  - Renders profile data for an authenticated user
+  - Renders `ProfileForm` 
+  - Renders `ReportView`, a summary of all reports submitted by the user
+
++ `ProfileForm`
+  - Renders a modal to create or update a user profile
+  - Profile Data 
+    - First Name (required)
+    - Age (required),
+    - Home State (required)
+    - Interests
+      - enter activities as a comma separated string
+      ex. `hiking, camping, fishing`
+    - Weather
+      - enter favorite weather as comma separated string
+      ex. `sun, warm`
+    - Preferred Landscape
+      - enter favorite landscape as a comma separated string
+      ex. `mountains, forest`
+    - Residential Environment 
+      - enter the environment where you live (urban, suburban, or rural)
+      ex. `urban`
 
 + `SearchForm`
   - The user chooses a state from a dropdown menu to search for
@@ -91,7 +130,17 @@ App
   - The bar chart represents the total number of parks per state, as well as the total number of each park type in each state.
 
 + `Dashboard`
-  - A user query from the `SearchForm` will pass a query object to the server and render the `Dashboard`
+  - The user is redirected to the user dashboard after login
+  - User can search by parameters based on user profile data 
+    - Geographic Region
+    - Climate
+    - Park Landscape
+    - Park Environment
+    - Interests 
+  - Dashboard also includes quick links to common searches (popular, discover, overview)
+
++ `CommonReturn`
+  - A user query from the `SearchForm` will pass a query object to the server and render the `CommonReturn`
   - Will render either the `ParkPanel` component, if the user specifies any interests; otherwise it will render an `ImageCarousel` for every park in the state specified by the user.
 
 + `ImageCarousel`
@@ -104,11 +153,27 @@ App
 
 + `ParkView`
   - This component renders the view of a single park, when selected from the `ParkPanel`.
-  - Renders `ParkViewMap` and an `ImageCarousel`
+  - Renders `ParkViewMap`, `ImageCarousel`, and `ReportView`
   - Renders travel related information for the park, and provides an entry point to `CampgroundOptions` - from this component, `CampgroundOptions` renders all camping options for the specific park
 
 + `ParkViewMap`
   - Uses the Google Maps API to render the location of the park on a map
+
++ `ReportForm`
+  - Renders a modal that allows a user to submit a park report
+  - Report Form data
+    - Overall Score (required) - 1-5 rating (5 is best)
+    - Length of Visit (required) - Length of time spent in the park in hours
+    - Park Location (required) - environment in which park is located 
+    - Temperature (required) - what was the temperature like during your visit?
+    - Weather (required) - what type of weather during your visit?
+    - Park Scenery (required) - what type of landscape?
+    - Activities (required) - what did you do during your stay?
+    - Wildlife - what wildlife did you see?
+
++ `ReportView`
+  - A table that shows a record of submitted reports 
+  - Is rendered on `ParkView` to show all reports for one park, and on `ProfileView` to show all reports from one user
 
 + `CampgroundOptions` 
   - When camping is specified as an interest, this component is accessible both from the `Dashboard` (where it renders camping options for the entire state), and from the `ParkView` (rendering options for only one park)

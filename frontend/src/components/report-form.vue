@@ -65,17 +65,17 @@
           <div class="checkbox">
             <p>What type of weather?<span> *</span></p>
             <input type="checkbox" v-model="weather" value="sun">
-            <label for="landscape">Sunny</label>
+            <label for="weather">Sunny</label>
             <input type="checkbox" v-model="weather" value="rain">
-            <label for="landscape">Cloudy</label>
+            <label for="weather">Cloudy</label>
             <input type="checkbox" v-model="weather" value="cloud">
-            <label for="landscape">Rain</label>
+            <label for="weather">Rain</label>
             <input type="checkbox" v-model="weather" value="snow">
-            <label for="landscape">Snow</label>
+            <label for="weather">Snow</label>
             <input type="checkbox" v-model="weather" value="thunderstorm">
-            <label for="landscape">Thunderstorm</label>
+            <label for="weather">Thunderstorm</label>
             <input type="checkbox" v-model="weather" value="wind">
-            <label for="landscape">Wind</label>
+            <label for="weather">Wind</label>
           </div>
           <div class="checkbox">
             <p>What type of scenery?<span> *</span></p>
