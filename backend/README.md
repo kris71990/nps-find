@@ -109,6 +109,12 @@ The report router is where logged-in users can contribute to the functionality o
     - Rating (required - how was your experience? (1-5 system, 5 is best))
     - Length of Stay (required - how long did you stay in the park (in hours)?)
     - Activities (required - what did you do while in the park?)
+    - Park Environment - (requried - what type of area is the park located in?)
+      - Urban, Suburban, Rural...
+    - Park Landscape - (required - what type of landscape is the park?)
+      - Mountains, forest etc...
+    - Weather (required - what was the weather like?)
+      - Sun, rain, snow etc...
     - Wildlife (not required - what wildlife did you see during your stay?)
 
 A submitted report will hold a reference to the user's profile and to the park for which it was submitted. Only users with an account can submit a report.
@@ -120,7 +126,7 @@ A submitted report will hold a reference to the user's profile and to the park f
   - Retrieves all reports submitted for the specified park
 
 4. DELETE /report/:id
-  - Allows a user to delete a specific report
+  - Allows a user to delete one of their reports
 
 
 *State Router*
@@ -148,7 +154,7 @@ This route is primarily used for chart rendering on the front-end. For specific 
 
 *Park Router*
 
-The park router deals with the primary functionality of the app, as it relates to the user's ability to discover parks of interest. All routes public.
+The park router deals with the primary functionality of the app, as it relates to the user's ability to discover parks of interest. All routes public unless specified.
 
 1. GET /parks/:state
   - Takes in a query object of user preferences for specific or nonspecific types of parks in a particular state. If the data needed does not exist in the database, it is fetched from the external API and saved to the database to minimize dependence on external data and maximize performance. 
@@ -166,6 +172,26 @@ The park router deals with the primary functionality of the app, as it relates t
 3. GET /park/:parkId
   - Retrieves a single existing park from the database
   - As above, this response also includes a quick reference to the number of user reports associated with it, via a join with the `Report` table
+
+4. GET /parks/all/top
+  - Returns parks in descending order of most reviewed 
+  - Joined with `Report` table as above
+
+5. GET /parks/all/random
+  - Returns a random set of fifteen parks that have not yet been reviewed 
+  - Joined with `Report` table as above
+
+6. GET /parks/region/:regionId 
+  - Private user endpoint
+  - Returns all parks within a given geographic region
+  - The geographic region is determined by the user's home state, and returns parks from states that are in the same general area
+
+7. GET /parks/userprefs/all
+  - Private user endpoint
+  - Handles three different user searches - by climate, park landscape type, and park environment type - type is determined by user query data passed from frontend 
+  - Dynamically generates a regular expression that is used to match data from `Park` and `Report` tables based on user preferences
+  - Dynamically generates a SQL query to join `Park` and `Report` tables based on user preferences
+  - Returns all parks that match the user's search preferences and relevant data in their profile
 
 
 *Campground Router*
