@@ -8,7 +8,8 @@
     "test-nolint": "jest --coverage --runInBand",
     "test-noexit": "eslint . && jest --coverage --runInBand",
     "build": "babel src -d build",
-    "start": "node index.js"
+    "start": "node index.js",
+    "aws-start": "babel src -d build && node index.js"
   },
   "jest": {
     "setupFiles": [
