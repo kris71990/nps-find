@@ -13,6 +13,8 @@ const reportRouter = new Router();
 const Op = models.Sequelize.Op;
 
 reportRouter.post('/report', bearerAuthMiddleware, jsonParser, (request, response, next) => {
+  if (Object.keys(request.body).length < 9) return next(new HttpError(400, 'Bad request'));
+
   logger.log(logger.INFO, 'Processing a POST on /report');
 
   return models.report.create({
