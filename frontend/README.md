@@ -1,6 +1,6 @@
 # NPS-Find - Front-End
 
-<img src="./src/utils/bison.png" alt="NPS-Find-logo" width="200"/>
+<img src="./src/assets/bison.png" alt="NPS-Find-logo" width="200"/>
 
 **Author: Kris Sakarias**
 
