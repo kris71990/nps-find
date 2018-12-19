@@ -11,6 +11,8 @@ const accountRouter = new Router();
 const jsonParser = json();
 
 accountRouter.post('/signup', jsonParser, (request, response, next) => {
+  if (!request.body.username) return next(new HttpError(400, 'Bad Request'));
+  
   logger.log(logger.INFO, `Creating account for username '${request.body.username}'`);
 
   return models.account.createAccount(
@@ -32,7 +34,7 @@ accountRouter.post('/signup', jsonParser, (request, response, next) => {
 });
 
 accountRouter.get('/login', basicAuthMiddleware, (request, response, next) => {
-  if (!request.account) return next(new HttpError(400), 'Invalid account');
+  if (!request.account) return next(new HttpError(400, 'Invalid account'));
   return request.account.generateToken()
     .then((token) => {
       logger.log(logger.INFO, 'Returning token');
