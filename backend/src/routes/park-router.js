@@ -240,6 +240,9 @@ parkRouter.get('/parks/userprefs/all', bearerAuthMiddleware, (request, response,
     searchTypeData.joinAs = 'landscape';
   }
 
+  logger.log(logger.INFO, searchTypeData);
+  logger.log(logger.INFO, request.body);
+
   if (!searchTypeData.searchType) return next(new HttpError(400, 'Bad Request'));
 
   const rx = generateRx(searchTypeData.searchType, searchTypeData.userPrefs);
