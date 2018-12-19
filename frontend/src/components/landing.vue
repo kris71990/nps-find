@@ -86,7 +86,6 @@ export default {
     },
 
     handleQuickSearch(event, a) {
-      console.log(event.target);
       if (event.target.localName === 'div') return;
       switch (event.target.textContent) {
         case 'Most Popular':
