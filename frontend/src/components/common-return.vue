@@ -22,7 +22,7 @@
           <div class="report-blurb">
             <router-link to="/">
               <div v-if="item.reports" class="with-image">
-                <img src="../utils/bison-avatar.png"/>
+                <img src="../assets/bison-avatar.png"/>
                 <p>- {{ createReportBlurb(item.reports) }} -</p>
               </div>
               <div v-else>

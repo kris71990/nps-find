@@ -2,7 +2,7 @@
   <header class="header">
     <div id="header-img">
       <router-link to="/">
-        <img v-on:click='resetDefault' src="../utils/bison.png">
+        <img v-on:click='resetDefault' src="../assets/bison.png">
       </router-link>
     </div>
     <div id="header-nav">
