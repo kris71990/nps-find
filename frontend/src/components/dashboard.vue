@@ -17,7 +17,7 @@
         </div>
       </div>  
     </div>
-    <div v-else>
+    <div id="profile-create" v-else>
       <router-link to="/profile">Create a profile</router-link>
     </div>
   </div>
@@ -103,6 +103,21 @@ export default {
 </script>
 
 <style lang="scss">
+#profile-create {
+  margin-top: 3%;
+  a {
+    border: 2px solid #4A8571;
+    border-radius: 5px;
+    background-color: #82BAA7;
+    text-decoration: none;
+    color: black;
+    padding: 0.6% 3%;
+  }
+  a:hover {
+      background-color: #00716F;
+      color: #F1E3CB;
+    }
+}
 .search-buttons {
   background-color: #C5D6DA;
   border: 3px solid grey;
